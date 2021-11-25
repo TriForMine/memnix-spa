@@ -158,7 +158,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `http://localhost:1813/api/register/`,
+            `https://memnix.yumenetwork.net/api/register/`,
             {
               username: this.username,
               email: this.email,
@@ -178,6 +178,5 @@ export default {
       }
     },
   },
-
 }
 </script>

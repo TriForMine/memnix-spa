@@ -66,8 +66,11 @@
               <v-card-actions class="ml-6 mr-6 text-center">
                 <p>
                   By continuing, you agree to Memnix's
-                  <a href="#" class="pl-2">Policy</a> and
-                  <a href="#" class="pl-2">Terms of Use</a>
+                  <a href="#" class="pl-2">Policy</a> and<a
+                    href="#"
+                    class="pl-2"
+                    >Terms of Use</a
+                  >
                 </p>
               </v-card-actions>
             </v-card>
@@ -85,7 +88,7 @@ import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
   layout: 'login',
-    middleware: 'guest',
+  middleware: 'guest',
 
   mixins: [validationMixin],
 
@@ -128,7 +131,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `http://localhost:1813/api/login/`,
+            `https://memnix.yumenetwork.net/api/login/`,
             {
               email: this.email,
               password: this.password,
@@ -139,9 +142,9 @@ export default {
               'Content-Type': 'application/json',
               withCredentials: true,
             }
-          )
+          ).then((res) => console.log(res))
 
-          await this.$axios.get(`http://localhost:1813/api/user/`, {
+          await this.$axios.get(`https://memnix.yumenetwork.net/api/user/`, {
             'X-Requested-With': 'XMLHttpRequest',
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',

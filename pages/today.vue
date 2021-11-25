@@ -30,6 +30,6 @@
 
 <script>
 export default {
-  middleware: 'authentificated'
+  middleware: 'authentificated',
 }
 </script>

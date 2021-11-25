@@ -10,7 +10,7 @@
         </v-card-title>
         <v-card-text>
           <p>
-            The scope of thius beta is to test the functionality and algorithmic
+            The scope of this beta is to test the functionality and algorithmic
             features.
             <br />The existing decks have been pre-established and aren't
             currently open to edit.
