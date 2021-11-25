@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+  memnix_prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: memnix_prod
+    restart: always
+
+    command: ash -c "npm run build && npm run start"
+
+    labels:
+      traefik.enable: true
+
+      # http port 80
+      traefik.http.routers.yume-memnix-ui.entrypoints: web
+      traefik.http.routers.yume-memnix-ui.rule: Host(`memnix.yumenetwork.net`)
+      traefik.http.routers.yume-memnix-ui.middlewares: yume-memnix-https-redirect
+      traefik.http.routers.yume-memnix-ui.service: yume-memnix-ui
+
+      # https port 443
+      traefik.http.routers.yume-memnix-ui-secure.entrypoints: websecure
+      traefik.http.routers.yume-memnix-ui-secure.rule: Host(`memnix.yumenetwork.net`)
+      # traefik.http.routers.yume-dashboard-ui-secure.middlewares: "medium-security-headers@file"
+      traefik.http.routers.yume-memnix-ui-secure.tls: true
+      traefik.http.routers.yume-memnix-ui-secure.service: yume-memnix-ui
+      traefik.http.routers.yume-memnix-ui-secure.tls.certresolver: httpcertresolver
+
+      traefik.http.middlewares.yume-memnix-https-redirect.redirectScheme.scheme: https
+      traefik.http.middlewares.yume-memnix-https-redirect.redirectScheme.permanent: true
+
+      traefik.http.services.yume-memnix-ui.loadbalancer.server.port: 1813
+
+    networks:
+      - traefik_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "3"
+
+
+networks:
+  traefik_network:
+      external: true

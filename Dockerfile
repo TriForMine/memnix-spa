@@ -1,0 +1,11 @@
+FROM node:12.0.0-alpine
+
+ENV APP_ROOT /src
+
+RUN mkdir ${APP_ROOT}
+
+WORKDIR ${APP_ROOT}
+
+ADD . ${APP_ROOT}
+
+ENV HOST 0.0.0.0
