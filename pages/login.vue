@@ -131,7 +131,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `https://memnix.yumenetwork.net/api/login/`,
+            `https://api-memnix.yumenetwork.net/api/login/`,
             {
               email: this.email,
               password: this.password,
@@ -144,7 +144,7 @@ export default {
             }
           ).then((res) => console.log(res))
 
-          await this.$axios.get(`https://memnix.yumenetwork.net/api/user/`, {
+          await this.$axios.get(`https://api-memnix.yumenetwork.net/api/user/`, {
             'X-Requested-With': 'XMLHttpRequest',
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',

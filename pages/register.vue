@@ -158,7 +158,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `https://memnix.yumenetwork.net/api/register/`,
+            `https://api-memnix.yumenetwork.net/api/register/`,
             {
               username: this.username,
               email: this.email,

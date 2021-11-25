@@ -3,7 +3,7 @@ import axios from 'axios'
 export default function ({ store, redirect }) {
     
     axios.get(
-        `https://memnix.yumenetwork.net/api/user/`,
+        `https://api-memnix.yumenetwork.net/api/user/`,
         {
           'X-Requested-With': 'XMLHttpRequest',
           'Access-Control-Allow-Origin': '*',
