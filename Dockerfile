@@ -1,11 +1,15 @@
-FROM node:12.0.0-alpine
+FROM node:14.15.0-alpine3.12
 
-ENV APP_ROOT /src
+WORKDIR /app
 
-RUN mkdir ${APP_ROOT}
+COPY package.json .
+COPY package-lock.json .
 
-WORKDIR ${APP_ROOT}
+RUN npm install
 
-ADD . ${APP_ROOT}
+COPY . .
 
 ENV HOST 0.0.0.0
+EXPOSE 1814
+
+CMD [ "npm", "run", "build" ]
