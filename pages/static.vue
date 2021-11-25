@@ -1,12 +1,12 @@
 <template>
   <v-row>
     <v-col class="text-center">
-      <img src="/v.png" alt="Vuetify.js" class="mb-5" />
+      <v-img src="moutmout.png" alt="Memnix" contain height="300" />
       <blockquote class="blockquote">
-        &#8220;First, solve the problem. Then, write the code.&#8221;
+        Welcome to the memnix website!<br>The web version of memnix is not yet available. You can use the android version (only on whitelist).
         <footer>
           <small>
-            <em>&mdash;John Johnson</em>
+            <em>&mdash;Corentin GS</em>
           </small>
         </footer>
       </blockquote>
@@ -17,5 +17,7 @@
 <script>
 export default {
   middleware: 'authentificated',
+  layout: 'login',
+
 }
 </script>

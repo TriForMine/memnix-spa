@@ -84,12 +84,11 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          title: 'Profile',
+          to: '/profile',
         },
       ],
-       // right: true,
-       // rightDrawer: false,
+
       title: 'Memnix',
     }
   },
