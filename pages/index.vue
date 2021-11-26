@@ -8,7 +8,7 @@
         <v-card-title class="headline">
           Welcome to the Memnix beta !
         </v-card-title>
-        <v-card-text>
+         <v-card-text>
           <p>
             The scope of this beta is to test the functionality and algorithmic
             features.
@@ -18,14 +18,15 @@
           <p>
             For more information on Memnix, check out the
             <a
-              href="https://vuetifyjs.com"
+              href="https://github.com/memnix"
               target="_blank"
               rel="noopener noreferrer"
             >
               github </a
             >.
-          </p>
-          <p>
+          </p> 
+          
+          <!--<p>
             If you have questions, please contact us on the official
             <a
               href="https://chat.vuetifyjs.com/"
@@ -35,12 +36,12 @@
             >
               discord </a
             >.
-          </p>
+          </p>  -->
           <p>
             Find a bug? Fill
 
             <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
+              href="https://github.com/memnix/memnix-spa/issues"
               target="_blank"
               rel="noopener noreferrer"
               title="contribute"
@@ -58,24 +59,24 @@
           </div>
           <hr class="my-3" />
           <a
-            href="https://nuxtjs.org/"
+            href="https://github.com/memnix/community-guidelines"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Nuxt Documentation
+            Memnix Documentation
           </a>
           <br />
           <a
-            href="https://github.com/nuxt/nuxt.js"
+            href="https://github.com/memnix"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Nuxt GitHub
+            Memnix GitHub
           </a>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/today"> Continue </v-btn>
+          <v-btn color="primary" nuxt to="/profile"> Continue </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
