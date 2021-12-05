@@ -130,26 +130,31 @@ export default {
       await this.$v.$touch()
       if (!this.$v.$invalid) {
         try {
-          await this.$axios.post(
-            `https://api-memnix.yumenetwork.net/api/login/`,
-            {
-              email: this.email,
-              password: this.password,
-            },
+          await this.$axios
+            .post(
+              `https://api-memnix.yumenetwork.net/api/login/`,
+              {
+                email: this.email,
+                password: this.password,
+              },
+              {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                withCredentials: true,
+              }
+            )
+            .then((res) => console.log(res))
+
+          await this.$axios.get(
+            `https://api-memnix.yumenetwork.net/api/user/`,
             {
               'X-Requested-With': 'XMLHttpRequest',
               'Access-Control-Allow-Origin': '*',
               'Content-Type': 'application/json',
               withCredentials: true,
             }
-          ).then((res) => console.log(res))
-
-          await this.$axios.get(`https://api-memnix.yumenetwork.net/api/user/`, {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-            withCredentials: true,
-          })
+          )
 
           this.$router.push('/today')
         } catch (e) {

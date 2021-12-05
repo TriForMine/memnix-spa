@@ -5,7 +5,7 @@
         <v-card-title class="headline">
           Welcome to the Memnix beta !
         </v-card-title>
-         <v-card-text>
+        <v-card-text>
           <p>
             The scope of this beta is to test the functionality and algorithmic
             features.
@@ -21,8 +21,8 @@
             >
               github </a
             >.
-          </p> 
-          
+          </p>
+
           <!--<p>
             If you have questions, please contact us on the official
             <a

@@ -18,9 +18,8 @@
         </v-list-item>
 
         <v-divider></v-divider>
-     
 
-          <v-list-item
+        <v-list-item
           v-for="(deck, j) in decks"
           :key="j"
           :to="deck.to"
@@ -34,7 +33,6 @@
             <v-list-item-title v-text="deck.title" />
           </v-list-item-content>
         </v-list-item>
-
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
@@ -48,7 +46,6 @@
         <Nuxt />
       </v-container>
     </v-main>
-
   </v-app>
 </template>
 
@@ -63,18 +60,18 @@ export default {
         {
           icon: 'mdi-airplane',
           title: 'Deck 1',
-          to: ''
+          to: '',
         },
-             {
+        {
           icon: 'mdi-baguette',
           title: 'Deck 2',
-          to: ''
+          to: '',
         },
-             {
+        {
           icon: 'mdi-food-apple',
           title: 'Deck 3',
-          to: ''
-        }
+          to: '',
+        },
       ],
       items: [
         {
