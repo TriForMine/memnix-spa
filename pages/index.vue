@@ -73,7 +73,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/profile"> Continue </v-btn>
+          <v-btn color="primary" nuxt to="/today"> Continue </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>

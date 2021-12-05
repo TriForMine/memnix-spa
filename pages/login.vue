@@ -151,7 +151,7 @@ export default {
             withCredentials: true,
           })
 
-          this.$router.push('/profile')
+          this.$router.push('/today')
         } catch (e) {
           this.error = e.response.data.message
         }

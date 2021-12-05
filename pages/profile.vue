@@ -17,7 +17,6 @@
 <script>
 export default {
   middleware: 'authentificated',
-  layout: 'login',
 
 }
 </script>
