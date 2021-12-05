@@ -12,8 +12,6 @@ export default function ({ store, redirect }) {
         }
       ).then((response) => {
 
-        console.log(response)
-
       if (response.status !== 200) {
         return redirect('/login')
       }})

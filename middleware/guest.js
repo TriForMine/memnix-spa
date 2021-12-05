@@ -9,7 +9,6 @@ export default function ({ store, redirect }) {
       withCredentials: true,
     })
     .then((response) => {
-      console.log(response)
 
       if (response.status === 200) {
         return redirect('/today')

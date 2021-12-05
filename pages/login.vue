@@ -144,7 +144,6 @@ export default {
                 withCredentials: true,
               }
             )
-            .then((res) => console.log(res))
 
           await this.$axios.get(
             `https://api-memnix.yumenetwork.net/api/user/`,
