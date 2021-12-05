@@ -1,5 +1,43 @@
 <template>
   <v-row v-if="result.ID !== 0">
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-card v-if="res.validate">
+        <v-card-title class="text-h5 green"> Correct ! </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-spacer></v-spacer>
+                <h2>Expected answer: {{ res.correct_answer }}</h2>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false"> Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card v-else>
+        <v-card-title class="text-h5 red"> Incorrect ! </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-spacer></v-spacer>
+                <h2>Expected answer: {{ res.correct_answer }}</h2>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false"> Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-col class="text-center">
       <v-card
         class="overflow-auto mx-auto mt-5 mb-10 rounded-xl"
@@ -56,8 +94,8 @@
       </v-container>
     </v-col>
   </v-row>
-  <v-row  v-else no-gutters align="center" justify="center">
-      <h1>You don't have more cards to play today !</h1>
+  <v-row v-else no-gutters align="center" justify="center">
+    <h1>You don't have more cards to play today !</h1>
   </v-row>
 </template>
 
@@ -80,6 +118,8 @@ export default {
       result: [],
       answer: '',
       item: [],
+      dialog: false,
+      res: [],
     }
   },
   methods: {
@@ -103,7 +143,12 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => this.getToday(), (this.answer = ''))
+          .then((res) => {
+            this.getToday()
+            this.res = res.data.data
+            this.dialog = true
+            this.answer = ''
+          })
 
         this.$router.push('/today')
       } catch (e) {
