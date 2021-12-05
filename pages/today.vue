@@ -62,7 +62,7 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => this.getToday(), this.answer="")
+          .then((res) => this.getToday(), (this.answer = ''))
 
         this.$router.push('/today')
       } catch (e) {
