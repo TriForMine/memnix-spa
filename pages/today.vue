@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="result.ID !== 0">
     <v-col class="text-center">
       <v-card
         class="overflow-auto mx-auto mt-5 mb-10 rounded-xl"
@@ -19,23 +19,59 @@
           {{ result.card_question }}
         </v-card-text>
       </v-card>
-      <v-form @submit.prevent="postAnswer">
-        <v-text-field
-          class="rounded-lg"
-          v-bind:label="result.card_format"
-          placeholder="your answer"
-          v-model="answer"
-          name="answer"
-          filled
-        ></v-text-field>
+
+      <v-form v-if="result.card_type < 2" @submit.prevent="validateAnswer">
+        <v-col cols="12">
+          <v-text-field
+            required
+            @input="$v.answer.$touch()"
+            @blur="$v.answer.$touch()"
+            class="rounded-lg"
+            v-bind:label="result.card_format"
+            placeholder="your answer"
+            v-model="answer"
+            :append-outer-icon="answer ? 'mdi-send' : ''"
+            clear-icon="mdi-close-circle"
+            clearable
+            name="answer"
+            @click:append-outer="validateAnswer"
+            @click:clear="clearMessage"
+            filled
+          ></v-text-field>
+        </v-col>
       </v-form>
+      <v-container v-else>
+        <v-row>
+          <v-col v-for="n in items" :key="n" cols="12" sm="6">
+            <v-btn
+              color="primary"
+              @click="buttonAnswer(n)"
+              x-large
+              dark
+              block
+              >{{ n }}</v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-container>
     </v-col>
+  </v-row>
+  <v-row  v-else no-gutters align="center" justify="center">
+      <h1>You don't have more cards to play today !</h1>
   </v-row>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   middleware: 'authentificated',
+  mixins: [validationMixin],
+
+  validations: {
+    answer: { required },
+  },
   beforeMount() {
     this.getToday()
   },
@@ -43,9 +79,14 @@ export default {
     return {
       result: [],
       answer: '',
+      item: [],
     }
   },
   methods: {
+    clearMessage() {
+      this.answer = ''
+    },
+
     async postAnswer() {
       try {
         await this.$axios
@@ -69,6 +110,17 @@ export default {
         this.error = e.response.data.message
       }
     },
+    async buttonAnswer(n) {
+      this.answer = n
+      await this.postAnswer()
+    },
+
+    async validateAnswer() {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        await this.postAnswer()
+      }
+    },
     async getToday() {
       try {
         await this.$axios
@@ -80,6 +132,9 @@ export default {
           })
           .then((res) => {
             this.result = res.data.data.Card
+            if (res.data.data.Card.card_type === 2) {
+              this.items = res.data.data.Answers
+            }
           })
       } catch (e) {
         this.error = e.response.data.message
