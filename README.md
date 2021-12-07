@@ -1,6 +1,5 @@
 # memnix-spa
-
-## Learn in a playful and efficient way with Memnix !
+ Learn in a playful and efficient way with Memnix !
 
 
 
