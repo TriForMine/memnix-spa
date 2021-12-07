@@ -1,6 +1,11 @@
 # memnix-spa
 
+## Learn in a playful and efficient way with Memnix !
+
+
+
 ## Build Setup
+___
 
 ```bash
 # install dependencies
