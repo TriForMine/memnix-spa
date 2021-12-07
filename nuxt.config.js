@@ -52,8 +52,8 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      name: "Memnix Web APP",
-      shrt_name: "Memnix",
+      name: "Memnix Web",
+      short_name: "Memnix",
       lang: 'en',
       display: "standalone",
     }
