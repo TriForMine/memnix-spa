@@ -68,6 +68,8 @@
             v-bind:label="result.card_format"
             placeholder="your answer"
             v-model="answer"
+            :error-messages="answerErrors"
+
             :append-outer-icon="answer ? 'mdi-send' : ''"
             clear-icon="mdi-close-circle"
             clearable
@@ -114,15 +116,27 @@ html::-webkit-scrollbar {
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required } from 'vuelidate/lib/validators'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   middleware: 'authentificated',
   mixins: [validationMixin],
 
   validations: {
-    answer: { required },
+    answer: { required, maxLength: maxLength(30) },
   },
+
+  computed: {
+    answerErrors() {
+      const errors = []
+      if (!this.$v.answer.$dirty) return errors
+      !this.$v.answer.maxLength &&
+        errors.push('Answer must be at most 30 characters long')
+      !this.$v.answer.required && errors.push('Answer is required.')
+      return errors
+    },
+  },
+
   beforeMount() {
     this.getToday()
   },
@@ -200,4 +214,4 @@ export default {
     },
   },
 }
-</script>
+</script> 
