@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default function ({ store, redirect }) {
+export default function ({ redirect }) {
     
     axios.get(
         `https://api-memnix.yumenetwork.net/api/user/`,
@@ -12,7 +12,7 @@ export default function ({ store, redirect }) {
         }
       ).then((response) => {
 
-      if (response.status !== 200) {
+      if (response.status !== 200 || response.data.ID === 0 || response.data.success === false) {
         return redirect('/login')
       }})
       .catch((error) => {

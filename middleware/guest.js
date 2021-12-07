@@ -10,7 +10,7 @@ export default function ({ store, redirect }) {
     })
     .then((response) => {
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success === true) {
         return redirect('/today')
       }
     })

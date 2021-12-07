@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
-      <v-list>
+  <v-list>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
@@ -19,7 +19,7 @@
 
         <v-divider></v-divider>
 
-        <v-list-item
+           <!--  <v-list-item
           v-for="(deck, j) in decks"
           :key="j"
           :to="deck.to"
@@ -32,8 +32,8 @@
           <v-list-item-content>
             <v-list-item-title v-text="deck.title" />
           </v-list-item-content>
-        </v-list-item>
-      </v-list>
+        </v-list-item>-->
+      </v-list> 
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
