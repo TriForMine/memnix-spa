@@ -50,7 +50,7 @@
                 <v-checkbox
                   v-model="checkbox"
                   :error-messages="checkboxErrors"
-                  label="Do you agree?"
+                  label="Do you agree to our TOS ?"
                   required
                   @change="$v.checkbox.$touch()"
                   @blur="$v.checkbox.$touch()"
@@ -72,8 +72,8 @@
             <v-card-actions class="ml-6 mr-6 text-center">
               <p>
                 By continuing, you agree to Memnix's
-                <a href="#" class="pl-2">Policy</a> and
-                <a href="#" class="pl-2">Terms of Use</a>
+                <a href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md" class="pl-2">Policy</a> and
+                <a href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md" class="pl-2">Terms of Use</a>
               </p>
             </v-card-actions>
           </v-card>
