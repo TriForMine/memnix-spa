@@ -60,8 +60,10 @@
 
       <v-form v-if="result.card_type < 2" @submit.prevent="validateAnswer">
         <v-col cols="12">
-          <v-text-field
+          <v-text-field 
             required
+            counter
+            maxlength="30"
             @input="$v.answer.$touch()"
             @blur="$v.answer.$touch()"
             class="rounded-lg"
@@ -103,7 +105,7 @@
 
     <style>
 html {
-  overflow: hidden !important;
+  overflow: auto !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
