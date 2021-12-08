@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto" max-width="344">
-    <v-img v-bind:src="deck.deck_banner" height="300px"></v-img>
+  <v-card class="mx-auto" max-width=auto>
+    <v-img v-bind:src="deck.deck_banner" height="450"></v-img>
 
     <v-card-title> {{ deck.deck_name }}</v-card-title>
 
@@ -36,5 +36,20 @@ export default {
   props: {
       deck: [],
   },
+
+  methods: {
+      getImageWidth(src){
+          const img = new Image();
+          img.src = src;
+          return img.width;
+      },
+      getImageHeight(src){
+          const img = new Image();
+          img.src = src;
+          console.log(img.height)
+          return img.height;
+      },
+
+  }
 }
 </script>

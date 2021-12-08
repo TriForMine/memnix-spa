@@ -43,16 +43,16 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
+          icon: 'mdi-chart-bubble',
           title: 'Today',
           to: '/today',
         },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-account',
           title: 'Profile',
           to: '/profile',
         },
-        { icon: 'mdi-chart-bubble', title: 'Decks', to: '/decks' },
+        { icon: 'mdi-view-list', title: 'Decks', to: '/decks' },
       ],
 
       title: 'Memnix',
