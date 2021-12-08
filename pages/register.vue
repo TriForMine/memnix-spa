@@ -72,8 +72,17 @@
             <v-card-actions class="ml-6 mr-6 text-center">
               <p>
                 By continuing, you agree to Memnix's
-                <a href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md" class="pl-2">Policy</a> and
-                <a href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md" class="pl-2">Terms of Use</a>
+                <a
+                  href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md"
+                  class="pl-2"
+                  >Policy</a
+                >
+                and
+                <a
+                  href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md"
+                  class="pl-2"
+                  >Terms of Use</a
+                >
               </p>
             </v-card-actions>
           </v-card>
