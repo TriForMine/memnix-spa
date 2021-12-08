@@ -5,7 +5,7 @@
     <v-card-title> {{ deck.deck_name }}</v-card-title>
 
     <v-card-actions>
-      <v-btn color="orange lighten-2" text> Play </v-btn>
+      <v-btn color="orange lighten-2" text @click="openDialog"> Play </v-btn>
 
       <v-spacer></v-spacer>
 
@@ -17,7 +17,6 @@
     <v-expand-transition>
       <div v-show="show">
         <v-divider></v-divider>
-
         <v-card-text>
           {{ deck.deck_description }}
         </v-card-text>
@@ -38,6 +37,10 @@ export default {
   },
 
   methods: {
+      openDialog() {
+          this.$emit("openDialog")
+      },
+
       getImageWidth(src){
           const img = new Image();
           img.src = src;
