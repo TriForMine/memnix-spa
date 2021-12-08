@@ -13,7 +13,7 @@
                   :error-messages="nameErrors"
                   label="Enter your username"
                   name="username"
-                  prepend-inner-icon="mdi-nuxt"
+                  prepend-inner-icon="mdi-account"
                   type="text"
                   class="rounded-0 control"
                   required
