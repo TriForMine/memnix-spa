@@ -6,7 +6,7 @@
       max-width="100%"
       max-height="550"
     >
-      <v-img
+      <v-img v-if="card.card_image !== ''"
         v-bind:src="card.card_image"
         max-height="450"
         class="mb-2"
