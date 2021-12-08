@@ -1,6 +1,18 @@
 <template>
-  <v-card class="mx-auto" max-width=auto>
-    <v-img v-bind:src="deck.deck_banner" height="450"></v-img>
+  <v-card class="mx-auto" max-width="auto">
+    <v-img
+      v-if="deck.deck_banner !== ''"
+      v-bind:src="deck.deck_banner"
+      height="450"
+    >
+      <template v-slot:placeholder>
+        <v-row class="fill-height ma-0" align="center" justify="center">
+          <v-progress-circular
+            indeterminate
+            color="grey lighten-5"
+          ></v-progress-circular>
+        </v-row> </template
+    ></v-img>
 
     <v-card-title> {{ deck.deck_name }}</v-card-title>
 
@@ -20,6 +32,12 @@
         <v-card-text>
           {{ deck.deck_description }}
         </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="unsubToDeck">
+            <v-icon>{{ 'mdi-trash-can' }}</v-icon>
+          </v-btn>
+        </v-card-actions>
       </div>
     </v-expand-transition>
   </v-card>
@@ -33,26 +51,17 @@ export default {
     }
   },
   props: {
-      deck: [],
+    deck: [],
   },
 
   methods: {
-      openDialog() {
-          this.$emit("openDialog")
-      },
+    openDialog() {
+      this.$emit('openDialog')
+    },
 
-      getImageWidth(src){
-          const img = new Image();
-          img.src = src;
-          return img.width;
-      },
-      getImageHeight(src){
-          const img = new Image();
-          img.src = src;
-          console.log(img.height)
-          return img.height;
-      },
-
-  }
+    unsubToDeck() {
+      this.$emit('unsubToDeck')
+    },
+  },
 }
 </script>
