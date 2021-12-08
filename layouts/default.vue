@@ -89,5 +89,7 @@ export default {
       title: 'Memnix',
     }
   },
+  methods: { 
+  }
 }
 </script>
