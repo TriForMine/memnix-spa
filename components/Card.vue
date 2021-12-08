@@ -6,13 +6,23 @@
       max-width="100%"
       max-height="550"
     >
-      <v-img v-if="card.card_image !== ''"
+      <v-img
+        v-if="card.card_image !== ''"
         v-bind:src="card.card_image"
         max-height="450"
         class="mb-2"
         dark
         contain
-      ></v-img>
+      >
+        <template v-slot:placeholder>
+          <v-row class="fill-height ma-0" align="center" justify="center">
+            <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
 
       <v-card-text class="font-weight-bold text-h4">
         {{ card.card_question }}
