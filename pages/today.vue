@@ -84,7 +84,7 @@
       </v-form>
       <v-container v-else>
         <v-row>
-          <v-col v-for="n in items" :key="n" cols="12" sm="6">
+          <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
             <v-btn
               color="primary"
               @click="buttonAnswer(n)"
