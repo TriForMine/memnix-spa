@@ -8,24 +8,31 @@
         transition="dialog-bottom-transition"
       >
         <v-card>
-          <v-toolbar dark color="primary">
-            <v-btn icon dark @click="dialog = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title>{{ selectedDeck.deck_name }}</v-toolbar-title>
-          </v-toolbar>
-          <v-row>
-            <v-dialog v-model="resDialog" persistent max-width="600px">
-              <ResultDialog :res="res" @closeResultDialog="closeResultDialog" />
-            </v-dialog>
-            <v-container>
-              <Card
-                :card="card"
-                :items="items"
-                @postAnswer="postAnswer($event)"
-              />
-            </v-container>
-          </v-row>
+          <v-card-title>
+            <v-toolbar dark color="primary" >
+              <v-btn icon dark @click="dialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ selectedDeck.deck_name }}</v-toolbar-title>
+            </v-toolbar>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-dialog v-model="resDialog" persistent max-width="600px">
+                <ResultDialog
+                  :res="res"
+                  @closeResultDialog="closeResultDialog"
+                />
+              </v-dialog>
+              <v-container>
+                <Card
+                  :card="card"
+                  :items="items"
+                  @postAnswer="postAnswer($event)"
+                />
+              </v-container>
+            </v-row>
+          </v-card-text>
         </v-card>
       </v-dialog>
       <v-col v-for="(n, index) in decks" :key="index" cols="12" sm="4">
