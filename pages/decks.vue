@@ -187,7 +187,7 @@ export default {
             }
           )
           .then((res) => {
-            this.decks.splice(this.decks.indexOf(this.selectedDeck))
+            this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })
       } catch (e) {
