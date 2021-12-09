@@ -58,6 +58,8 @@ export default {
           to: '/profile',
         },
         { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
+        { icon: 'mdi-plus-circle', title: 'Public decks', to: '/available' },
+
       ],
 
       title: 'Memnix',
