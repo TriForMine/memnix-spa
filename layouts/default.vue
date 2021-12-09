@@ -32,12 +32,9 @@
       </v-container>
     </v-main>
     <v-footer padless>
-          <v-col
-      class="text-center"
-      cols="12"
-    >
-      {{ new Date().getFullYear() }} — <strong>Memnix</strong>
-    </v-col>
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} — <strong>Memnix</strong>
+      </v-col>
     </v-footer>
   </v-app>
 </template>
@@ -60,7 +57,7 @@ export default {
           title: 'Profile',
           to: '/profile',
         },
-        { icon: 'mdi-view-list', title: 'Decks', to: '/decks' },
+        { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
       ],
 
       title: 'Memnix',
