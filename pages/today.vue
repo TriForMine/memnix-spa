@@ -28,6 +28,7 @@ export default {
   beforeMount() {
     this.getToday()
   },
+
   methods: {
     closeResultDialog() {
       this.resDialog = false

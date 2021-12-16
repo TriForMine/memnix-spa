@@ -1,3 +1,4 @@
+/* eslint-disable vue/require-default-prop */
 <template>
   <v-col class="text-center">
     <v-card
@@ -8,13 +9,13 @@
     >
       <v-img
         v-if="card.card_image !== ''"
-        v-bind:src="card.card_image"
+        :src="card.card_image"
         max-height="450"
         class="mb-2"
         dark
         contain
       >
-        <template v-slot:placeholder>
+        <template #placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
             <v-progress-circular
               indeterminate
@@ -32,29 +33,29 @@
     <v-form v-if="card.card_type < 2" @submit.prevent="validateAnswer">
       <v-col cols="12">
         <v-text-field
+          v-model="answer"
           required
           counter
           maxlength="30"
-          @input="$v.answer.$touch()"
-          @blur="$v.answer.$touch()"
           class="rounded-lg"
-          v-bind:label="card.card_format"
+          :label="card.card_format"
           placeholder="your answer"
-          v-model="answer"
           :append-outer-icon="answer ? 'mdi-send' : ''"
           clear-icon="mdi-close-circle"
           clearable
           name="answer"
+          filled
+          @input="$v.answer.$touch()"
+          @blur="$v.answer.$touch()"
           @click:append-outer="validateAnswer"
           @click:clear="clearMessage"
-          filled
         ></v-text-field>
       </v-col>
     </v-form>
     <v-container v-else>
       <v-row>
         <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
-          <v-btn color="primary" @click="buttonAnswer(n)" x-large dark block>{{
+          <v-btn color="primary" x-large dark block @click="buttonAnswer(n)">{{
             n
           }}</v-btn>
         </v-col>
@@ -73,15 +74,15 @@ export default {
   validations: {
     answer: { required, maxLength: maxLength(30) },
   },
+  props: {
+    card: [],
+    items: [],
+  },
 
   data() {
     return {
       answer: '',
     }
-  },
-  props: {
-    card: [],
-    items: [],
   },
 
   methods: {
@@ -89,7 +90,7 @@ export default {
       this.answer = ''
     },
 
-    postAnswer() {
+    postAnswer() { 
       this.$emit('postAnswer', this.answer)
       this.clearMessage()
     },

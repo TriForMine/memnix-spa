@@ -37,28 +37,12 @@
       <h1>You don't have any deck available for subscription.</h1>
     </v-row>
   </v-container>
-
 </template>
 
-<style>
-html {
-  overflow: auto !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>
 
 <script>
 export default {
-  beforeMount() {
-    this.getAvailableDeck()
-  },
-
   data() {
     return {
       decks: [],
@@ -69,6 +53,9 @@ export default {
       items: [],
       res: [],
     }
+  },
+  beforeMount() {
+    this.getAvailableDeck()
   },
 
   methods: {
@@ -122,3 +109,16 @@ export default {
   },
 }
 </script>
+
+<style>
+html {
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>

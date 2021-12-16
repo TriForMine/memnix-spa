@@ -71,29 +71,13 @@
         />
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
-<style>
-html {
-  overflow: auto !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>
 
 <script>
 export default {
-  beforeMount() {
-    this.getSubDeck()
-  },
-
   data() {
     return {
       decks: [],
@@ -105,6 +89,9 @@ export default {
       items: [],
       res: [],
     }
+  },
+  beforeMount() {
+    this.getSubDeck()
   },
 
   methods: {
@@ -217,3 +204,16 @@ export default {
   },
 }
 </script>
+
+<style>
+html {
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>

@@ -39,12 +39,12 @@
 
 <script>
 export default {
+  props: {
+    res: [],
+  },
   data() {
     return {
     }
-  },
-  props: {
-    res: [],
   },
 
   methods: {

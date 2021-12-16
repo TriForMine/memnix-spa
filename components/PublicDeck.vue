@@ -2,10 +2,10 @@
   <v-card class="mx-auto" max-width="auto">
     <v-img
       v-if="deck.deck_banner !== ''"
-      v-bind:src="deck.deck_banner"
+      :src="deck.deck_banner"
       height="450"
     >
-      <template v-slot:placeholder>
+      <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
             indeterminate
@@ -41,13 +41,13 @@
 
 <script>
 export default {
+  props: {
+    deck: [],
+  },
   data() {
     return {
       show: false,
     }
-  },
-  props: {
-    deck: [],
   },
 
   methods: {

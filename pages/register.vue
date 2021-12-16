@@ -6,7 +6,7 @@
           <v-card elevation="0">
             <v-card-title class="headline"> Register !</v-card-title>
             <v-card-text>
-              <Notification :message="error" v-if="error" />
+              <Notification v-if="error" :message="error" />
               <v-form @submit.prevent="register">
                 <v-text-field
                   v-model="username"
@@ -17,9 +17,9 @@
                   type="text"
                   class="rounded-0 control"
                   required
+                  outlined
                   @input="$v.username.$touch()"
                   @blur="$v.username.$touch()"
-                  outlined
                 ></v-text-field>
                 <v-text-field
                   v-model="email"
@@ -30,9 +30,9 @@
                   type="email"
                   class="rounded-0 control"
                   required
+                  outlined
                   @input="$v.email.$touch()"
                   @blur="$v.email.$touch()"
-                  outlined
                 ></v-text-field>
                 <v-text-field
                   v-model="password"
@@ -43,9 +43,9 @@
                   type="password"
                   class="rounded-0 control"
                   required
+                  outlined
                   @input="$v.password.$touch()"
                   @blur="$v.password.$touch()"
-                  outlined
                 ></v-text-field>
                 <v-checkbox
                   v-model="checkbox"
@@ -97,11 +97,11 @@ import { validationMixin, useVuelidate } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
-  setup: () => ({ v$: useVuelidate() }),
-  layout: 'login',
-  middleware: 'guest',
 
   mixins: [validationMixin],
+  layout: 'login',
+  middleware: 'guest',
+  setup: () => ({ v$: useVuelidate() }),
 
   validations: {
     username: { required, maxLength: maxLength(15), minLength: minLength(4) },
@@ -112,6 +112,16 @@ export default {
         return val
       },
     },
+  },
+
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+      checkbox: false,
+      error: null,
+    }
   },
 
   computed: {
@@ -148,16 +158,6 @@ export default {
       !this.$v.email.required && errors.push('E-mail is required')
       return errors
     },
-  },
-
-  data() {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      checkbox: false,
-      error: null,
-    }
   },
 
   methods: {

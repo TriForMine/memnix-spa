@@ -13,23 +13,12 @@
       </blockquote>
       <v-spacer></v-spacer>
 
-      <v-btn color="secondary" @click="logout" x-large dark>Logout</v-btn>
+      <v-btn color="secondary" x-large dark @click="logout">Logout</v-btn>
     </v-col>
   </v-row>
 </template>
 
-<style>
-html {
-  overflow: auto !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>
 
 <script>
 export default {
@@ -55,3 +44,17 @@ export default {
   },
 }
 </script>
+
+
+<style>
+html {
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>

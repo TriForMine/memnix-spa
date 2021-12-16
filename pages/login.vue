@@ -23,9 +23,9 @@
                     type="email"
                     class="rounded-0"
                     required
+                    outlined
                     @input="$v.email.$touch()"
                     @blur="$v.email.$touch()"
-                    outlined
                   ></v-text-field>
                   <v-text-field
                     v-model="password"
@@ -36,9 +36,9 @@
                     type="password"
                     class="rounded-0"
                     required
+                    outlined
                     @input="$v.password.$touch()"
                     @blur="$v.password.$touch()"
-                    outlined
                   ></v-text-field>
                   <v-btn
                     class="mb-2"
@@ -87,14 +87,22 @@ import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
-  layout: 'login',
-  middleware: 'guest',
 
   mixins: [validationMixin],
+  layout: 'login',
+  middleware: 'guest',
 
   validations: {
     password: { required, maxLength: maxLength(20), minLength: minLength(8) },
     email: { required, email },
+  },
+
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: null,
+    }
   },
 
   computed: {
@@ -115,14 +123,6 @@ export default {
       !this.$v.email.required && errors.push('E-mail is required')
       return errors
     },
-  },
-
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: null,
-    }
   },
 
   methods: {
