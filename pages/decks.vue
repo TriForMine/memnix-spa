@@ -18,7 +18,12 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-dialog v-model="resDialog" persistent max-width="600px">
+              <v-dialog
+                v-model="resDialog"
+                persistent
+                max-width="600px"
+                @keydown.enter="closeResultDialog"
+              >
                 <ResultDialog
                   :res="res"
                   @closeResultDialog="closeResultDialog"
