@@ -12,26 +12,9 @@
   </v-row>
 </template>
 
-<style>
-html {
-  overflow: auto !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>
-
 <script>
 export default {
   middleware: 'authentificated',
-
-  beforeMount() {
-    this.getToday()
-  },
   data() {
     return {
       card: [],
@@ -40,6 +23,10 @@ export default {
       resDialog: false,
       res: [],
     }
+  },
+
+  beforeMount() {
+    this.getToday()
   },
   methods: {
     closeResultDialog() {
@@ -97,3 +84,16 @@ export default {
   },
 }
 </script> 
+
+<style>
+html {
+  overflow: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>
