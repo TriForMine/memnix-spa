@@ -10,7 +10,7 @@
         </v-row> </template
     ></v-img>
 
-    <v-card-title> {{ deck.deck_name }}</v-card-title>
+    <v-card-title> {{ name }}</v-card-title>
 
     <v-card-actions>
       <v-btn color="orange lighten-2" text @click="openDialog"> Play </v-btn>
@@ -48,6 +48,15 @@ export default {
     return {
       show: false,
     }
+  },
+
+  computed: {
+    name() {
+      if (this.deck.deck_status === 3) {
+        return this.deck.deck_name + ' · public'
+      }
+      return this.deck.deck_name
+    },
   },
 
   methods: {
