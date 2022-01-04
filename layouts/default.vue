@@ -16,15 +16,11 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
-
-        <v-divider></v-divider>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-
       <v-toolbar-title v-text="title" />
-      <v-spacer />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -52,14 +48,14 @@ export default {
           title: 'Today',
           to: '/today',
         },
+
+        { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
+        { icon: 'mdi-plus-circle', title: 'Public decks', to: '/available' },
         {
           icon: 'mdi-account',
           title: 'Profile',
           to: '/profile',
         },
-        { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
-        { icon: 'mdi-plus-circle', title: 'Public decks', to: '/available' },
-
       ],
 
       title: 'Memnix',

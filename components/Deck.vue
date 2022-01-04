@@ -1,10 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="auto">
-    <v-img
-      v-if="deck.deck_banner !== ''"
-      :src="deck.deck_banner"
-      height="450"
-    >
+    <v-img v-if="deck.deck_banner !== ''" :src="deck.deck_banner" height="450">
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
