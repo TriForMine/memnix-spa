@@ -3,7 +3,6 @@
     <v-col class="text-center">
       <User :user="user" />
       <v-spacer></v-spacer>
-
       <v-btn color="secondary" class="px-14 mt-15" x-large @click="logout"
         >Logout</v-btn
       >
@@ -69,6 +68,7 @@ html {
   overflow: auto !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
+
 }
 
 html::-webkit-scrollbar {

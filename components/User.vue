@@ -1,9 +1,9 @@
 /* eslint-disable vue/require-default-prop */
 <template>
-  <v-container fluid>
-    <v-row dense>
+  <v-container>
+    <v-row>
       <v-col cols="12">
-        <v-card elevation="11">
+        <v-card elevation="5">
           <v-img
             src=""
             class="white--text align-end"
@@ -11,7 +11,7 @@
             height="150px"
           >
             <v-card-title>
-              <v-avatar size="120">
+              <v-avatar size="100">
                 <img
                   alt="user"
                   :src=url

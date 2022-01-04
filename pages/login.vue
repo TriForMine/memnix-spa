@@ -134,7 +134,7 @@ export default {
             .post(
               `https://api-memnix.yumenetwork.net/api/login/`,
               {
-                email: this.email,
+                email: this.email.toLowerCase(),
                 password: this.password,
               },
               {
