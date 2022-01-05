@@ -256,7 +256,7 @@ export default {
           })
           .then((res) => {
             for (let i = 0; i < res.data.count; i++) {
-              this.decks.push(res.data.data[i])
+              this.decks.push(res.data.data[i].Deck)
             }
           })
       } catch (e) {
