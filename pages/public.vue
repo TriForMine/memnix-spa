@@ -33,7 +33,7 @@
         :page.sync="page"
         :search="search"
         hide-default-footer
-        class="d-flex flex-column overflow-hidden"
+        class="d-flex flex-column overflow-hidden mx-10 ma-3"
       >
         <template #header>
           <v-toolbar class="mb-2 shrink" color="indigo" dark flat>
@@ -57,10 +57,10 @@
               v-for="item in props.items"
               :key="item.deck_name"
               cols="12"
-              sm="6"
+              sm="12"
               md="6"
               lg="4"
-              xl="6"
+              xl="3"
             >
               <v-card>
                 <div class="d-flex flex-no-wrap justify-space-between">
