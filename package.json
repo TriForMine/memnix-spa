@@ -17,7 +17,9 @@
     "nuxt": "^2.15.7",
     "shrink-ray-current": "^4.1.3",
     "vue-cookies": "^1.7.4",
+    "vue-flex-waterfall": "^1.0.7",
     "vue-snip": "^1.3.0",
+    "vue-stack-grid": "^1.2.2",
     "vuelidate": "^0.7.6",
     "vuetify": "^2.5.5"
   },

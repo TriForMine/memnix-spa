@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-if="decks.length !== 0">
       <v-dialog
         v-model="dialog"
         fullscreen
@@ -68,6 +68,7 @@
           </v-card-actions>
         </v-card></v-dialog
       >
+
       <v-col v-for="(n, index) in decks" :key="index" cols="12" sm="4">
         <Deck
           :deck="n"
@@ -75,6 +76,9 @@
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
       </v-col>
+    </v-row>
+    <v-row v-else no-gutters align="center" justify="center">
+      <h1>You are not sub to any deck yet!</h1>
     </v-row>
   </v-container>
 </template>

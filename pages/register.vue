@@ -194,18 +194,7 @@ export default {
             }
           )
 
-          await this.$axios.post(
-            `https://api-memnix.yumenetwork.net/api/v1/decks/1/subscribe`,
-            {},
-            {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              withCredentials: true,
-            }
-          )
-
-          this.$router.push('/login')
+          await this.$router.push('/login')
         } catch (e) {
           this.error = e.response.data.message
         }
