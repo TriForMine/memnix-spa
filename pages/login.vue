@@ -155,7 +155,7 @@ export default {
             }
           )
 
-          this.$router.push('/today')
+          await this.$router.push('/today')
         } catch (e) {
           this.error = e.response.data.message
         }

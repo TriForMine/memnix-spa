@@ -36,7 +36,7 @@ export default {
             withCredentials: true,
           }
         )
-        this.$router.push('/login')
+        await this.$router.push('/login')
       } catch (e) {
         this.error = e.response.data.message
       }

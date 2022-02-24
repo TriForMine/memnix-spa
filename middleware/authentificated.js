@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default function ({ redirect }) {
-    
+
     axios.get(
         `https://api-memnix.yumenetwork.net/api/user/`,
         {
@@ -16,6 +16,7 @@ export default function ({ redirect }) {
         return redirect('/login')
       }})
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error.message)
 
         return redirect('/login')

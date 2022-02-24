@@ -90,7 +90,7 @@ export default {
       this.answer = ''
     },
 
-    postAnswer() { 
+    postAnswer() {
       this.$emit('postAnswer', this.answer)
       this.clearMessage()
     },

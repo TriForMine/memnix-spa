@@ -1,3 +1,4 @@
+<!--suppress ALL, HtmlUnknownTag -->
 <template>
   <v-row>
     <v-col>
@@ -76,7 +77,7 @@
                     >
                       <v-tooltip bottom color="indigo">
                         <template #activator="{ on, attrs }">
-                          <span class="mb-1" dark v-bind="attrs" v-on="on">
+                          <span class="mb-1" v-bind="attrs" v-on="on">
                             {{ item.deck_name }}
                           </span>
                         </template>
@@ -86,7 +87,7 @@
                     <v-card-text style="height: 60px; max-width: 180px">
                       <v-tooltip bottom color="indigo">
                         <template #activator="{ on, attrs }">
-                          <span dark v-bind="attrs" v-on="on">
+                          <span v-bind="attrs" v-on="on">
                             <p v-snip:js="2">{{ item.deck_description }}</p>
                           </span>
                         </template>

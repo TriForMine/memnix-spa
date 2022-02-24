@@ -15,6 +15,7 @@ export default function ({ store, redirect }) {
       }
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
         console.log(error.message)
 
     })
