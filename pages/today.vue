@@ -2,7 +2,6 @@
   <v-row v-if="card.ID !== 0">
     <v-dialog
       v-model="resDialog"
-      persistent
       max-width="600px"
       @keydown.enter="closeResultDialog"
     >
@@ -89,7 +88,7 @@ export default {
     },
   },
 }
-</script> 
+</script>
 
 <style>
 html {

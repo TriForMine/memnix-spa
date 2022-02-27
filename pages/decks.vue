@@ -20,7 +20,6 @@
             <v-row>
               <v-dialog
                 v-model="resDialog"
-                persistent
                 max-width="600px"
                 @keydown.enter="closeResultDialog"
               >
