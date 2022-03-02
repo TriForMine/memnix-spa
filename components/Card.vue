@@ -109,3 +109,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.v-btn {
+  text-transform: none !important;
+}
+</style>
