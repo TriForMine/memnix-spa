@@ -17,7 +17,7 @@ export default function ({ redirect }) {
       }})
       .catch((error) => {
         // eslint-disable-next-line no-console
-        console.log(error.message)
+        
 
         return redirect('/login')
       })
