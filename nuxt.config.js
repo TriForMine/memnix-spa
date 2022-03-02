@@ -1,8 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 import shrinkRay from 'shrink-ray-current'
 
-
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -30,7 +28,7 @@ export default {
   components: true,
 
   render: {
-    compressor: shrinkRay()
+    compressor: shrinkRay(),
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
