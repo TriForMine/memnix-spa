@@ -75,8 +75,14 @@ export default {
     answer: { required, maxLength: maxLength(30) },
   },
   props: {
-    card: [],
-    items: [],
+    card: {
+      type: Object,
+      default() {},
+    },
+    items: {
+      type: Object,
+      default() {},
+    },
   },
 
   data() {

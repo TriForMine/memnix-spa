@@ -42,7 +42,10 @@
 <script>
 export default {
   props: {
-    deck: [],
+    deck: {
+      type: Object,
+      default() {},
+    },
   },
   data() {
     return {

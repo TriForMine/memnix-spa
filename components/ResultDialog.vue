@@ -40,7 +40,10 @@
 <script>
 export default {
   props: {
-    res: [],
+    res: {
+      type: Object,
+      default() {},
+    },
   },
   data() {
     return {

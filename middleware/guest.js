@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default function ({ store, redirect }) {
+export default function ({ redirect }) {
   axios
     .get(`https://api-memnix.yumenetwork.net/api/user/`, {
       'X-Requested-With': 'XMLHttpRequest',

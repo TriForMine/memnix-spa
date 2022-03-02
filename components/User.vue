@@ -69,7 +69,10 @@
 export default {
   name: "UserComponent",
   props: {
-    user: [],
+    user: {
+      type: Object,
+      default() {},
+    },
   },
   data() {
     return {
