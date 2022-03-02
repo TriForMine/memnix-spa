@@ -6,7 +6,6 @@
           <v-card elevation="0">
             <v-card-title class="headline"> Register !</v-card-title>
             <v-card-text>
-              <Notification v-if="error" :message="error" />
               <v-form @submit.prevent="register">
                 <v-text-field
                   v-model="username"
@@ -86,6 +85,16 @@
               </p>
             </v-card-actions>
           </v-card>
+          <v-alert
+            v-model="alert"
+            dismissible
+            prominent
+            type="error"
+            transition="scale-transition"
+            shaped
+          >
+            {{ error }}
+          </v-alert>
         </v-col>
       </v-row>
     </v-container>
@@ -97,7 +106,6 @@ import { validationMixin, useVuelidate } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
-
   mixins: [validationMixin],
   layout: 'login',
   middleware: 'guest',
@@ -120,7 +128,8 @@ export default {
       email: '',
       password: '',
       checkbox: false,
-      error: null,
+      error: 'An error occurred !',
+      alert: false,
     }
   },
 
@@ -180,23 +189,30 @@ export default {
             }
           )
 
-          await this.$axios.post(
-            `https://api-memnix.yumenetwork.net/api/login/`,
-            {
-              email: this.email,
-              password: this.password,
-            },
-            {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
-              withCredentials: true,
-            }
-          )
-
-          await this.$router.push('/login')
+          await this.$axios
+            .post(
+              `https://api-memnix.yumenetwork.net/api/login/`,
+              {
+                email: this.email,
+                password: this.password,
+              },
+              {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                withCredentials: true,
+              }
+            )
+            .then(async (res) => {
+              this.res = res.data
+              await this.$router.push('/login')
+            })
         } catch (e) {
           this.error = e.response.data.message
+          this.alert = true
+          window.setInterval(() => {
+            this.alert = false;
+          }, 10000)
         }
       }
     },

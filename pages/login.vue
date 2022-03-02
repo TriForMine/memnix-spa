@@ -74,6 +74,16 @@
                 </p>
               </v-card-actions>
             </v-card>
+            <v-alert
+              v-model="alert"
+              dismissible
+              prominent
+              type="error"
+              transition="scale-transition"
+              shaped
+            >
+              {{ error }}
+            </v-alert>
           </v-col>
         </v-row>
       </v-container>
@@ -101,7 +111,8 @@ export default {
     return {
       email: '',
       password: '',
-      error: null,
+      error: 'An error occurred !',
+      alert: false,
     }
   },
 
@@ -158,9 +169,13 @@ export default {
           await this.$router.push('/today')
         } catch (e) {
           this.error = e.response.data.message
+          this.alert = true
+          window.setInterval(() => {
+            this.alert = false;
+          }, 10000)
+        }
         }
       }
-    },
   },
 }
 </script>
