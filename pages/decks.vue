@@ -182,7 +182,7 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => {
+          .then((_) => {
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })
