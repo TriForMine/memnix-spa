@@ -13,7 +13,7 @@
     <v-card-title> {{ name }}</v-card-title>
 
     <v-card-actions>
-      <v-btn color="orange lighten-2" text @click="openDialog"> Play </v-btn>
+      <v-btn color="orange lighten-2" text @click="openDialog"> Practice </v-btn>
 
       <v-spacer></v-spacer>
 
