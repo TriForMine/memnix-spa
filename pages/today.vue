@@ -49,6 +49,7 @@ export default {
             {
               card_id: this.card.ID,
               response: answer,
+              training: false
             },
             {
               'X-Requested-With': 'XMLHttpRequest',

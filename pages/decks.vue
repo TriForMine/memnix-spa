@@ -150,6 +150,7 @@ export default {
             {
               card_id: this.card.ID,
               response: answer,
+              training: true
             },
             {
               'X-Requested-With': 'XMLHttpRequest',
