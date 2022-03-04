@@ -93,8 +93,14 @@ export default {
       dialogConfirmation: false,
       selectedDeck: [],
       resDialog: false,
-      card: [],
-      items: [],
+      card: {
+      },
+      cards: [{
+        "Card": {},
+        "Answers": []
+      }],
+      cardIndex: 0,
+      items: {},
       res: [],
     }
   },
@@ -106,7 +112,7 @@ export default {
     openDialog(value) {
       this.selectedDeck = value
       this.dialog = true
-      this.getCard()
+      this.getCards()
     },
 
     unsubToDeckConfirmation(n) {
@@ -117,13 +123,27 @@ export default {
     closeResultDialog() {
       this.resDialog = false
     },
-    async getCard() {
+    getCard() {
+      this.card = this.cards[this.cardIndex].Card
+      if (this.card.card_type === 2) {
+        this.items = this.cards[this.cardIndex].Answers
+      }
+    },
+    updateIndex() {
+      if (this.cardIndex === this.cards.length - 1) {
+        this.cardIndex = 0
+      } else {
+        this.cardIndex+=1
+      }
+    },
+
+    async getCards() {
       try {
         await this.$axios
           .get(
             `https://api-memnix.yumenetwork.net/api/v1/cards/` +
               this.selectedDeck.ID +
-              `/next`,
+              `/training`,
             {
               'X-Requested-With': 'XMLHttpRequest',
               'Access-Control-Allow-Origin': '*',
@@ -132,10 +152,8 @@ export default {
             }
           )
           .then((res) => {
-            this.card = res.data.data.Card
-            if (res.data.data.Card.card_type === 2) {
-              this.items = res.data.data.Answers
-            }
+            this.cards = res.data.data
+            this.getCard()
           })
       } catch (e) {
         this.error = e.response.data.message
@@ -160,6 +178,7 @@ export default {
             }
           )
           .then((res) => {
+            this.updateIndex()
             this.getCard()
             this.res = res.data.data
             this.resDialog = true

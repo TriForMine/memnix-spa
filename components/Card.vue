@@ -80,7 +80,7 @@ export default {
       default() {},
     },
     items: {
-      type: Object,
+      type: Array,
       default() {},
     },
   },
