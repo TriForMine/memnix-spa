@@ -9,8 +9,17 @@
     </v-dialog>
     <v-container>
       <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
-      <v-progress-linear class="mt-15" :value="progress*100/total"  :buffer-value="progress_buffer*100/total" stream background-color="red" background-opacity="0.5"></v-progress-linear>
-
+      <v-progress-linear
+        class="mt-15"
+        :value="(progress * 100) / total"
+        :buffer-value="(progress_buffer * 100) / total"
+        stream
+        height="20"
+        background-color="red"
+        background-opacity="0.5"
+      >
+          <strong>{{ progress }} / {{total }}</strong>
+      </v-progress-linear>
     </v-container>
   </v-row>
   <v-row v-else no-gutters align="center" justify="center">
@@ -24,10 +33,12 @@ export default {
   data() {
     return {
       card: {},
-      cards: [{
-        "Card": {},
-        "Answers": []
-      }],
+      cards: [
+        {
+          Card: {},
+          Answers: [],
+        },
+      ],
       answer: '',
       cardIndex: 0,
 
@@ -36,8 +47,8 @@ export default {
       res: [],
 
       progress: 0,
-      total:0,
-      progress_buffer:0,
+      total: 0,
+      progress_buffer: 0,
     }
   },
 
@@ -61,7 +72,7 @@ export default {
             {
               card_id: this.card.ID,
               response: answer,
-              training: false
+              training: false,
             },
             {
               'X-Requested-With': 'XMLHttpRequest',
@@ -75,11 +86,11 @@ export default {
             if (this.res.validate) {
               this.progress += 1
             }
-            this.progress_buffer+=1
+            this.progress_buffer += 1
 
             this.resDialog = true
             const result = this.updateIndex()
-            if (result){
+            if (result) {
               this.getCard()
             }
           })
@@ -96,11 +107,11 @@ export default {
     updateIndex() {
       if (this.cardIndex >= this.cards.length - 1) {
         this.cardIndex = 0
-        this.cards= []
+        this.cards = []
         this.getToday()
         return false
       } else {
-        this.cardIndex+=1
+        this.cardIndex += 1
         return true
       }
     },
@@ -108,7 +119,7 @@ export default {
     async getToday() {
       try {
         await this.$axios
-           .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
+          .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
             'X-Requested-With': 'XMLHttpRequest',
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
