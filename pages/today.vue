@@ -1,5 +1,5 @@
 <template>
-  <v-row v-if="card.ID !== 0">
+  <v-row v-if="total !== 0">
     <v-dialog
       v-model="resDialog"
       max-width="600px"
@@ -9,6 +9,8 @@
     </v-dialog>
     <v-container>
       <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
+      <v-progress-linear class="mt-15" :value="progress*100/total"  :buffer-value="progress_buffer*100/total" stream background-color="red" background-opacity="0.5"></v-progress-linear>
+
     </v-container>
   </v-row>
   <v-row v-else no-gutters align="center" justify="center">
@@ -32,6 +34,10 @@ export default {
       items: [],
       resDialog: false,
       res: [],
+
+      progress: 0,
+      total:0,
+      progress_buffer:0,
     }
   },
 
@@ -65,13 +71,21 @@ export default {
             }
           )
           .then((res) => {
-            this.updateIndex()
-            this.getCard()
             this.res = res.data.data
+            if (this.res.validate) {
+              this.progress += 1
+            }
+            this.progress_buffer+=1
+
             this.resDialog = true
+            const result = this.updateIndex()
+            if (result){
+              this.getCard()
+            }
           })
       } catch (e) {
-        this.error = e.response.data.message
+        console.log(e)
+        this.error = e.res.data.message
       }
     },
     getCard() {
@@ -81,12 +95,14 @@ export default {
       }
     },
     updateIndex() {
-      if (this.cardIndex === this.cards.length - 1) {
+      if (this.cardIndex >= this.cards.length - 1) {
         this.cardIndex = 0
         this.cards= []
         this.getToday()
+        return false
       } else {
         this.cardIndex+=1
+        return true
       }
     },
 
@@ -101,7 +117,16 @@ export default {
           })
           .then((res) => {
             this.cards = res.data.data
-            this.getCard()
+            this.cardIndex = 0
+            if (this.total === 0) {
+              this.total = this.cards.length
+            }
+            if (res.data.data === null) {
+              this.total = 0
+              this.progress = 0
+            } else {
+              this.getCard()
+            }
           })
       } catch (e) {
         this.error = e.response.data.message
