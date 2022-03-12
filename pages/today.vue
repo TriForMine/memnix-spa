@@ -84,7 +84,6 @@ export default {
             }
           })
       } catch (e) {
-        console.log(e)
         this.error = e.res.data.message
       }
     },
