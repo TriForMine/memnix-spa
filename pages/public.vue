@@ -12,7 +12,7 @@
           <v-card-title class="text-h5">
             Subscribe to this deck ?
           </v-card-title>
-          <v-card-text> You will be able to play it. </v-card-text>
+          <v-card-text> You will be able to play it.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
 
@@ -24,7 +24,7 @@
               No
             </v-btn>
 
-            <v-btn color="green darken-1" text @click="subToDeck"> Yes </v-btn>
+            <v-btn color="green darken-1" text @click="subToDeck"> Yes</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -60,61 +60,51 @@
               cols="12"
               sm="12"
               md="6"
-              lg="4"
-              xl="3"
+              lg="6"
+              xl="4"
             >
-              <v-card>
-                <div class="d-flex flex-no-wrap justify-space-between">
-                  <div>
-                    <v-card-title
-                      class="
-                        subheading
-                        font-weight-bold
-                        d-inline-block
-                        text-truncate
-                      "
-                      style="max-width: 180px"
-                    >
-                      <v-tooltip bottom color="indigo">
-                        <template #activator="{ on, attrs }">
+              <v-card class="content-bg card mx-auto pa-1 transparent" flat max-width="500">
+                <v-img class="white--text align-end"
+                       :src="item.deck_banner" height="200px">
+                </v-img>
+                <v-card-title
+                  class="font-weight-bold d-inline-block text-truncate"
+                  style="max-width: 400px">
+                  <v-tooltip bottom color="indigo">
+                    <template #activator="{ on, attrs }">
                           <span class="mb-1" v-bind="attrs" v-on="on">
                             {{ item.deck_name }}
                           </span>
-                        </template>
-                        <span> {{ item.deck_name }}</span>
-                      </v-tooltip>
-                    </v-card-title>
-                    <v-card-text style="height: 60px; max-width: 180px">
-                      <v-tooltip bottom color="indigo">
-                        <template #activator="{ on, attrs }">
+                    </template>
+                    <span> {{ item.deck_name }}</span>
+                  </v-tooltip>
+                </v-card-title>
+
+                <v-card-text style="height: 60px; max-width: 400px">
+                  <v-tooltip bottom color="indigo">
+                    <template #activator="{ on, attrs }">
                           <span v-bind="attrs" v-on="on">
                             <p v-snip:js="2">{{ item.deck_description }}</p>
                           </span>
-                        </template>
-                        <span> {{ item.deck_description }}</span>
-                      </v-tooltip>
-                    </v-card-text>
+                    </template>
+                    <span> {{ item.deck_description }}</span>
+                  </v-tooltip>
+                </v-card-text>
 
-                    <v-divider></v-divider>
+                <v-divider></v-divider>
 
-                    <v-card-actions>
-                      <v-btn
-                        class="ml-2 mt-5"
-                        outlined
-                        rounded
-                        small
-                        color="orange"
-                        @click="subToDeckConfirmation(item)"
-                      >
-                        Subscribe Now
-                      </v-btn>
-                    </v-card-actions>
-                  </div>
-
-                  <v-avatar class="ma-3" size="125" tile>
-                    <v-img :src="item.deck_banner"></v-img>
-                  </v-avatar>
-                </div>
+                <v-card-actions>
+                  <v-btn
+                    class="ml-2 mt-5"
+                    outlined
+                    rounded
+                    small
+                    color="orange"
+                    @click="subToDeckConfirmation(item)"
+                  >
+                    Subscribe Now
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
@@ -163,7 +153,6 @@
 </template>
 
 
-
 <script>
 export default {
   data() {
@@ -195,7 +184,7 @@ export default {
           align: 'end',
           width: '5%',
         },
-        { text: '', value: 'data-table-expand', align: 'end', width: '5%' },
+        {text: '', value: 'data-table-expand', align: 'end', width: '5%'},
       ],
     }
   },
@@ -227,8 +216,8 @@ export default {
         await this.$axios
           .post(
             `https://api-memnix.yumenetwork.net/api/v1/decks/` +
-              this.selectedDeck.ID +
-              `/subscribe`,
+            this.selectedDeck.ID +
+            `/subscribe`,
             {},
             {
               'X-Requested-With': 'XMLHttpRequest',
