@@ -21,8 +21,14 @@ export default {
   middleware: 'authentificated',
   data() {
     return {
-      card: [],
+      card: {},
+      cards: [{
+        "Card": {},
+        "Answers": []
+      }],
       answer: '',
+      cardIndex: 0,
+
       items: [],
       resDialog: false,
       res: [],
@@ -59,7 +65,8 @@ export default {
             }
           )
           .then((res) => {
-            this.getToday()
+            this.updateIndex()
+            this.getCard()
             this.res = res.data.data
             this.resDialog = true
           })
@@ -67,21 +74,34 @@ export default {
         this.error = e.response.data.message
       }
     },
+    getCard() {
+      this.card = this.cards[this.cardIndex].Card
+      if (this.card.card_type === 2) {
+        this.items = this.cards[this.cardIndex].Answers
+      }
+    },
+    updateIndex() {
+      if (this.cardIndex === this.cards.length - 1) {
+        this.cardIndex = 0
+        this.cards= []
+        this.getToday()
+      } else {
+        this.cardIndex+=1
+      }
+    },
 
     async getToday() {
       try {
         await this.$axios
-          .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
+           .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
             'X-Requested-With': 'XMLHttpRequest',
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
             withCredentials: true,
           })
           .then((res) => {
-            this.card = res.data.data.Card
-            if (res.data.data.Card.card_type === 2) {
-              this.items = res.data.data.Answers
-            }
+            this.cards = res.data.data
+            this.getCard()
           })
       } catch (e) {
         this.error = e.response.data.message

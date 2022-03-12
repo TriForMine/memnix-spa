@@ -49,7 +49,7 @@
           <v-card-title class="text-h5">
             Unsubscribe to this deck ?
           </v-card-title>
-          <v-card-text> Your progression won't be deleted. </v-card-text>
+          <v-card-text> Your progression won't be deleted.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
 
@@ -65,7 +65,8 @@
               Yes
             </v-btn>
           </v-card-actions>
-        </v-card></v-dialog
+        </v-card>
+      </v-dialog
       >
 
       <v-col v-for="(n, index) in decks" :key="index" cols="12" sm="4">
@@ -83,7 +84,6 @@
 </template>
 
 
-
 <script>
 export default {
   data() {
@@ -93,8 +93,7 @@ export default {
       dialogConfirmation: false,
       selectedDeck: [],
       resDialog: false,
-      card: {
-      },
+      card: {},
       cards: [{
         "Card": {},
         "Answers": []
@@ -133,7 +132,7 @@ export default {
       if (this.cardIndex === this.cards.length - 1) {
         this.cardIndex = 0
       } else {
-        this.cardIndex+=1
+        this.cardIndex += 1
       }
     },
 
@@ -142,8 +141,8 @@ export default {
         await this.$axios
           .get(
             `https://api-memnix.yumenetwork.net/api/v1/cards/` +
-              this.selectedDeck.ID +
-              `/training`,
+            this.selectedDeck.ID +
+            `/training`,
             {
               'X-Requested-With': 'XMLHttpRequest',
               'Access-Control-Allow-Origin': '*',
@@ -192,8 +191,8 @@ export default {
         await this.$axios
           .post(
             `https://api-memnix.yumenetwork.net/api/v1/decks/` +
-              this.selectedDeck.ID +
-              `/unsubscribe`,
+            this.selectedDeck.ID +
+            `/unsubscribe`,
             {},
             {
               'X-Requested-With': 'XMLHttpRequest',
