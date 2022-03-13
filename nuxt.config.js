@@ -65,6 +65,10 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      title: 'Memnix Web',
+      author: 'CorentinGS',
+    },
     manifest: {
       name: 'Memnix Web',
       short_name: 'Memnix',
