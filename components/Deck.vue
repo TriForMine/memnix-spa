@@ -10,32 +10,38 @@
         </v-row> </template
     ></v-img>
 
-    <v-card-title> {{ name }}</v-card-title>
-
+    <v-card-title> {{ deck.deck_name }}</v-card-title>
+    <v-divider></v-divider>
+    <v-card-text>
+      {{ deck.deck_description }}
+    </v-card-text>
+    <v-chip v-if="deck.deck_status === 3"
+            class="ma-2"
+            color="primary"
+            text-color="white"
+    >
+      <v-icon left>
+        mdi-lock-open
+      </v-icon>
+      Public
+    </v-chip>
+    <v-chip v-if="deck.ID === 13"
+      class="ma-2"
+      color="accent"
+      text-color="white"
+    >
+      <v-icon left>
+        mdi-star
+      </v-icon>
+      Sponsored
+    </v-chip>
     <v-card-actions>
       <v-btn color="orange lighten-2" text @click="openDialog"> Practice </v-btn>
-
       <v-spacer></v-spacer>
-
-      <v-btn icon @click="show = !show">
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+      <v-btn icon @click="unsubToDeck">
+        <v-icon>{{ 'mdi-trash-can' }}</v-icon>
       </v-btn>
     </v-card-actions>
-
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
-        <v-card-text>
-          {{ deck.deck_description }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="unsubToDeck">
-            <v-icon>{{ 'mdi-trash-can' }}</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </div>
-    </v-expand-transition>
   </v-card>
 </template>
 
@@ -53,14 +59,6 @@ export default {
     }
   },
 
-  computed: {
-    name() {
-      if (this.deck.deck_status === 3) {
-        return this.deck.deck_name + ' · public'
-      }
-      return this.deck.deck_name
-    },
-  },
 
   methods: {
     openDialog() {

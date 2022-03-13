@@ -38,7 +38,6 @@
       >
         <template #header>
           <v-toolbar class="mb-2 shrink" color="indigo" dark flat>
-            <v-toolbar-title class="mx-5">Public decks</v-toolbar-title>
             <v-text-field
               v-model="search"
               class="d-flex flex-column mh-100 overflow-hidden"
@@ -64,12 +63,11 @@
               xl="4"
             >
               <v-card class="content-bg card mx-auto pa-1 transparent" flat max-width="500">
-                <v-img class="white--text align-end"
-                       :src="item.deck_banner" height="200px">
+                <v-img :src="item.deck_banner" height="200px">
                 </v-img>
                 <v-card-title
                   class="font-weight-bold d-inline-block text-truncate"
-                  style="max-width: 400px">
+                  style="max-width: 50vw">
                   <v-tooltip bottom color="indigo">
                     <template #activator="{ on, attrs }">
                           <span class="mb-1" v-bind="attrs" v-on="on">
@@ -94,6 +92,8 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
+                  <v-spacer></v-spacer>
+
                   <v-btn
                     class="ml-2 mt-5"
                     outlined
@@ -112,7 +112,7 @@
 
         <template #footer>
           <v-row
-            class="mt-auto no-gutters py-2 shrink"
+            class="mt-5 no-gutters py-2 shrink"
             align="center"
             justify="center"
           >
