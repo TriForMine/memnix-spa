@@ -15,7 +15,7 @@ export default {
       { hid: 'description', name: 'description', content: 'Memnix Web App' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/moutmout.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -46,14 +46,19 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/robots',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
   ],
 
-  sitemap: {
-      hostname: "https://memnix.yumenetwork.net",
-      gzip: true,
+  robots: {
+    UserAgent: '*',
+    Allow: '/',
+    Sitemap: 'https://memnix.yumenetwork.net/sitemap.xml',
   },
 
+  sitemap: {
+    hostname: 'https://memnix.yumenetwork.net',
+    gzip: true,
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -65,6 +70,37 @@ export default {
       short_name: 'Memnix',
       lang: 'en',
       display: 'standalone',
+      theme_color: "#ffffff",
+      background_color: "#ffffff",
+      icons: [
+        {
+          src: '/android-chrome-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: '/android-chrome-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: '/android-chrome-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: '/safari-pinned-tab.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: "monochrome"
+        },
+        {
+          src: '/icon.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable',
+        },
+      ],
     },
   },
 
