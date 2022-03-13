@@ -27,6 +27,12 @@
                   :res="res"
                   @closeResultDialog="closeResultDialog"
                 />
+                <v-progress-linear
+                  class="mt-auto"
+                  :value="dialogValue"
+                  color="secondary"
+                  height="5">
+                </v-progress-linear>
               </v-dialog>
               <v-container>
                 <Card
@@ -101,6 +107,9 @@ export default {
       cardIndex: 0,
       items: {},
       res: [],
+
+      dialogValue: 0,
+      dialogInterval: 0
     }
   },
   beforeMount() {
@@ -120,7 +129,22 @@ export default {
     },
 
     closeResultDialog() {
-      this.resDialog = false
+      if (this.resDialog) {
+        this.resDialog = false
+        this.updateIndex()
+        this.getCard()
+      }
+    },
+    startDialogInterval(delay) {
+      clearInterval(this.interval)
+
+      this.interval = setInterval(()=> {
+        this.dialogValue += 1
+        if (this.dialogValue > 100) {
+          clearInterval(this.interval)
+          this.closeResultDialog()
+        }
+      }, delay)
     },
     getCard() {
       this.card = this.cards[this.cardIndex].Card
@@ -177,10 +201,15 @@ export default {
             }
           )
           .then((res) => {
-            this.updateIndex()
-            this.getCard()
+            let delay = 50
+
             this.res = res.data.data
             this.resDialog = true
+            this.dialogValue = 0
+            if (this.res.validate) {
+              delay = 30
+            }
+            this.startDialogInterval(delay)
           })
       } catch (e) {
         this.error = e.response.data.message

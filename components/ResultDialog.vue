@@ -4,8 +4,7 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12">
-              <v-spacer></v-spacer>
+            <v-col cols="12" class="mt-5">
               <h2>Expected answer: {{ res.correct_answer }}</h2>
             </v-col>
           </v-row>
@@ -14,7 +13,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="closeDialog"> Ok</v-btn>
+        <v-btn color="secondary"  text @click="closeDialog"> <strong>Ok</strong></v-btn>
       </v-card-actions>
     </v-card>
     <v-card v-else>
@@ -22,8 +21,7 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12">
-              <v-spacer></v-spacer>
+            <v-col cols="12" class="mt-5">
               <h2>Expected answer: {{ res.correct_answer }}</h2>
             </v-col>
           </v-row>
@@ -32,8 +30,9 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="closeDialog"> Ok</v-btn>
+        <v-btn color="secondary"  text @click="closeDialog"> <strong>Ok</strong></v-btn>
       </v-card-actions>
+
     </v-card>
 </template>
 
@@ -47,7 +46,11 @@ export default {
   },
   data() {
     return {
+      value :0
     }
+  },
+
+  mounted() {
   },
 
   methods: {
