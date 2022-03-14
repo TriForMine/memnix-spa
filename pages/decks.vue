@@ -19,6 +19,7 @@
           <v-card-text>
             <v-row>
               <v-dialog
+                persistent
                 v-model="resDialog"
                 max-width="600px"
                 @keydown.enter="closeResultDialog"

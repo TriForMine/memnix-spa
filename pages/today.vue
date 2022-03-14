@@ -1,6 +1,7 @@
 <template>
   <v-row v-if="total !== 0">
     <v-dialog
+      persistent
       v-model="resDialog"
       max-width="600px"
       @keydown.enter="closeResultDialog"
