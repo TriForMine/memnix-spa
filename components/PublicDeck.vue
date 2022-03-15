@@ -1,0 +1,65 @@
+<template>
+  <v-card class="content-bg card mx-auto pa-1 transparent" flat max-width="500">
+    <v-img :src="item.deck_banner" height="200px"> </v-img>
+    <v-card-title
+      class="font-weight-bold d-inline-block text-truncate"
+      style="max-width: 50vw"
+    >
+      <v-tooltip bottom color="indigo">
+        <template #activator="{ on, attrs }">
+          <span class="mb-1" v-bind="attrs" v-on="on">
+            {{ item.deck_name }}
+          </span>
+        </template>
+        <span> {{ item.deck_name }}</span>
+      </v-tooltip>
+    </v-card-title>
+
+    <v-card-text style="height: 60px; max-width: 400px">
+      <v-tooltip bottom color="indigo">
+        <template #activator="{ on, attrs }">
+          <span v-bind="attrs" v-on="on">
+            <p v-snip:js="2">{{ item.deck_description }}</p>
+          </span>
+        </template>
+        <span> {{ item.deck_description }}</span>
+      </v-tooltip>
+    </v-card-text>
+
+    <v-divider></v-divider>
+
+    <v-card-actions>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        class="ml-2 mt-5"
+        outlined
+        rounded
+        small
+        color="orange"
+        @click="subToDeckConfirmation(item)"
+      >
+        Subscribe Now
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+export default {
+  name: 'PublicDeck',
+  props: {
+    item: {
+      type: Object,
+      default() {},
+    },
+  },
+  methods: {
+    subToDeckConfirmation(n) {
+      this.$emit('subToDeckConfirmation', n)
+    },
+  },
+}
+</script>
+
+<style scoped></style>
