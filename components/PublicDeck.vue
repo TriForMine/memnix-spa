@@ -25,6 +25,16 @@
         <span> {{ item.deck_description }}</span>
       </v-tooltip>
     </v-card-text>
+    <v-chip v-if="item.ID === 13"
+            class="ma-2"
+            color="accent"
+            text-color="white"
+    >
+      <v-icon left>
+        mdi-star
+      </v-icon>
+      Sponsored
+    </v-chip>
 
     <v-divider></v-divider>
 

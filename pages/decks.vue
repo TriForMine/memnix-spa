@@ -17,7 +17,11 @@
         <UnsubDialog @unsubToDeck="unsubToDeck" @closeDialogConfirmation="closeDialogConfirmation"/>
       </v-dialog>
 
-      <v-col v-for="(n, index) in decks" :key="index" cols="12" sm="4">
+      <v-col v-for="(n, index) in decks" :key="index"   cols="12"
+             sm="12"
+             md="6"
+             lg="6"
+             xl="4">
         <Deck
           :deck="n"
           @openDialog="openDialog(n)"
