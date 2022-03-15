@@ -1,41 +1,33 @@
 <template>
   <v-row v-if="total !== 0">
     <v-dialog
-      persistent
       v-model="resDialog"
       max-width="600px"
+      persistent
       @keydown.enter="closeResultDialog"
     >
-      <ResultDialog :res="res" @closeResultDialog="closeResultDialog" />
-      <v-progress-linear
-        class="mt-auto"
-        :value="dialogValue"
-        color="secondary"
-        height="5">
-      </v-progress-linear>
+      <ResultDialog :res="res" @closeResultDialog="closeResultDialog"/>
+      <ResultProgressLinear
+        ref="resultProgressLinear"
+        @closeResultDialog="closeResultDialog"
+      />
     </v-dialog>
     <v-container>
-      <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
-      <v-progress-linear
-        class="mt-15"
-        :value="(progress * 100) / total"
-        :buffer-value="(progress_buffer * 100) / total"
-        stream
-        height="20"
-        background-color="red"
-        color="green"
-        background-opacity="0.5"
-      >
-          <strong>{{ progress }} / {{total }}</strong>
-      </v-progress-linear>
+      <Card :card="card" :items="items" @postAnswer="postAnswer($event)"/>
+      <TodayProgressLinear
+        :progress="progress"
+        :progress_buffer="progress_buffer"
+        :total="total"
+      />
     </v-container>
   </v-row>
-  <v-row v-else no-gutters align="center" justify="center">
+  <v-row v-else align="center" justify="center" no-gutters>
     <h1>You don't have more cards to play today !</h1>
   </v-row>
 </template>
 
 <script>
+
 export default {
   middleware: 'authentificated',
   data() {
@@ -54,11 +46,10 @@ export default {
       resDialog: false,
       res: [],
 
+      delay:0,
       progress: 0,
       total: 0,
       progress_buffer: 0,
-      dialogValue: 0,
-      dialogInterval: 0
     }
   },
 
@@ -75,21 +66,9 @@ export default {
         }
         this.resDialog = false
       }
-
     },
     clearMessage() {
       this.answer = ''
-    },
-
-    startDialogInterval(delay) {
-      clearInterval(this.interval)
-      this.interval = setInterval(()=> {
-        this.dialogValue += 1
-        if (this.dialogValue > 100) {
-          clearInterval(this.interval)
-          this.closeResultDialog()
-        }
-      }, delay)
     },
 
     async postAnswer(answer) {
@@ -109,17 +88,22 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => {
+          .then(async (res) => {
             this.res = res.data.data
-            let delay = 50
+            this.delay = 50
             if (this.res.validate) {
+
               this.progress += 1
-              delay = 30
+              this.delay = 30
             }
             this.progress_buffer += 1
             this.resDialog = true
-            this.dialogValue = 0
-            this.startDialogInterval(delay)
+
+            while (!this.$refs.resultProgressLinear) {
+              await setTimeout( _ => {}, 100)
+            }
+
+            this.$refs.resultProgressLinear.startDialogInterval(this.delay)
           })
       } catch (e) {
         this.error = e.res.data.message
