@@ -57,6 +57,7 @@
           ></span>
         </span>
         <v-btn
+          :disabled="!hasFormerPage"
           small
           rounded
           dark
@@ -67,6 +68,7 @@
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
         <v-btn
+          :disabled="!hasNextPage"
           small
           rounded
           dark
@@ -124,6 +126,12 @@ export default {
     numberOfPages() {
       return Math.ceil(this.decks.length / this.itemsPerPage)
     },
+    hasNextPage() {
+      return this.page + 1 <= this.numberOfPages
+    },
+    hasFormerPage() {
+      return this.page - 1 >= 1
+    },
   },
   methods: {
     subToDeckConfirmation(n) {
@@ -131,10 +139,10 @@ export default {
     },
 
     nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1
+      if (this.hasNextPage) this.page += 1
     },
     formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1
+      if (this.hasFormerPage) this.page -= 1
     },
   },
 }

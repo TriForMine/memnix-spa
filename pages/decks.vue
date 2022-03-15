@@ -7,7 +7,7 @@
         hide-overlay
         transition="dialog-bottom-transition"
       >
-        <PracticeDialog :selected-deck="selectedDeck" @closePracticeDialog="closePracticeDialog" ref="practiceDialog"/>
+        <PracticeDialog ref="practiceDialog" :selected-deck="selectedDeck" @closePracticeDialog="closePracticeDialog"/>
       </v-dialog>
       <v-dialog
         v-model="dialogConfirmation"
@@ -64,10 +64,9 @@ export default {
       this.selectedDeck = value
       this.dialog = true
       while (!this.$refs.practiceDialog) {
-        await setTimeout(_ => {
-        }, 100)
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
-      await this.$refs.practiceDialog.getCards()
+      await this.$refs.practiceDialog.getCards(value.ID)
     },
 
     closeDialogConfirmation() {

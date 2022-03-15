@@ -81,12 +81,12 @@ export default {
       }
     },
 
-    async getCards() {
+    async getCards(ID) {
       try {
         await this.$axios
           .get(
             `https://api-memnix.yumenetwork.net/api/v1/cards/` +
-            this.selectedDeck.ID +
+            ID +
             `/training`,
             {
               'X-Requested-With': 'XMLHttpRequest',
@@ -132,8 +132,7 @@ export default {
             }
 
             while (!this.$refs.resultProgressLinear) {
-              await setTimeout(_ => {
-              }, 100)
+              await new Promise(resolve => setTimeout(resolve, 100));
             }
             this.$refs.resultProgressLinear.startDialogInterval(delay)
           })
