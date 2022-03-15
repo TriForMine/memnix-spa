@@ -17,9 +17,9 @@
                   :src=url
                 />
               </v-avatar>
-              <container class="ml-3" >
+              <span class="ml-3" >
                 <h2>{{user.user_name}}</h2>
-              </container>
+              </span>
             </v-card-title>
           </v-img>
 

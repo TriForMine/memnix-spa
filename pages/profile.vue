@@ -17,7 +17,7 @@ export default {
   middleware: 'authentificated',
   data() {
     return {
-      user: [],
+      user: {},
     }
   },
   beforeMount() {
