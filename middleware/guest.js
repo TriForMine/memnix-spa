@@ -3,9 +3,9 @@ import axios from 'axios'
 export default function ({ redirect }) {
   axios
     .get(`https://api-memnix.yumenetwork.net/api/user/`, {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       withCredentials: true,
     })
     .then((response) => {
@@ -14,9 +14,9 @@ export default function ({ redirect }) {
         return redirect('/today')
       }
     })
-    .catch((error) => {
+    .catch(() => {
       // eslint-disable-next-line no-console
-        
+
 
     })
 }

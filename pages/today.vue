@@ -82,9 +82,9 @@ export default {
               training: false,
             },
             {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              headers: {
+                'Content-Type': 'application/json'
+              },
               withCredentials: true,
             }
           )
@@ -100,7 +100,7 @@ export default {
             this.resDialog = true
 
             while (!this.$refs.resultProgressLinear) {
-              await setTimeout( _ => {}, 100)
+              await new Promise(resolve => setTimeout(resolve, 100));
             }
 
             this.$refs.resultProgressLinear.startDialogInterval(this.delay)
@@ -131,13 +131,13 @@ export default {
       try {
         await this.$axios
           .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             withCredentials: true,
           })
           .then((res) => {
-            this.cards = res.data.data
+            this.cards = res.data.data ?? []
             this.cardIndex = 0
             if (this.total === 0) {
               this.total = this.cards.length

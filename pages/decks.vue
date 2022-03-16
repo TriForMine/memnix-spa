@@ -92,9 +92,9 @@ export default {
             `/unsubscribe`,
             {},
             {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              headers: {
+                'Content-Type': 'application/json'
+              },
               withCredentials: true,
             }
           )
@@ -111,9 +111,9 @@ export default {
       try {
         await this.$axios
           .get(`https://api-memnix.yumenetwork.net/api/v1/decks/sub`, {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             withCredentials: true,
           })
           .then((res) => {
