@@ -36,7 +36,7 @@
           v-model="answer"
           required
           counter
-          maxlength="30"
+          maxlength="100"
           class="rounded-lg"
           :label="card.card_format"
           placeholder="your answer"
