@@ -89,9 +89,10 @@ export default {
             ID +
             `/training`,
             {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              headers: {
+
+                'Content-Type': 'application/json'
+              },
               withCredentials: true,
             }
           )
@@ -114,9 +115,10 @@ export default {
               training: true
             },
             {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              headers: {
+
+                'Content-Type': 'application/json'
+              },
               withCredentials: true,
             }
           )

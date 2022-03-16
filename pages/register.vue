@@ -183,9 +183,10 @@ export default {
               password: this.password,
             },
             {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/json',
+              headers: {
+
+                'Content-Type': 'application/json'
+              },
             }
           )
 
@@ -197,9 +198,9 @@ export default {
                 password: this.password,
               },
               {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
                 withCredentials: true,
               }
             )
