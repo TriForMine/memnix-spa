@@ -88,7 +88,7 @@ export default {
   name: 'PublicDeckIterator',
   props: {
     decks: {
-      Type: Array[Object],
+      type: Array[Object],
       default() {},
     },
   },

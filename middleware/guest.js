@@ -14,9 +14,9 @@ export default function ({ redirect }) {
         return redirect('/today')
       }
     })
-    .catch((error) => {
+    .catch((_error) => {
       // eslint-disable-next-line no-console
-        
+
 
     })
 }

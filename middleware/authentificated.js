@@ -15,9 +15,9 @@ export default function ({ redirect }) {
       if (response.status !== 200 || response.data.ID === 0 || response.data.success === false) {
         return redirect('/login')
       }})
-      .catch((error) => {
+      .catch((_error) => {
         // eslint-disable-next-line no-console
-        
+
 
         return redirect('/login')
       })

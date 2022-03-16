@@ -100,7 +100,7 @@ export default {
             this.resDialog = true
 
             while (!this.$refs.resultProgressLinear) {
-              await setTimeout( _ => {}, 100)
+              await new Promise(resolve => setTimeout(resolve, 100));
             }
 
             this.$refs.resultProgressLinear.startDialogInterval(this.delay)
@@ -137,7 +137,7 @@ export default {
             withCredentials: true,
           })
           .then((res) => {
-            this.cards = res.data.data
+            this.cards = res.data.data ?? []
             this.cardIndex = 0
             if (this.total === 0) {
               this.total = this.cards.length
