@@ -160,7 +160,6 @@ export default {
             `https://api-memnix.yumenetwork.net/api/user/`,
             {
               headers: {
-
                 'Content-Type': 'application/json'
               },
               withCredentials: true,

@@ -31,7 +31,6 @@ export default {
           {},
           {
             headers: {
-
               'Content-Type': 'application/json'
             },
             withCredentials: true,
@@ -48,7 +47,6 @@ export default {
         await this.$axios
           .get(`https://api-memnix.yumenetwork.net/api/user/`, {
             headers: {
-
               'Content-Type': 'application/json'
             },
             withCredentials: true,
