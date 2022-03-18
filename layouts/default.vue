@@ -1,6 +1,20 @@
 <template>
   <v-app dark>
     <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
+      <template #prepend>
+        <v-list-item two-line>
+          <v-list-item-avatar>
+            <img :src=url>
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ user.user_name }}</v-list-item-title>
+            <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+      <v-divider></v-divider>
+
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -17,6 +31,13 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template #append>
+        <div class="pa-2">
+          <v-btn block color="accent" @click="logout">
+            Logout
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -42,6 +63,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      user: {},
       items: [
         {
           icon: 'mdi-chart-bubble',
@@ -51,15 +73,54 @@ export default {
 
         { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
         { icon: 'mdi-plus-circle', title: 'Public decks', to: '/public' },
-        {
-          icon: 'mdi-account',
-          title: 'Profile',
-          to: '/profile',
-        },
+
       ],
 
       title: 'Memnix',
     }
   },
+  computed: {
+    url() {
+      return "https://source.boringavatars.com/beam/120/"+this.user.user_name+"?colors=070705,3E4B51,6F737E,89A09A,C1C0AE"
+    }
+  },
+  beforeMount() {
+    this.getUser()
+  },
+  methods: {
+    async getUser() {
+      try {
+        await this.$axios
+          .get(`https://api-memnix.yumenetwork.net/api/user/`, {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true,
+          })
+          .then((res) => {
+            this.user = res.data
+          })
+      } catch (e) {
+        this.error = e.response.data.message
+      }
+    },
+    async logout() {
+      try {
+        await this.$axios.post(
+          `https://api-memnix.yumenetwork.net/api/logout`,
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true,
+          }
+        )
+        await this.$router.push('/login')
+      } catch (e) {
+        this.error = e.response.data.message
+      }
+    },
+  }
 }
 </script>

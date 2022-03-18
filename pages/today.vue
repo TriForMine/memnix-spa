@@ -22,7 +22,17 @@
     </v-container>
   </v-row>
   <v-row v-else align="center" justify="center" no-gutters>
+    <v-container mt-10>
+
     <h1>You don't have more cards to play today !</h1>
+      <v-container mt-5>
+
+      <v-btn color="info" class="mx-auto" nuxt to="/public"> Discover new decks </v-btn>
+      <v-btn color="primary"  nuxt to="/decks"> Practice </v-btn>
+      </v-container>
+
+
+    </v-container>
   </v-row>
 </template>
 
