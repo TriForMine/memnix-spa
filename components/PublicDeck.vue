@@ -1,5 +1,5 @@
 <template>
-  <v-card class="content-bg card mx-auto pa-1 transparent" flat max-width="500">
+  <v-card class="content-bg card mx-auto pa-1 " flat max-width="500">
     <v-img :src="item.deck_banner" height="200px"> </v-img>
     <v-card-title
       class="font-weight-bold d-inline-block text-truncate"

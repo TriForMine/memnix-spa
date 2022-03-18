@@ -49,5 +49,6 @@
 <script>
 export default {
   layout: 'landing',
+  middleware: 'guest'
 }
 </script>
