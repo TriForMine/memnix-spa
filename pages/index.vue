@@ -39,7 +39,7 @@
       <v-container mt-10>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/today"> Getting Started </v-btn>
+          <v-btn x-large color="primary" nuxt to="/today"> Getting Started </v-btn>
         </v-card-actions>
       </v-container>
     </v-container>
