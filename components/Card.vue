@@ -29,8 +29,8 @@
         {{ card.card_question }}
       </v-card-text>
     </v-card>
-
-    <v-form v-if="card.card_type < 2" @submit.prevent="validateAnswer">
+    <v-container v-if="card.card_type < 2">
+    <v-form @submit.prevent="validateAnswer">
       <v-col cols="12">
         <v-text-field
           v-model="answer"
@@ -51,7 +51,34 @@
           @click:clear="clearMessage"
         ></v-text-field>
       </v-col>
+      <div class="text-center">
+
+        <v-chip v-if="card.card_case"
+                class="ma-2"
+                color="secondary"
+                text-color="white"
+                outlined
+        >
+          <v-avatar left>
+            <v-icon>mdi-alert-circle</v-icon>
+          </v-avatar>
+          Case sensitive
+        </v-chip>
+        <v-chip v-if="card.card_spaces"
+                class="ma-2"
+                color="error"
+                text-color="white"
+                outlined
+        >
+          <v-avatar left>
+            <v-icon>mdi-alert-octagram</v-icon>
+          </v-avatar>
+          Space sensitive
+        </v-chip>
+      </div>
     </v-form>
+    </v-container>
+
     <v-container v-else>
       <v-row>
         <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
