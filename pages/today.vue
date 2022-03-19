@@ -16,7 +16,7 @@
       <Card :card="card" :items="items" @postAnswer="postAnswer($event)"/>
       <TodayProgressLinear
         :progress="progress"
-        :progress_buffer="progress_buffer"
+        :progressBuffer="progressBuffer"
         :total="total"
       />
     </v-container>
@@ -59,7 +59,7 @@ export default {
       delay:0,
       progress: 0,
       total: 0,
-      progress_buffer: 0,
+      progressBuffer: 0,
     }
   },
 
@@ -102,11 +102,10 @@ export default {
             this.res = res.data.data
             this.delay = 50
             if (this.res.validate) {
-
               this.progress += 1
               this.delay = 30
             }
-            this.progress_buffer += 1
+            this.progressBuffer += 1
             this.resDialog = true
 
             while (!this.$refs.resultProgressLinear) {
