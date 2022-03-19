@@ -22,11 +22,51 @@
           />
           <ResultProgressLinear ref="resultProgressLinear" @closeResultDialog="closeResultDialog"/>
         </v-dialog>
+        <v-dialog
+          v-model="completeDialog"
+          max-width="600px"
+          persistent>
+          <v-card>
+            <v-card-title class="text-h5">
+              Practice session is finished !
+            </v-card-title>
+            <v-card-text> Correct answers : {{progress}} <br> Incorrect answers : {{total-progress}}</v-card-text>
+            <v-rating
+              empty-icon="mdi-star-outline"
+              full-icon="mdi-star"
+              half-icon="mdi-star-half"
+              color="yellow darken-3"
+              background-color="grey darken-1"
+              length="5"
+              readonly
+              size="32"
+              :value="progress * 5 / total"
+            ></v-rating>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn
+                color="red darken-1"
+                text
+                @click="closePracticeDialog"
+              >
+                Quit
+              </v-btn>
+
+              <v-btn color="green darken-1" text @click="keepPracticing"> Keep practicing</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-container>
           <Card
             :card="card"
             :items="items"
             @postAnswer="postAnswer($event)"
+          />
+          <TodayProgressLinear
+            :progress="progress"
+            :progressBuffer="progressBuffer"
+            :total="total"
           />
         </v-container>
       </v-row>
@@ -46,6 +86,7 @@ export default {
   data() {
     return {
       resDialog: false,
+      completeDialog: false,
       card: {},
       cards: [{
         "Card": {},
@@ -54,6 +95,9 @@ export default {
       cardIndex: 0,
       items: [],
       res: [],
+      progress: 0,
+      total: 0,
+      progressBuffer: 0,
     }
   },
   methods: {
@@ -64,7 +108,18 @@ export default {
         this.getCard()
       }
     },
+    keepPracticing() {
+      this.progressBuffer = 0
+      this.progress = 0
+      this.cardIndex = 0
+      this.completeDialog = false
+    },
+
     closePracticeDialog() {
+      this.total = 0
+      this.progressBuffer = 0
+      this.progress = 0
+      this.completeDialog = false
       this.$emit("closePracticeDialog")
     },
     getCard() {
@@ -75,7 +130,7 @@ export default {
     },
     updateIndex() {
       if (this.cardIndex === this.cards.length - 1) {
-        this.cardIndex = 0
+        this.completeDialog = true
       } else {
         this.cardIndex += 1
       }
@@ -97,6 +152,8 @@ export default {
           )
           .then((res) => {
             this.cards = res.data.data
+            this.total = this.cards.length
+
             this.getCard()
           })
       } catch (e) {
@@ -128,8 +185,10 @@ export default {
 
             this.dialogValue = 0
             if (this.res.validate) {
+              this.progress += 1
               delay = 30
             }
+            this.progressBuffer += 1
 
             while (!this.$refs.resultProgressLinear) {
               await new Promise(resolve => setTimeout(resolve, 100));
