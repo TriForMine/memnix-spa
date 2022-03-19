@@ -72,7 +72,7 @@ export default {
   mixins: [validationMixin],
 
   validations: {
-    answer: { required, maxLength: maxLength(30) },
+    answer: { required, maxLength: maxLength(100) },
   },
   props: {
     card: {
