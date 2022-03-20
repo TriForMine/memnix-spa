@@ -23,7 +23,7 @@
              lg="6"
              xl="4">
         <Deck
-          :deck="n"
+          :deckObject="n"
           @openDialog="openDialog(n)"
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
@@ -118,8 +118,10 @@ export default {
           })
           .then((res) => {
             for (let i = 0; i < res.data.count; i++) {
-              this.decks.push(res.data.data[i].Deck)
+              this.decks.push({deck: res.data.data[i].Deck, today: res.data.data[i].settings_today})
+
             }
+            console.log(this.decks)
           })
       } catch (e) {
         this.error = e.response.data.message
