@@ -66,7 +66,7 @@ export default {
       while (!this.$refs.practiceDialog) {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
-      await this.$refs.practiceDialog.getCards(value.ID)
+      await this.$refs.practiceDialog.getCards(value.deck.ID)
     },
 
     closeDialogConfirmation() {
@@ -88,7 +88,7 @@ export default {
         await this.$axios
           .post(
             `https://api-memnix.yumenetwork.net/api/v1/decks/` +
-            this.selectedDeck.ID +
+            this.selectedDeck.deck.ID +
             `/unsubscribe`,
             {},
             {
@@ -121,7 +121,6 @@ export default {
               this.decks.push({deck: res.data.data[i].Deck, today: res.data.data[i].settings_today})
 
             }
-            console.log(this.decks)
           })
       } catch (e) {
         this.error = e.response.data.message
