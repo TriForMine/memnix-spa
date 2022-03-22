@@ -28,9 +28,14 @@
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
       </v-col>
-      <v-btn fab dark color="secondary" fixed right bottom @click="deckCreator = true">
-        <v-icon dark>mdi-plus</v-icon>
-      </v-btn>
+    </v-row>
+    <v-row v-else-if="loaderOverlay">
+      <v-overlay :value="loaderOverlay">
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+      </v-overlay>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
       <h1>You are not sub to any deck yet!</h1>
@@ -58,6 +63,7 @@ export default {
       cardIndex: 0,
       items: {},
       res: [],
+      loaderOverlay: false,
     }
   },
   beforeMount() {
@@ -113,6 +119,7 @@ export default {
     },
 
     async getSubDeck() {
+      this.loaderOverlay = true
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/decks/sub`, {
@@ -126,6 +133,8 @@ export default {
               this.decks.push({deck: res.data.data[i].Deck, today: res.data.data[i].settings_today})
 
             }
+
+            this.loaderOverlay = false
           })
       } catch (e) {
         this.error = e.response.data.message
