@@ -28,6 +28,9 @@
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
       </v-col>
+      <v-btn fab dark color="secondary" fixed right bottom @click="deckCreator = true">
+        <v-icon dark>mdi-plus</v-icon>
+      </v-btn>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
       <h1>You are not sub to any deck yet!</h1>
@@ -38,6 +41,8 @@
 
 <script>
 export default {
+  middleware: 'authentificated',
+
   data() {
     return {
       decks: [],

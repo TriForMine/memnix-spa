@@ -36,7 +36,7 @@ export default {
   name: "DeckConfigMenu",
   props: {
     today: {
-      type: Object,
+      type: Boolean,
       default(){}
     }
   },
