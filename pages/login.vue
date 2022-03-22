@@ -143,7 +143,7 @@ export default {
         try {
           await this.$axios
             .post(
-              `https://api-memnix.yumenetwork.net/api/login/`,
+              `https://api.memnix.app/api/login/`,
               {
                 email: this.email.toLowerCase(),
                 password: this.password,
@@ -157,7 +157,7 @@ export default {
             )
 
           await this.$axios.get(
-            `https://api-memnix.yumenetwork.net/api/user/`,
+            `https://api.memnix.app/api/user/`,
             {
               headers: {
                 'Content-Type': 'application/json'

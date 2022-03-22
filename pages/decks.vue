@@ -92,7 +92,7 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/decks/` +
+            `https://api.memnix.app/api/v1/decks/` +
             this.selectedDeck.deck.ID +
             `/unsubscribe`,
             {},
@@ -115,7 +115,7 @@ export default {
     async getSubDeck() {
       try {
         await this.$axios
-          .get(`https://api-memnix.yumenetwork.net/api/v1/decks/sub`, {
+          .get(`https://api.memnix.app/api/v1/decks/sub`, {
             headers: {
               'Content-Type': 'application/json'
             },

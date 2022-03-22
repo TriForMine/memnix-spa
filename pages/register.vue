@@ -176,7 +176,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `https://api-memnix.yumenetwork.net/api/register/`,
+            `https://api.memnix.app/api/register/`,
             {
               username: this.username,
               email: this.email,
@@ -191,7 +191,7 @@ export default {
 
           await this.$axios
             .post(
-              `https://api-memnix.yumenetwork.net/api/login/`,
+              `https://api.memnix.app/api/login/`,
               {
                 email: this.email,
                 password: this.password,
