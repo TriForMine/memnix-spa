@@ -64,36 +64,7 @@
       <v-btn icon @click="unsubToDeck">
         <v-icon>{{ 'mdi-trash-can' }}</v-icon>
       </v-btn>
-      <v-menu
-        v-model="menu"
-        bottom
-        offset-x
-        rounded="lg"
-        :close-on-content-click="false"
-        :nudge-width="200"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn dark icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-cog</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-list>
-            <v-list-item>
-              <v-list-item-action>
-                <v-switch v-model="daily" color="purple"></v-switch>
-              </v-list-item-action>
-              <v-list-item-title>Enable daily</v-list-item-title>
-            </v-list-item>
-          </v-list>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn text @click="menu = false"> Cancel </v-btn>
-            <v-btn color="primary" text @click="setTodaySettings"> Save </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
+      <DeckConfigMenu @setTodaySettings="setTodaySettings($event)" :today="deckObject.today"/>
     </v-card-actions>
   </v-card>
 </template>
@@ -109,8 +80,6 @@ export default {
   data() {
     return {
       show: false,
-      menu: false,
-      daily: this.deckObject.today,
     }
   },
 
@@ -119,13 +88,13 @@ export default {
       this.$emit('openDialog')
     },
 
-    async setTodaySettings() {
+    async setTodaySettings(daily) {
       try {
         await this.$axios
           .post(
             `https://api-memnix.yumenetwork.net/api/v1/users/settings/` + this.deckObject.deck.ID+ '/today',
             {
-              "settings_today" : this.daily
+              "settings_today" : daily
             },
             {
               headers: {
