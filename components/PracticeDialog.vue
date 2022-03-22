@@ -140,7 +140,7 @@ export default {
       try {
         await this.$axios
           .get(
-            `https://api-memnix.yumenetwork.net/api/v1/cards/` +
+            `https://api.memnix.app/api/v1/cards/` +
             ID +
             `/training`,
             {
@@ -164,7 +164,7 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/cards/response`,
+            `https://api.memnix.app/api/v1/cards/response`,
             {
               card_id: this.card.ID,
               response: answer,

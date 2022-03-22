@@ -123,7 +123,7 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/users/settings/` + this.deckObject.deck.ID+ '/today',
+            `https://api.memnix.app/api/v1/users/settings/` + this.deckObject.deck.ID+ '/today',
             {
               "settings_today" : this.daily
             },

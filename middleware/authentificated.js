@@ -3,7 +3,7 @@ import axios from 'axios'
 export default function ({ redirect }) {
 
   axios.get(
-    `https://api-memnix.yumenetwork.net/api/user/`,
+    `https://api.memnix.app/api/user/`,
     {
       headers: {
         'Content-Type': 'application/json'

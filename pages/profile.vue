@@ -27,7 +27,7 @@ export default {
     async logout() {
       try {
         await this.$axios.post(
-          `https://api-memnix.yumenetwork.net/api/logout`,
+          `https://api.memnix.app/api/logout`,
           {},
           {
             headers: {
@@ -45,7 +45,7 @@ export default {
     async getUser() {
       try {
         await this.$axios
-          .get(`https://api-memnix.yumenetwork.net/api/user/`, {
+          .get(`https://api.memnix.app/api/user/`, {
             headers: {
               'Content-Type': 'application/json'
             },
