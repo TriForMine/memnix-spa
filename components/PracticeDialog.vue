@@ -5,7 +5,7 @@
         <v-btn dark icon @click="closePracticeDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
-        <v-toolbar-title>{{ selectedDeck.deck_name }}</v-toolbar-title>
+        <v-toolbar-title>{{ selectedDeck.deck.deck_name }}</v-toolbar-title>
       </v-toolbar>
     </v-card-title>
     <v-card-text>
