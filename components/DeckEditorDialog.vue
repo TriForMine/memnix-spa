@@ -13,7 +13,7 @@
     >
       {{ snackbarText }}
 
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn color="warning" icon v-bind="attrs" @click="snackbar = false">
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -27,15 +27,15 @@
     </v-toolbar>
     <v-card-title> </v-card-title>
     <v-tabs :value="isCreateMode ? 0 : 1">
-      <v-tab :disabled="isCreateMode ? false : true">
+      <v-tab :disabled="!isCreateMode">
         <v-icon left> mdi-cog </v-icon>
         Deck
       </v-tab>
-      <v-tab :disabled="isCreateMode ? true : false">
+      <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-cards </v-icon>
         Cards
       </v-tab>
-      <v-tab :disabled="isCreateMode ? true : false">
+      <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-checkbox-multiple-marked </v-icon>
         MCQ
       </v-tab>
@@ -65,23 +65,23 @@
                 </v-btn>
               </v-card-title>
               <v-data-table :headers="headers" :items="cards" :search="search">
-                <template v-slot:[`item.card_case`]="{ item }">
+                <template #[`item.card_case`]="{ item }">
                   <v-simple-checkbox
                     v-model="item.card_case"
                     disabled
                   ></v-simple-checkbox>
                 </template>
-                <template v-slot:[`item.card_spaces`]="{ item }">
+                <template #[`item.card_spaces`]="{ item }">
                   <v-simple-checkbox
                     v-model="item.card_spaces"
                     disabled
                   ></v-simple-checkbox>
                 </template>
-                <template v-slot:[`item.actions`]="{}">
+                <template #[`item.actions`]="{}">
                   <v-icon small class="mr-2"> mdi-pencil </v-icon>
                   <v-icon small> mdi-delete </v-icon>
                 </template>
-                <template v-slot:no-data>
+                <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
                 </template>
               </v-data-table>
@@ -111,7 +111,7 @@
                 :items="mcqs"
                 :search="search"
               >
-                <template v-slot:[`item.mcq_answers`]="{ item }">
+                <template #[`item.mcq_answers`]="{ item }">
                   <p
                     class="font-weight-bold d-inline-block text-truncate"
                     style="max-width: 50vw"
@@ -126,11 +126,11 @@
                     </v-tooltip>
                   </p>
                 </template>
-                <template v-slot:[`item.actions`]="{}">
+                <template #[`item.actions`]="{}">
                   <v-icon small class="mr-2"> mdi-pencil </v-icon>
                   <v-icon small> mdi-delete </v-icon>
                 </template>
-                <template v-slot:no-data>
+                <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
                 </template>
               </v-data-table>

@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: "landing"
+  name: "Landing"
 }
 </script>
 

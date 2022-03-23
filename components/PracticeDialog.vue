@@ -65,7 +65,7 @@
           />
           <TodayProgressLinear
             :progress="progress"
-            :progressBuffer="progressBuffer"
+            :progress-buffer="progressBuffer"
             :total="total"
           />
         </v-container>

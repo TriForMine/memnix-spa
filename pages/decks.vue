@@ -23,7 +23,7 @@
              lg="6"
              xl="4">
         <Deck
-          :deckObject="n"
+          :deck-object="n"
           @openDialog="openDialog(n)"
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />

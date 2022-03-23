@@ -16,7 +16,7 @@
       <Card :card="card" :items="items" @postAnswer="postAnswer($event)"/>
       <TodayProgressLinear
         :progress="progress"
-        :progressBuffer="progressBuffer"
+        :progress-buffer="progressBuffer"
         :total="total"
       />
     </v-container>
