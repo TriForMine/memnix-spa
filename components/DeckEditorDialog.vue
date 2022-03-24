@@ -23,8 +23,8 @@
         :mcqs="mcqs"
         :selected-deck="selectedDeck"
         :card="selectedCard"
-        @closeCardCreatorDialog="closeCardEditDialog"
-        @createCardSave="createCardSave"
+        @closeCardEditDialog="closeCardEditDialog"
+        @editCardSave="editCardSave"
       />
     </v-dialog>
     <v-dialog
@@ -312,6 +312,17 @@ export default {
       this.createCardDialog = false
       this.loaderOverlay = true
       this.snackbarText = 'Success creating a new card !'
+      await this.getCards(this.selectedDeck.ID)
+      setTimeout(() => {
+        this.loaderOverlay = false
+        this.snackbar = true
+      }, 2000)
+    },
+
+    async editCardSave() {
+      this.editCardDialog = false
+      this.loaderOverlay = true
+      this.snackbarText = 'Success edited a card !'
       await this.getCards(this.selectedDeck.ID)
       setTimeout(() => {
         this.loaderOverlay = false

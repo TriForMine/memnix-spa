@@ -9,10 +9,10 @@
     <v-item>
       <DeckCardForm
         :deck-id="getDeckId"
-        :card="card"
+        :card.sync="card"
         :mcqs="mcqs"
         @closeCardDialog="closeDialog"
-        @createCardSave="createCardSave"
+        @createCardSave="editCardSave"
       />
     </v-item>
   </v-card>
@@ -42,10 +42,10 @@ export default {
   },
   methods: {
     closeDialog() {
-      this.$emit('closeCardCreatorDialog')
+      this.$emit('closeCardEditDialog')
     },
-    createCardSave() {
-      this.$emit('createCardSave')
+    editCardSave() {
+      this.$emit('editCardSave')
     }
   },
 }

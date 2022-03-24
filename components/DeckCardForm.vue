@@ -125,7 +125,7 @@
       <v-spacer></v-spacer>
       <v-btn color="info" text @click="closeCardDialog"> Close </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
-        Create
+        {{ confirmButtonText }}
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -178,6 +178,18 @@ export default {
       error: 'An error occurred !',
     }
   },
+  watch: {
+    card(newVal) {
+      this.cardQuestion = newVal.card_question ?? ''
+      this.cardAnswer = newVal.card_answer ?? ''
+      this.cardFormat = newVal.card_format ?? ''
+      this.cardImage = newVal.card_image ?? ''
+      this.cardType = newVal.card_type ?? -1
+      this.cardMCQId = newVal.mcq_id?.Int32 ?? -1
+      this.cardCase = newVal.card_case ?? false
+      this.cardSpaces = newVal.card_spaces ?? false
+    }
+  },
   computed: {
     answerFieldType() {
       if (this.cardType === 1)
@@ -185,13 +197,20 @@ export default {
       else
         return 'string'
     },
+    confirmButtonText() {
+      if (this.card) {
+        return 'Edit'
+      } else {
+        return 'Create'
+      }
+    },
     questionErrors() {
       const errors = []
       if (!this.$v.cardQuestion.$dirty) return errors
       !this.$v.cardQuestion.maxLength &&
-        errors.push('Question must be at most 200 characters long')
+      errors.push('Question must be at most 200 characters long')
       !this.$v.cardQuestion.minLength &&
-        errors.push('Question must be at least 1 character long')
+      errors.push('Question must be at least 1 character long')
       !this.$v.cardQuestion.required && errors.push('Question is required.')
       return errors
     },
@@ -246,7 +265,7 @@ export default {
         if (this.card) {
           await this.$axios
             .put(
-              `https://api.memnix.app/api/v1/cards/${this.card.ID}`,
+              `https://api.memnix.app/api/v1/cards/${this.card.ID}/edit`,
               data,
               {
                 headers: {
