@@ -341,24 +341,16 @@ export default {
 
     async editCardSave() {
       this.editCardDialog = false
-      this.loaderOverlay = true
       this.snackbarText = 'Success edited a card !'
+      this.snackbar = true
       await this.getCards(this.selectedDeck.ID)
-      setTimeout(() => {
-        this.loaderOverlay = false
-        this.snackbar = true
-      }, 2000)
     },
 
     async createMCQSave() {
       this.createMCQDialog = false
-      this.loaderOverlay = true
       this.snackbarText = 'Success creating a new MCQ !'
+      this.snackbar = true
       await this.getMCQS(this.selectedDeck.ID)
-      setTimeout(() => {
-        this.loaderOverlay = false
-        this.snackbar = true
-      }, 2000)
     },
 
     async deleteCard() {
@@ -380,10 +372,11 @@ export default {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
-      this.snackbar = true
     },
 
     async getCards(ID) {
+      this.loaderOverlay = true
+
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/cards/deck/` + ID, {
@@ -399,9 +392,11 @@ export default {
       } catch (e) {
         this.error = e.response.data.message
       }
+      this.loaderOverlay = false
     },
 
     async getMCQS(ID) {
+      this.loaderOverlay = true
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/mcqs/` + ID, {
@@ -417,6 +412,7 @@ export default {
       } catch (e) {
         this.error = e.response.data.message
       }
+      this.loaderOverlay = false
     },
   },
 }

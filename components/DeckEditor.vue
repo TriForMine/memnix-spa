@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" flat max-width="500">
-    <v-img :src="deckObject.deck_banner" height="200px">
+    <v-img :src="deckObject.deck_banner" lazy-src="moutmout.png" height="200px">
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -43,6 +43,24 @@
     >
       <v-icon left> mdi-lock-open </v-icon>
       Public
+    </v-chip>
+    <v-chip
+      v-if="deckObject.deck_status === 1"
+      class="ma-2"
+      color="secondary"
+      text-color="white"
+    >
+      <v-icon left> mdi-lock </v-icon>
+      Private
+    </v-chip>
+    <v-chip
+      v-if="deckObject.deck_status === 2"
+      class="ma-2"
+      color="error"
+      text-color="white"
+    >
+      <v-icon left> mdi-clock-alert </v-icon>
+      Waiting for approval
     </v-chip>
     <v-chip
       v-if="deckObject.ID === 13"
