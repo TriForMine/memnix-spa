@@ -74,10 +74,10 @@ export default {
     deckName: { required, maxLength: maxLength(42), minLength: minLength(5) },
     deckDescription: {
       required,
-      maxLength: maxLength(120),
+      maxLength: maxLength(200),
       minLength: minLength(5),
     },
-    deckImageUrl: { maxLength: maxLength(120) },
+    deckImageUrl: { maxLength: maxLength(200) },
   },
   data() {
     return {

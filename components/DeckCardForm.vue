@@ -154,7 +154,7 @@ export default {
     }
   },
   validations: {
-    cardQuestion: { required, maxLength: maxLength(200), minLength: minLength(1) },
+    cardQuestion: { required, maxLength: maxLength(200), minLength: minLength(5) },
     cardAnswer: { required, maxLength: maxLength(200), minLength: minLength(1) },
     cardImage: { maxLength: maxLength(200), minLength: minLength(1) },
     cardFormat: { required, maxLength: maxLength(50), minLength: minLength(1) },
@@ -210,7 +210,7 @@ export default {
       !this.$v.cardQuestion.maxLength &&
       errors.push('Question must be at most 200 characters long')
       !this.$v.cardQuestion.minLength &&
-      errors.push('Question must be at least 1 character long')
+      errors.push('Question must be at least 5 character long')
       !this.$v.cardQuestion.required && errors.push('Question is required.')
       return errors
     },
