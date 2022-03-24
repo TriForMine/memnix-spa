@@ -74,15 +74,15 @@
     </v-toolbar>
     <v-card-title> </v-card-title>
     <v-tabs :value="isCreateMode ? 0 : 1">
-      <v-tab :disabled="isCreateMode ? false : true">
+      <v-tab :disabled="!isCreateMode">
         <v-icon left> mdi-cog </v-icon>
         Deck
       </v-tab>
-      <v-tab :disabled="isCreateMode ? true : false">
+      <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-cards </v-icon>
         Cards
       </v-tab>
-      <v-tab :disabled="isCreateMode ? true : false">
+      <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-checkbox-multiple-marked </v-icon>
         MCQ
       </v-tab>

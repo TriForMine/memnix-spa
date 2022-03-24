@@ -64,7 +64,7 @@
       <v-btn icon @click="unsubToDeck">
         <v-icon>{{ 'mdi-trash-can' }}</v-icon>
       </v-btn>
-      <DeckConfigMenu @setTodaySettings="setTodaySettings($event)" :today="deckObject.today"/>
+      <DeckConfigMenu :today="deckObject.today" @setTodaySettings="setTodaySettings($event)"/>
     </v-card-actions>
   </v-card>
 </template>

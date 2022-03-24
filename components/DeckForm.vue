@@ -8,21 +8,19 @@
               v-model="deckName"
               name="deckName"
               :error-messages="nameErrors"
-              @input="$v.deckName.$touch()"
-              @blur="$v.deckName.$touch()"
               label="Name *"
               required
               outlined
               shaped
               counter
               maxlength="42"
+              @input="$v.deckName.$touch()"
+              @blur="$v.deckName.$touch()"
             ></v-text-field>
           </v-col>
           <v-col cols="12">
             <v-textarea
               v-model="deckDescription"
-              @input="$v.deckDescription.$touch()"
-              @blur="$v.deckDescription.$touch()"
               :error-messages="descriptionErrors"
               label="Description *"
               no-resize
@@ -32,18 +30,20 @@
               counter
               maxlength="120"
               shaped
+              @input="$v.deckDescription.$touch()"
+              @blur="$v.deckDescription.$touch()"
             ></v-textarea>
           </v-col>
 
           <v-col cols="12">
             <v-text-field
               v-model="deckImageUrl"
-              @input="$v.deckImageUrl.$touch()"
-              @blur="$v.deckImageUrl.$touch()"
               label="Image url"
               outlined
               shaped
               maxlength="120"
+              @input="$v.deckImageUrl.$touch()"
+              @blur="$v.deckImageUrl.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -66,6 +66,8 @@ import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 
 export default {
+  name: 'DeckForm',
+
   mixins: [validationMixin],
 
   validations: {
@@ -77,7 +79,6 @@ export default {
     },
     deckImageUrl: { maxLength: maxLength(120) },
   },
-  name: 'DeckForm',
   data() {
     return {
       deckName: '',
