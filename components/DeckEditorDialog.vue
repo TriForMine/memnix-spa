@@ -1,5 +1,52 @@
 <template>
   <v-card>
+    <v-dialog
+      v-model="createCardDialog"
+      max-width="600px"
+      persistent
+      @keydown.enter="closeCardCreatorDialog"
+    >
+      <DeckEditorCardDialog
+        :mcqs="mcqs"
+        :selected-deck="selectedDeck"
+        @closeCardCreatorDialog="closeCardCreatorDialog"
+        @createCardSave="createCardSave"
+      />
+    </v-dialog>
+    <v-dialog
+      v-model="editCardDialog"
+      max-width="600px"
+      persistent
+      @keydown.enter="closeCardEditDialog"
+    >
+      <DeckEditorEditCardDialog
+        :mcqs="mcqs"
+        :selected-deck="selectedDeck"
+        :card="selectedCard"
+        @closeCardEditDialog="closeCardEditDialog"
+        @editCardSave="editCardSave"
+      />
+    </v-dialog>
+    <v-dialog
+      v-model="createMCQDialog"
+      max-width="600px"
+      persistent
+      @keydown.enter="closeMCQCreatorDialog"
+    >
+      <DeckEditorMCQDialog
+        :mcqs="mcqs"
+        :selected-deck="selectedDeck"
+        @closeMCQCreatorDialog="closeMCQCreatorDialog"
+        @createMCQSave="createMCQSave"
+      />
+    </v-dialog>
+    <v-dialog
+      v-model="cardDeleteConfirmationDialog"
+      hide-overlay
+      max-width="600px"
+      transition="dialog-bottom-transition">
+      <DeckEditorDeleteCardDialog @deleteCard="deleteCard" @closeDialogConfirmation="closeDialogConfirmation"/>
+    </v-dialog>
     <v-overlay :value="loaderOverlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -60,7 +107,7 @@
                   hide-details
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn text outlined color="warning" x-large>
+                <v-btn text outlined color="warning" x-large @click="openCardCreatorDialog" >
                   Create new card
                 </v-btn>
               </v-card-title>
@@ -77,9 +124,9 @@
                     disabled
                   ></v-simple-checkbox>
                 </template>
-                <template #[`item.actions`]="{}">
-                  <v-icon small class="mr-2"> mdi-pencil </v-icon>
-                  <v-icon small> mdi-delete </v-icon>
+                <template #[`item.actions`]="{ item }">
+                  <v-icon small class="mr-2" @click="openEditCardDialog(item)" > mdi-pencil </v-icon>
+                  <v-icon small @click="openDeleteCardDialog(item)"> mdi-delete </v-icon>
                 </template>
                 <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -102,7 +149,7 @@
                   hide-details
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn text outlined color="warning" x-large>
+                <v-btn text outlined color="warning" x-large @click="openMCQCreatorDialog">
                   Create new MCQ
                 </v-btn>
               </v-card-title>
@@ -160,8 +207,13 @@ export default {
       snackbar: false,
       snackbarText: ' ',
       timeout: 2000,
+      selectedCard: undefined,
 
       createMode: true,
+      createCardDialog: false,
+      editCardDialog: false,
+      createMCQDialog: false,
+      cardDeleteConfirmationDialog: false,
       cards: [],
       mcqs: [],
       total: 0,
@@ -192,9 +244,49 @@ export default {
     },
     isCreateMode() {
       return this.create & this.createMode
-    },
+    }
   },
   methods: {
+    closeCardCreatorDialog() {
+      if (this.createCardDialog) {
+        this.createCardDialog = false
+      }
+    },
+
+    closeCardEditDialog() {
+      if (this.editCardDialog) {
+        this.editCardDialog = false
+      }
+    },
+
+    closeMCQCreatorDialog() {
+      if (this.createMCQDialog) {
+        this.createMCQDialog = false
+      }
+    },
+
+    closeDialogConfirmation() {
+      this.cardDeleteConfirmationDialog = false
+    },
+
+    openCardCreatorDialog() {
+      this.createCardDialog = true
+    },
+
+    openEditCardDialog(card) {
+      this.selectedCard = card;
+      this.editCardDialog = true
+    },
+
+    openMCQCreatorDialog() {
+      this.createMCQDialog = true
+    },
+
+    openDeleteCardDialog(card) {
+      this.selectedCard = card;
+      this.cardDeleteConfirmationDialog = true
+    },
+
     closeEditDeck() {
       this.createMode = true
       this.$emit('closeEditDeck')
@@ -214,6 +306,61 @@ export default {
         this.snackbar = true
         this.createMode = false
       }, 2000)
+    },
+
+    async createCardSave() {
+      this.createCardDialog = false
+      this.loaderOverlay = true
+      this.snackbarText = 'Success creating a new card !'
+      await this.getCards(this.selectedDeck.ID)
+      setTimeout(() => {
+        this.loaderOverlay = false
+        this.snackbar = true
+      }, 2000)
+    },
+
+    async editCardSave() {
+      this.editCardDialog = false
+      this.loaderOverlay = true
+      this.snackbarText = 'Success edited a card !'
+      await this.getCards(this.selectedDeck.ID)
+      setTimeout(() => {
+        this.loaderOverlay = false
+        this.snackbar = true
+      }, 2000)
+    },
+
+    async createMCQSave() {
+      this.createMCQDialog = false
+      this.loaderOverlay = true
+      this.snackbarText = 'Success creating a new MCQ !'
+      await this.getMCQS(this.selectedDeck.ID)
+      setTimeout(() => {
+        this.loaderOverlay = false
+        this.snackbar = true
+      }, 2000)
+    },
+
+    async deleteCard() {
+      try {
+        this.cardDeleteConfirmationDialog = false;
+        this.loaderOverlay = true
+        await this.$axios
+          .delete(`https://api.memnix.app/api/v1/cards/${this.selectedCard.ID}`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          })
+          .then(async () => {
+            this.snackbarText = 'Successfully deleted the card !'
+            await this.getCards(this.selectedDeck.ID)
+          })
+      } catch (e) {
+        this.error = e.response.data.message
+      }
+      this.loaderOverlay = false
+      this.snackbar = true
     },
 
     async getCards(ID) {

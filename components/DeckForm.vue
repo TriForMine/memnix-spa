@@ -110,10 +110,34 @@ export default {
     },
   },
   methods: {
+    async createDeck() {
+      try {
+        await this.$axios
+          .post(
+            `https://api.memnix.app/api/v1/decks/new`,
+            {
+              "deck_name": this.deckName,
+              "deck_description": this.deckDescription,
+              "deck_banner": this.deckImageUrl
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true,
+            }
+          )
+          .then(() => {
+            this.createDeckSave()
+          })
+      } catch (e) {
+        this.error = e.res.data.message
+      }
+    },
     validateAnswer() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.createDeckSave()
+        this.createDeck()
       }
     },
     closeEditDeck() {
