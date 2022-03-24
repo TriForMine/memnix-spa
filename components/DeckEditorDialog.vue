@@ -226,7 +226,7 @@ export default {
       search: '',
       headersMCQ: [
         { text: 'Name', align: 'start', value: 'mcq_name' },
-        { text: 'Answer', value: 'mcq_answers' },
+        { text: 'Answers', value: 'mcq_answers' },
         { text: 'Type', value: 'mcq_type' },
       ],
       headers: [
