@@ -128,6 +128,9 @@
                   <v-icon small class="mr-2" @click="openEditCardDialog(item)" > mdi-pencil </v-icon>
                   <v-icon small @click="openDeleteCardDialog(item)"> mdi-delete </v-icon>
                 </template>
+                <template #[`item.card_type`]="{ item }">
+                  {{ getCardType(item.card_type) }}
+                </template>
                 <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
                 </template>
@@ -172,6 +175,9 @@
                       <span> {{ item.mcq_answers }}</span>
                     </v-tooltip>
                   </p>
+                </template>
+                <template #[`item.mcq_type`]="{ item }">
+                  {{ getMcqType(item.mcq_type) }}
                 </template>
                 <template #[`item.actions`]="{}">
                   <v-icon small class="mr-2"> mdi-pencil </v-icon>
@@ -244,12 +250,31 @@ export default {
     },
     isCreateMode() {
       return this.create & this.createMode
-    }
+    },
+
+
   },
   methods: {
     closeCardCreatorDialog() {
       if (this.createCardDialog) {
         this.createCardDialog = false
+      }
+    },
+
+    getMcqType(type) {
+      if (type === 0) {
+        return "Standalone"
+      } else {
+        return "Linked"
+      }
+    },
+    getCardType(type) {
+      if (type===0) {
+        return "String"
+      } else if (type===1) {
+        return "Integer"
+      } else {
+        return "MCQ Only"
       }
     },
 
