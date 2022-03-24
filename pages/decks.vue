@@ -23,11 +23,19 @@
              lg="6"
              xl="4">
         <Deck
-          :deckObject="n"
+          :deck-object="n"
           @openDialog="openDialog(n)"
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
       </v-col>
+    </v-row>
+    <v-row v-else-if="loaderOverlay">
+      <v-overlay :value="loaderOverlay">
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+      </v-overlay>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
       <h1>You are not sub to any deck yet!</h1>
@@ -38,6 +46,8 @@
 
 <script>
 export default {
+  middleware: 'authentificated',
+
   data() {
     return {
       decks: [],
@@ -53,6 +63,7 @@ export default {
       cardIndex: 0,
       items: {},
       res: [],
+      loaderOverlay: false,
     }
   },
   beforeMount() {
@@ -108,6 +119,7 @@ export default {
     },
 
     async getSubDeck() {
+      this.loaderOverlay = true
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/decks/sub`, {
@@ -121,6 +133,8 @@ export default {
               this.decks.push({deck: res.data.data[i].Deck, today: res.data.data[i].settings_today})
 
             }
+
+            this.loaderOverlay = false
           })
       } catch (e) {
         this.error = e.response.data.message

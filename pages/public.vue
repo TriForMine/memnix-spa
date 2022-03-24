@@ -23,6 +23,8 @@
 
 <script>
 export default {
+  middleware: 'authentificated',
+
   data() {
     return {
       decks: [],
