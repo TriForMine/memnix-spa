@@ -299,13 +299,8 @@ export default {
 
     createDeckSave() {
       this.createDeck = false
-      this.loaderOverlay = true
-      this.snackbarText = 'Success creating a new deck !'
-      setTimeout(() => {
-        this.loaderOverlay = false
-        this.snackbar = true
-        this.createMode = false
-      }, 2000)
+      this.createMode = false
+      this.$emit("createDeckSave")
     },
 
     async createCardSave() {

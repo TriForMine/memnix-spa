@@ -1,5 +1,24 @@
 <template>
   <v-container>
+    <v-overlay :value="loaderOverlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      shaped
+      elevation="24"
+      outlined
+      color="info"
+    >
+      {{ snackbarText }}
+
+      <template #action="{ attrs }">
+        <v-btn color="warning" icon v-bind="attrs" @click="snackbar = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-dialog
       v-model="editor"
       fullscreen
@@ -11,6 +30,7 @@
         :create="createMode"
         :selected-deck="selectedDeck"
         @closeEditDeck="closeEditDeck"
+        @createDeckSave="createDeckSave"
       />
     </v-dialog>
     <v-toolbar color="primary" dark flat mb-10>
@@ -47,7 +67,11 @@ export default {
       dialog: false,
       selectedDeck: {},
       editor: false,
-      createMode: false
+      createMode: false,
+      snackbar: false,
+      snackbarText: "",
+      loaderOverlay: false,
+      timeout: 2000,
     }
   },
 
@@ -82,7 +106,17 @@ export default {
       this.editor = false
     },
 
+    async createDeckSave() {
+      this.editor = false
+      this.snackbarText = 'Success creating a new deck !'
+      this.snackbar = true
+      await this.getEditorsDeck()
+    },
+
     async getEditorsDeck() {
+      this.loaderOverlay = true
+      this.decks = []
+
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/decks/editor`, {
@@ -99,6 +133,7 @@ export default {
       } catch (e) {
         this.error = e.response.data.message
       }
+      this.loaderOverlay = false
     },
   },
 }
