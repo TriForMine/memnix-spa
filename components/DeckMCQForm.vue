@@ -91,7 +91,7 @@ export default {
       ],
 
       mcqName: '',
-      mcqStandalone: true,
+      mcqStandalone: false,
       mcqAnswers: '',
       error: 'An error occurred !',
     }
