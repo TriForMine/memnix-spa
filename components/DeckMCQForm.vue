@@ -38,7 +38,7 @@
               :error-messages="answersErrors"
               @input="$v.mcqAnswers.$touch()"
               @blur="$v.mcqAnswers.$touch()"
-              label="Answers"
+              label="Answers *"
               outlined
               shaped
               maxlength="500"
