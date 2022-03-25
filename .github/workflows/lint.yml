@@ -1,5 +1,7 @@
 name: Run Lint Files
-"on": push
+on:
+  push:
+  pull_request:
 jobs:
   unit_test-lint:
     runs-on: ubuntu-latest
