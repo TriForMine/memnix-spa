@@ -33,6 +33,7 @@
         @createDeckSave="createDeckSave"
       />
     </v-dialog>
+
     <v-toolbar color="primary" dark flat mb-10>
       <v-spacer></v-spacer>
       <v-btn text x-large @click="createDeck"> Create a deck </v-btn>
