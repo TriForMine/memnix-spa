@@ -7,23 +7,36 @@
         hide-overlay
         transition="dialog-bottom-transition"
       >
-        <PracticeDialog ref="practiceDialog" :selected-deck="selectedDeck" @closePracticeDialog="closePracticeDialog"/>
+        <PracticeDialog
+          ref="practiceDialog"
+          :selected-deck="selectedDeck"
+          @closePracticeDialog="closePracticeDialog"
+        />
       </v-dialog>
       <v-dialog
         v-model="dialogConfirmation"
         hide-overlay
         max-width="600px"
-        transition="dialog-bottom-transition">
-        <UnsubDialog @unsubToDeck="unsubToDeck" @closeDialogConfirmation="closeDialogConfirmation"/>
+        transition="dialog-bottom-transition"
+      >
+        <UnsubDialog
+          @unsubToDeck="unsubToDeck"
+          @closeDialogConfirmation="closeDialogConfirmation"
+        />
       </v-dialog>
 
-      <v-col v-for="(n, index) in decks" :key="index" cols="12"
-             sm="12"
-             md="6"
-             lg="6"
-             xl="4">
+      <v-col
+        v-for="(n, index) in decks"
+        :key="index"
+        cols="12"
+        sm="12"
+        md="6"
+        lg="6"
+        xl="4"
+      >
         <Deck
           :deck-object="n"
+          :is-owner="isOwner(n)"
           @openDialog="openDialog(n)"
           @unsubToDeck="unsubToDeckConfirmation(n)"
         />
@@ -31,10 +44,7 @@
     </v-row>
     <v-row v-else-if="loaderOverlay">
       <v-overlay :value="loaderOverlay">
-        <v-progress-circular
-          indeterminate
-          size="64"
-        ></v-progress-circular>
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
@@ -42,7 +52,6 @@
     </v-row>
   </v-container>
 </template>
-
 
 <script>
 export default {
@@ -56,26 +65,38 @@ export default {
       selectedDeck: [],
       resDialog: false,
       card: {},
-      cards: [{
-        "Card": {},
-        "Answers": []
-      }],
+      cards: [
+        {
+          Card: {},
+          Answers: [],
+        },
+      ],
       cardIndex: 0,
       items: {},
       res: [],
       loaderOverlay: false,
+      userID: 0,
     }
   },
   beforeMount() {
     this.getSubDeck()
   },
+  mounted() {
+    if (localStorage.userID) {
+      this.userID = localStorage.userID
+    }
+  },
 
   methods: {
+    isOwner(n) {
+      return parseInt(n.owner) === parseInt(this.userID)
+    },
+
     async openDialog(value) {
       this.selectedDeck = value
       this.dialog = true
       while (!this.$refs.practiceDialog) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100))
       }
       await this.$refs.practiceDialog.getCards(value.deck.ID)
     },
@@ -89,7 +110,6 @@ export default {
       this.dialogConfirmation = true
     },
 
-
     closePracticeDialog() {
       this.dialog = false
     },
@@ -99,12 +119,12 @@ export default {
         await this.$axios
           .post(
             `https://api.memnix.app/api/v1/decks/` +
-            this.selectedDeck.deck.ID +
-            `/unsubscribe`,
+              this.selectedDeck.deck.ID +
+              `/unsubscribe`,
             {},
             {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               withCredentials: true,
             }
@@ -124,14 +144,17 @@ export default {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/decks/sub`, {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
             },
             withCredentials: true,
           })
           .then((res) => {
             for (let i = 0; i < res.data.count; i++) {
-              this.decks.push({deck: res.data.data[i].Deck, today: res.data.data[i].settings_today})
-
+              this.decks.push({
+                deck: res.data.data[i].Deck,
+                owner: res.data.data[i].owner_id,
+                today: res.data.data[i].settings_today,
+              })
             }
 
             this.loaderOverlay = false

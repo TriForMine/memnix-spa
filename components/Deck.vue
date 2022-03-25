@@ -79,7 +79,7 @@
       </v-btn>
 
       <v-spacer></v-spacer>
-      <v-btn icon @click="unsubToDeck">
+      <v-btn v-if="!isOwner" icon @click="unsubToDeck">
         <v-icon>{{ 'mdi-trash-can' }}</v-icon>
       </v-btn>
       <DeckConfigMenu :today="deckObject.today" @setTodaySettings="setTodaySettings($event)"/>
@@ -94,6 +94,9 @@ export default {
       type: Object,
       default() {},
     },
+    isOwner: {
+      type: Boolean,
+    }
   },
   data() {
     return {
