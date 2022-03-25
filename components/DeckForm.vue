@@ -1,5 +1,28 @@
 <template>
   <v-card flat>
+    <v-dialog
+      v-model="errorDialog"
+    >
+      <v-card>
+        <v-card-title class="text-h5 error lighten-2">
+          {{error}}
+        </v-card-title>
+
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="errorDialog = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+
+
+    </v-dialog>
     <v-card-text>
       <v-form @submit.prevent="validateAnswer">
         <v-row>
@@ -85,6 +108,7 @@ export default {
       deckDescription: '',
       deckImageUrl: '',
       error: 'An error occurred !',
+      errorDialog: false,
     }
   },
   computed: {
@@ -131,7 +155,8 @@ export default {
             this.createDeckSave()
           })
       } catch (e) {
-        this.error = e.res.data.message
+        this.error = e.response.data.message
+        this.errorDialog = true
       }
     },
     validateAnswer() {
