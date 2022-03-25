@@ -28,13 +28,25 @@
       />
     </v-dialog>
     <v-dialog
+      v-model="editMCQDialog"
+      max-width="600px"
+      persistent
+      @keydown.enter="closeMCQEditDialog"
+    >
+      <DeckEditorEditMCQDialog
+        :selected-deck="selectedDeck"
+        :mcq="selectedMCQ"
+        @closeMCQCreatorDialog="closeMCQEditDialog"
+        @editMCQSave="editMCQSave"
+      />
+    </v-dialog>
+    <v-dialog
       v-model="createMCQDialog"
       max-width="600px"
       persistent
       @keydown.enter="closeMCQCreatorDialog"
     >
       <DeckEditorMCQDialog
-        :mcqs="mcqs"
         :selected-deck="selectedDeck"
         @closeMCQCreatorDialog="closeMCQCreatorDialog"
         @createMCQSave="createMCQSave"
@@ -46,6 +58,13 @@
       max-width="600px"
       transition="dialog-bottom-transition">
       <DeckEditorDeleteCardDialog @deleteCard="deleteCard" @closeDialogConfirmation="closeDialogConfirmation"/>
+    </v-dialog>
+    <v-dialog
+      v-model="mcqDeleteConfirmationDialog"
+      hide-overlay
+      max-width="600px"
+      transition="dialog-bottom-transition">
+      <DeckEditorDeleteMCQDialog @deleteMCQ="deleteMCQ" @closeDialogConfirmation="closeDialogMCQConfirmation"/>
     </v-dialog>
     <v-overlay :value="loaderOverlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -179,9 +198,9 @@
                 <template #[`item.mcq_type`]="{ item }">
                   {{ getMcqType(item.mcq_type) }}
                 </template>
-                <template #[`item.actions`]="{}">
-                  <v-icon small class="mr-2"> mdi-pencil </v-icon>
-                  <v-icon small> mdi-delete </v-icon>
+                <template #[`item.actions`]="{item}">
+                  <v-icon small class="mr-2" @click="openEditMCQDialog(item)" > mdi-pencil </v-icon>
+                  <v-icon small @click="openDeleteMCQDialog(item)"> mdi-delete </v-icon>
                 </template>
                 <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -214,12 +233,14 @@ export default {
       snackbarText: ' ',
       timeout: 2000,
       selectedCard: undefined,
-
+      selectedMCQ: undefined,
       createMode: true,
       createCardDialog: false,
       editCardDialog: false,
       createMCQDialog: false,
+      editMCQDialog: false,
       cardDeleteConfirmationDialog: false,
+      mcqDeleteConfirmationDialog: false,
       cards: [],
       mcqs: [],
       total: 0,
@@ -228,6 +249,8 @@ export default {
         { text: 'Name', align: 'start', value: 'mcq_name' },
         { text: 'Answers', value: 'mcq_answers' },
         { text: 'Type', value: 'mcq_type' },
+        { text: 'Actions', value: 'actions', sortable: false },
+
       ],
       headers: [
         { text: 'Question', align: 'start', value: 'card_question' },
@@ -284,6 +307,12 @@ export default {
       }
     },
 
+    closeMCQEditDialog(){
+      if (this.editMCQDialog) {
+        this.editMCQDialog = false
+      }
+    },
+
     closeMCQCreatorDialog() {
       if (this.createMCQDialog) {
         this.createMCQDialog = false
@@ -292,6 +321,10 @@ export default {
 
     closeDialogConfirmation() {
       this.cardDeleteConfirmationDialog = false
+    },
+
+    closeDialogMCQConfirmation() {
+      this.mcqDeleteConfirmationDialog = false
     },
 
     openCardCreatorDialog() {
@@ -307,9 +340,19 @@ export default {
       this.createMCQDialog = true
     },
 
+    openEditMCQDialog(mcq) {
+      this.selectedMCQ = mcq;
+      this.editMCQDialog = true
+    },
+
     openDeleteCardDialog(card) {
       this.selectedCard = card;
       this.cardDeleteConfirmationDialog = true
+    },
+
+    openDeleteMCQDialog(mcq) {
+      this.selectedMCQ = mcq;
+      this.mcqDeleteConfirmationDialog = true
     },
 
     closeEditDeck() {
@@ -353,6 +396,13 @@ export default {
       await this.getMCQS(this.selectedDeck.ID)
     },
 
+    async editMCQSave() {
+      this.editMCQDialog = false
+      this.snackbarText = 'Success edited a MCQ !'
+      this.snackbar = true
+      await this.getMCQS(this.selectedDeck.ID)
+    },
+
     async deleteCard() {
       try {
         this.cardDeleteConfirmationDialog = false;
@@ -373,6 +423,28 @@ export default {
       }
       this.loaderOverlay = false
     },
+
+    async deleteMCQ() {
+      try {
+        this.mcqDeleteConfirmationDialog = false;
+        this.loaderOverlay = true
+        await this.$axios
+          .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ.ID}`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          })
+          .then(async () => {
+            this.snackbarText = 'Successfully deleted the card !'
+            await this.getMCQS(this.selectedDeck.ID)
+          })
+      } catch (e) {
+        this.error = e.response.data.message
+      }
+      this.loaderOverlay = false
+    },
+
 
     async getCards(ID) {
       this.loaderOverlay = true

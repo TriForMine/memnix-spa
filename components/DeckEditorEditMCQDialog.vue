@@ -4,13 +4,14 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Create a new MCQ</v-toolbar-title>
+      <v-toolbar-title>Edit a MCQ</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckMCQForm
         :deck-id="getDeckId"
+        :mcq.sync="mcq"
         @closeMCQDialog="closeDialog"
-        @createMCQSave="createMCQSave"
+        @createMCQSave="editMCQSave"
       />
     </v-item>
   </v-card>
@@ -18,24 +19,29 @@
 
 <script>
 export default {
-  name: 'DeckEditorMCQDialog',
+  name: 'DeckEditorEditMCQDialog',
   props: {
     selectedDeck: {
       type: Object,
       default() {},
     },
+    mcq: {
+      type: Object,
+      default() {}
+    },
+
   },
   computed: {
     getDeckId() {
       return this.selectedDeck.ID
-    }
+    },
   },
   methods: {
     closeDialog() {
       this.$emit('closeMCQCreatorDialog')
     },
-    createMCQSave() {
-      this.$emit('createMCQSave')
+    editMCQSave() {
+      this.$emit('editMCQSave')
     }
   },
 }
