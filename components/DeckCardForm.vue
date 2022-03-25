@@ -8,14 +8,14 @@
               v-model="cardQuestion"
               name="cardQuestion"
               :error-messages="questionErrors"
-              @input="$v.cardQuestion.$touch()"
-              @blur="$v.cardQuestion.$touch()"
               label="Question *"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.cardQuestion.$touch()"
+              @blur="$v.cardQuestion.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -23,8 +23,8 @@
         <v-row>
           <v-col cols="12">
             <v-select
-              label="Type"
               v-model="cardType"
+              label="Type"
               outlined
               shaped
               :items="cardTypes"
@@ -37,8 +37,8 @@
         <v-row>
           <v-col cols="12">
             <v-select
-              label="MCQ"
               v-model="cardMCQId"
+              label="MCQ"
               outlined
               shaped
               :items="mcqs"
@@ -54,8 +54,6 @@
               v-model="cardAnswer"
               name="cardQuestion"
               :error-messages="answerErrors"
-              @input="$v.cardAnswer.$touch()"
-              @blur="$v.cardAnswer.$touch()"
               :type="answerFieldType"
               label="Answer *"
               required
@@ -63,6 +61,8 @@
               shaped
               counter
               maxlength="200"
+              @input="$v.cardAnswer.$touch()"
+              @blur="$v.cardAnswer.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -90,14 +90,14 @@
               v-model="cardFormat"
               name="cardFormat"
               :error-messages="formatErrors"
-              @input="$v.cardFormat.$touch()"
-              @blur="$v.cardFormat.$touch()"
               label="Format *"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.cardFormat.$touch()"
+              @blur="$v.cardFormat.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -108,12 +108,12 @@
               v-model="cardImage"
               name="cardFormat"
               :error-messages="imageErrors"
-              @input="$v.cardImage.$touch()"
-              @blur="$v.cardImage.$touch()"
               label="Image"
               outlined
               shaped
               maxlength="200"
+              @input="$v.cardImage.$touch()"
+              @blur="$v.cardImage.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -178,18 +178,6 @@ export default {
       error: 'An error occurred !',
     }
   },
-  watch: {
-    card(newVal) {
-      this.cardQuestion = newVal.card_question ?? ''
-      this.cardAnswer = newVal.card_answer ?? ''
-      this.cardFormat = newVal.card_format ?? ''
-      this.cardImage = newVal.card_image ?? ''
-      this.cardType = newVal.card_type ?? -1
-      this.cardMCQId = newVal.mcq_id?.Int32 ?? -1
-      this.cardCase = newVal.card_case ?? false
-      this.cardSpaces = newVal.card_spaces ?? false
-    }
-  },
   computed: {
     answerFieldType() {
       if (this.cardType === 1)
@@ -243,6 +231,18 @@ export default {
       errors.push('Image must be at least 1 character long')
       return errors
     },
+  },
+  watch: {
+    card(newVal) {
+      this.cardQuestion = newVal.card_question ?? ''
+      this.cardAnswer = newVal.card_answer ?? ''
+      this.cardFormat = newVal.card_format ?? ''
+      this.cardImage = newVal.card_image ?? ''
+      this.cardType = newVal.card_type ?? -1
+      this.cardMCQId = newVal.mcq_id?.Int32 ?? -1
+      this.cardCase = newVal.card_case ?? false
+      this.cardSpaces = newVal.card_spaces ?? false
+    }
   },
   methods: {
     async createCard() {

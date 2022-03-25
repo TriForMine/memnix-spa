@@ -118,13 +118,6 @@ export default {
       errorDialog: false,
     }
   },
-  watch: {
-    selectedDeck(newVal) {
-      this.deckName = newVal.deck_name ?? ''
-      this.deckDescription = newVal.deck_description ?? ''
-      this.deckImageUrl = newVal.deck_banner ?? ''
-    }
-  },
   computed: {
     nameErrors() {
       const errors = []
@@ -153,6 +146,13 @@ export default {
         return 'Create'
       }
     },
+  },
+  watch: {
+    selectedDeck(newVal) {
+      this.deckName = newVal.deck_name ?? ''
+      this.deckDescription = newVal.deck_description ?? ''
+      this.deckImageUrl = newVal.deck_banner ?? ''
+    }
   },
   methods: {
     async createDeck() {

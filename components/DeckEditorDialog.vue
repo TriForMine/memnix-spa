@@ -116,9 +116,9 @@
 
       <v-tab-item>
         <DeckForm
+          :selected-deck="selectedDeck"
           @closeEditDeck="closeEditDeck"
           @createDeckSave="createDeckSave"
-          :selected-deck="selectedDeck"
         />
       </v-tab-item>
 
