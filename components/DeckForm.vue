@@ -147,7 +147,7 @@ export default {
       return errors
     },
     confirmButtonText() {
-      if (this.mcq) {
+      if (this.selectedDeck) {
         return 'Edit'
       } else {
         return 'Create'
