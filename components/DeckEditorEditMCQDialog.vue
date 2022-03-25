@@ -9,7 +9,7 @@
     <v-item>
       <DeckMCQForm
         :deck-id="getDeckId"
-        :mcq.sync="mcq"
+        :mcq="mcq"
         @closeMCQDialog="closeDialog"
         @createMCQSave="editMCQSave"
       />

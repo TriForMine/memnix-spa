@@ -124,7 +124,7 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => {
+          .then(() => {
               this.menu = false
             })
       } catch (e) {

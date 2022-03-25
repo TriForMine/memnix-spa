@@ -9,7 +9,7 @@
     <v-item>
       <DeckCardForm
         :deck-id="getDeckId"
-        :card.sync="card"
+        :card="card"
         :mcqs="mcqs"
         @closeCardDialog="closeDialog"
         @createCardSave="editCardSave"

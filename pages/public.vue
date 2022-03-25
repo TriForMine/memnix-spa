@@ -21,16 +21,18 @@
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
   middleware: 'authentificated',
 
-  data() {
+  data(): {decks: any[], dialogConfirmation: boolean, selectedDeck: any, res: any[], error: ''} {
     return {
       decks: [],
       dialogConfirmation: false,
       selectedDeck: [],
       res: [],
+      error: ''
     }
   },
 
@@ -39,7 +41,7 @@ export default {
   },
 
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: []) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
@@ -63,11 +65,11 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => {
+          .then(() => {
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -86,12 +88,12 @@ export default {
               this.decks.push(res.data.data[i].Deck)
             }
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 <style>
