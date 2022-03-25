@@ -8,14 +8,14 @@
               v-model="mcqName"
               name="mcqName"
               :error-messages="nameErrors"
-              @input="$v.mcqName.$touch()"
-              @blur="$v.mcqName.$touch()"
               label="Name *"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.mcqName.$touch()"
+              @blur="$v.mcqName.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -36,13 +36,13 @@
               v-model="mcqAnswers"
               name="mcqAnswers"
               :error-messages="answersErrors"
-              @input="$v.mcqAnswers.$touch()"
-              @blur="$v.mcqAnswers.$touch()"
               label="Answers *"
               outlined
               shaped
               maxlength="500"
               :required="requiresAnswers"
+              @input="$v.mcqAnswers.$touch()"
+              @blur="$v.mcqAnswers.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -90,13 +90,6 @@ export default {
       error: 'An error occurred !',
     }
   },
-  watch: {
-    mcq(newVal) {
-      this.mcqName = newVal.mcq_name ?? ''
-      this.mcqStandalone = newVal.mcq_type===0 ?? false
-      this.mcqAnswers = newVal.mcq_answers ?? ''
-    },
-  },
   computed: {
     requiresAnswers() {
       return this.mcqStandalone ?? true
@@ -128,6 +121,13 @@ export default {
         errors.push('Answers must be at least 1 character long')
       !this.$v.mcqAnswers.required && errors.push('Answers is required.')
       return errors
+    },
+  },
+  watch: {
+    mcq(newVal) {
+      this.mcqName = newVal.mcq_name ?? ''
+      this.mcqStandalone = newVal.mcq_type===0 ?? false
+      this.mcqAnswers = newVal.mcq_answers ?? ''
     },
   },
   methods: {
