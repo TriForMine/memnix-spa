@@ -78,7 +78,7 @@
       <v-spacer></v-spacer>
       <v-btn color="info" text @click="closeEditDeck"> Close </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
-        Create
+        {{ confirmButtonText }}
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -93,6 +93,13 @@ export default {
 
   mixins: [validationMixin],
 
+  props: {
+    selectedDeck: {
+      type: Object,
+      default(){},
+    },
+  },
+
   validations: {
     deckName: { required, maxLength: maxLength(42), minLength: minLength(5) },
     deckDescription: {
@@ -104,11 +111,18 @@ export default {
   },
   data() {
     return {
-      deckName: '',
-      deckDescription: '',
-      deckImageUrl: '',
+      deckName: this.selectedDeck?.deck_name ?? '',
+      deckDescription: this.selectedDeck?.deck_description ?? '',
+      deckImageUrl: this.selectedDeck?.deck_banner ?? '',
       error: 'An error occurred !',
       errorDialog: false,
+    }
+  },
+  watch: {
+    selectedDeck(newVal) {
+      this.deckName = newVal.deck_name ?? ''
+      this.deckDescription = newVal.deck_description ?? ''
+      this.deckImageUrl = newVal.deck_banner ?? ''
     }
   },
   computed: {
@@ -132,18 +146,42 @@ export default {
       !this.$v.deckName.required && errors.push('Deck name is required.')
       return errors
     },
+    confirmButtonText() {
+      if (this.mcq) {
+        return 'Edit'
+      } else {
+        return 'Create'
+      }
+    },
   },
   methods: {
     async createDeck() {
+      const data = {
+        "deck_name": this.deckName,
+        "deck_description": this.deckDescription,
+        "deck_banner": this.deckImageUrl
+      }
       try {
+        if (this.selectedDeck) {
+          await this.$axios
+            .put(
+              `https://api.memnix.app/api/v1/decks/${this.selectedDeck.ID}/edit`,
+              data,
+              {
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+              }
+            )
+            .then(() => {
+              this.createDeckSave()
+            })
+        } else {
         await this.$axios
           .post(
             `https://api.memnix.app/api/v1/decks/new`,
-            {
-              "deck_name": this.deckName,
-              "deck_description": this.deckDescription,
-              "deck_banner": this.deckImageUrl
-            },
+            data,
             {
               headers: {
                 'Content-Type': 'application/json'
@@ -153,7 +191,7 @@ export default {
           )
           .then(() => {
             this.createDeckSave()
-          })
+          })}
       } catch (e) {
         this.error = e.response.data.message
         this.errorDialog = true

@@ -165,6 +165,9 @@ export default {
               withCredentials: true,
             }
           )
+            .then(() => {
+            this.createMCQSave()
+          })
         }
       } catch (e) {
         this.error = e.res.data.message

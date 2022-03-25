@@ -56,15 +56,23 @@
       v-model="cardDeleteConfirmationDialog"
       hide-overlay
       max-width="600px"
-      transition="dialog-bottom-transition">
-      <DeckEditorDeleteCardDialog @deleteCard="deleteCard" @closeDialogConfirmation="closeDialogConfirmation"/>
+      transition="dialog-bottom-transition"
+    >
+      <DeckEditorDeleteCardDialog
+        @deleteCard="deleteCard"
+        @closeDialogConfirmation="closeDialogConfirmation"
+      />
     </v-dialog>
     <v-dialog
       v-model="mcqDeleteConfirmationDialog"
       hide-overlay
       max-width="600px"
-      transition="dialog-bottom-transition">
-      <DeckEditorDeleteMCQDialog @deleteMCQ="deleteMCQ" @closeDialogConfirmation="closeDialogMCQConfirmation"/>
+      transition="dialog-bottom-transition"
+    >
+      <DeckEditorDeleteMCQDialog
+        @deleteMCQ="deleteMCQ"
+        @closeDialogConfirmation="closeDialogMCQConfirmation"
+      />
     </v-dialog>
     <v-overlay :value="loaderOverlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -93,7 +101,7 @@
     </v-toolbar>
     <v-card-title> </v-card-title>
     <v-tabs :value="isCreateMode ? 0 : 1">
-      <v-tab :disabled="!isCreateMode">
+      <v-tab>
         <v-icon left> mdi-cog </v-icon>
         Deck
       </v-tab>
@@ -110,6 +118,7 @@
         <DeckForm
           @closeEditDeck="closeEditDeck"
           @createDeckSave="createDeckSave"
+          :selected-deck="selectedDeck"
         />
       </v-tab-item>
 
@@ -126,7 +135,13 @@
                   hide-details
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn text outlined color="warning" x-large @click="openCardCreatorDialog" >
+                <v-btn
+                  text
+                  outlined
+                  color="warning"
+                  x-large
+                  @click="openCardCreatorDialog"
+                >
                   Create new card
                 </v-btn>
               </v-card-title>
@@ -144,8 +159,12 @@
                   ></v-simple-checkbox>
                 </template>
                 <template #[`item.actions`]="{ item }">
-                  <v-icon small class="mr-2" @click="openEditCardDialog(item)" > mdi-pencil </v-icon>
-                  <v-icon small @click="openDeleteCardDialog(item)"> mdi-delete </v-icon>
+                  <v-icon small class="mr-2" @click="openEditCardDialog(item)">
+                    mdi-pencil
+                  </v-icon>
+                  <v-icon small @click="openDeleteCardDialog(item)">
+                    mdi-delete
+                  </v-icon>
                 </template>
                 <template #[`item.card_type`]="{ item }">
                   {{ getCardType(item.card_type) }}
@@ -171,7 +190,13 @@
                   hide-details
                 ></v-text-field>
                 <v-spacer></v-spacer>
-                <v-btn text outlined color="warning" x-large @click="openMCQCreatorDialog">
+                <v-btn
+                  text
+                  outlined
+                  color="warning"
+                  x-large
+                  @click="openMCQCreatorDialog"
+                >
                   Create new MCQ
                 </v-btn>
               </v-card-title>
@@ -198,9 +223,13 @@
                 <template #[`item.mcq_type`]="{ item }">
                   {{ getMcqType(item.mcq_type) }}
                 </template>
-                <template #[`item.actions`]="{item}">
-                  <v-icon small class="mr-2" @click="openEditMCQDialog(item)" > mdi-pencil </v-icon>
-                  <v-icon small @click="openDeleteMCQDialog(item)"> mdi-delete </v-icon>
+                <template #[`item.actions`]="{ item }">
+                  <v-icon small class="mr-2" @click="openEditMCQDialog(item)">
+                    mdi-pencil
+                  </v-icon>
+                  <v-icon small @click="openDeleteMCQDialog(item)">
+                    mdi-delete
+                  </v-icon>
                 </template>
                 <template #no-data>
                   <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -250,7 +279,6 @@ export default {
         { text: 'Answers', value: 'mcq_answers' },
         { text: 'Type', value: 'mcq_type' },
         { text: 'Actions', value: 'actions', sortable: false },
-
       ],
       headers: [
         { text: 'Question', align: 'start', value: 'card_question' },
@@ -274,8 +302,6 @@ export default {
     isCreateMode() {
       return this.create & this.createMode
     },
-
-
   },
   methods: {
     closeCardCreatorDialog() {
@@ -286,18 +312,18 @@ export default {
 
     getMcqType(type) {
       if (type === 0) {
-        return "Standalone"
+        return 'Standalone'
       } else {
-        return "Linked"
+        return 'Linked'
       }
     },
     getCardType(type) {
-      if (type===0) {
-        return "String"
-      } else if (type===1) {
-        return "Integer"
+      if (type === 0) {
+        return 'String'
+      } else if (type === 1) {
+        return 'Integer'
       } else {
-        return "MCQ Only"
+        return 'MCQ Only'
       }
     },
 
@@ -307,7 +333,7 @@ export default {
       }
     },
 
-    closeMCQEditDialog(){
+    closeMCQEditDialog() {
       if (this.editMCQDialog) {
         this.editMCQDialog = false
       }
@@ -332,7 +358,7 @@ export default {
     },
 
     openEditCardDialog(card) {
-      this.selectedCard = card;
+      this.selectedCard = card
       this.editCardDialog = true
     },
 
@@ -341,17 +367,17 @@ export default {
     },
 
     openEditMCQDialog(mcq) {
-      this.selectedMCQ = mcq;
+      this.selectedMCQ = mcq
       this.editMCQDialog = true
     },
 
     openDeleteCardDialog(card) {
-      this.selectedCard = card;
+      this.selectedCard = card
       this.cardDeleteConfirmationDialog = true
     },
 
     openDeleteMCQDialog(mcq) {
-      this.selectedMCQ = mcq;
+      this.selectedMCQ = mcq
       this.mcqDeleteConfirmationDialog = true
     },
 
@@ -367,19 +393,20 @@ export default {
 
     createDeckSave() {
       this.createDeck = false
-      this.createMode = false
-      this.$emit("createDeckSave")
+      if (this.isCreateMode) {
+        this.createMode = false
+        this.$emit('createDeckSave')
+      } else {
+        this.snackbarText = 'Success edited a deck !'
+        this.snackbar = true
+      }
     },
 
     async createCardSave() {
       this.createCardDialog = false
-      this.loaderOverlay = true
+      this.snackbar = true
       this.snackbarText = 'Success creating a new card !'
       await this.getCards(this.selectedDeck.ID)
-      setTimeout(() => {
-        this.loaderOverlay = false
-        this.snackbar = true
-      }, 2000)
     },
 
     async editCardSave() {
@@ -405,15 +432,18 @@ export default {
 
     async deleteCard() {
       try {
-        this.cardDeleteConfirmationDialog = false;
+        this.cardDeleteConfirmationDialog = false
         this.loaderOverlay = true
         await this.$axios
-          .delete(`https://api.memnix.app/api/v1/cards/${this.selectedCard.ID}`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
+          .delete(
+            `https://api.memnix.app/api/v1/cards/${this.selectedCard.ID}`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              withCredentials: true,
+            }
+          )
           .then(async () => {
             this.snackbarText = 'Successfully deleted the card !'
             await this.getCards(this.selectedDeck.ID)
@@ -426,7 +456,7 @@ export default {
 
     async deleteMCQ() {
       try {
-        this.mcqDeleteConfirmationDialog = false;
+        this.mcqDeleteConfirmationDialog = false
         this.loaderOverlay = true
         await this.$axios
           .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ.ID}`, {
@@ -445,10 +475,8 @@ export default {
       this.loaderOverlay = false
     },
 
-
     async getCards(ID) {
       this.loaderOverlay = true
-
       try {
         await this.$axios
           .get(`https://api.memnix.app/api/v1/cards/deck/` + ID, {
