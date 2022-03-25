@@ -3,7 +3,7 @@ import axios from 'axios'
 export default function ({ redirect }) {
 
   axios.get(
-    `https://api-memnix.yumenetwork.net/api/user/`,
+    `https://api.memnix.app/api/user/`,
     {
       headers: {
         'Content-Type': 'application/json'
@@ -14,6 +14,8 @@ export default function ({ redirect }) {
 
     if (response.status !== 200 || response.data.ID === 0 || response.data.success === false) {
       return redirect('/login')
+    } else {
+      localStorage.setItem('userID', response.data.ID)
     }})
     .catch(() => {
       // eslint-disable-next-line no-console

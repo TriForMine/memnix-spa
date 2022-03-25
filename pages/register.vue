@@ -113,7 +113,7 @@ export default {
 
   validations: {
     username: { required, maxLength: maxLength(15), minLength: minLength(4) },
-    password: { required, maxLength: maxLength(20), minLength: minLength(8) },
+    password: { required, maxLength: maxLength(50), minLength: minLength(8) },
     email: { required, email },
     checkbox: {
       checked(val) {
@@ -154,7 +154,7 @@ export default {
       const errors = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength &&
-        errors.push('Password must be at most 20 characters long')
+        errors.push('Password must be at most 50 characters long')
       !this.$v.password.minLength &&
         errors.push('Password must be at least 8 characters long')
       !this.$v.password.required && errors.push('Password is required.')
@@ -176,7 +176,7 @@ export default {
       if (!this.$v.$invalid) {
         try {
           await this.$axios.post(
-            `https://api-memnix.yumenetwork.net/api/register/`,
+            `https://api.memnix.app/api/register/`,
             {
               username: this.username,
               email: this.email,
@@ -191,7 +191,7 @@ export default {
 
           await this.$axios
             .post(
-              `https://api-memnix.yumenetwork.net/api/login/`,
+              `https://api.memnix.app/api/login/`,
               {
                 email: this.email,
                 password: this.password,

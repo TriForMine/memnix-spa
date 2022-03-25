@@ -16,10 +16,18 @@
       <Card :card="card" :items="items" @postAnswer="postAnswer($event)"/>
       <TodayProgressLinear
         :progress="progress"
-        :progressBuffer="progressBuffer"
+        :progress-buffer="progressBuffer"
         :total="total"
       />
     </v-container>
+  </v-row>
+  <v-row v-else-if="loaderOverlay">
+    <v-overlay :value="loaderOverlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </v-row>
   <v-row v-else align="center" justify="center" no-gutters>
     <v-container mt-10>
@@ -30,8 +38,6 @@
       <v-btn color="info" class="mx-auto" nuxt to="/public"> Discover new decks </v-btn>
       <v-btn color="primary"  nuxt to="/decks"> Practice </v-btn>
       </v-container>
-
-
     </v-container>
   </v-row>
 </template>
@@ -60,6 +66,7 @@ export default {
       progress: 0,
       total: 0,
       progressBuffer: 0,
+      loaderOverlay: false,
     }
   },
 
@@ -85,7 +92,7 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/cards/response`,
+            `https://api.memnix.app/api/v1/cards/response`,
             {
               card_id: this.card.ID,
               response: answer,
@@ -137,9 +144,10 @@ export default {
     },
 
     async getToday() {
+      this.loaderOverlay = true
       try {
         await this.$axios
-          .get(`https://api-memnix.yumenetwork.net/api/v1/cards/today`, {
+          .get(`https://api.memnix.app/api/v1/cards/today`, {
             headers: {
               'Content-Type': 'application/json'
             },
@@ -157,6 +165,7 @@ export default {
             } else {
               this.getCard()
             }
+            this.loaderOverlay = false
           })
       } catch (e) {
         this.error = e.response.data.message

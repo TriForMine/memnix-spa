@@ -23,6 +23,8 @@
 
 <script>
 export default {
+  middleware: 'authentificated',
+
   data() {
     return {
       decks: [],
@@ -50,7 +52,7 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/decks/` +
+            `https://api.memnix.app/api/v1/decks/` +
               this.selectedDeck.ID +
               `/subscribe`,
             {},
@@ -73,7 +75,7 @@ export default {
     async getAvailableDeck() {
       try {
         await this.$axios
-          .get(`https://api-memnix.yumenetwork.net/api/v1/decks/available`, {
+          .get(`https://api.memnix.app/api/v1/decks/available`, {
             headers: {
               'Content-Type': 'application/json',
             },

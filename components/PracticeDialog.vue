@@ -5,7 +5,7 @@
         <v-btn dark icon @click="closePracticeDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
-        <v-toolbar-title>{{ selectedDeck.deck_name }}</v-toolbar-title>
+        <v-toolbar-title>{{ selectedDeck.deck.deck_name }}</v-toolbar-title>
       </v-toolbar>
     </v-card-title>
     <v-card-text>
@@ -16,21 +16,21 @@
           persistent
           @keydown.enter="closeResultDialog"
         >
-          <ResultDialog
-            :res="res"
+          <ResultDialog :res="res" @closeResultDialog="closeResultDialog" />
+          <ResultProgressLinear
+            ref="resultProgressLinear"
             @closeResultDialog="closeResultDialog"
           />
-          <ResultProgressLinear ref="resultProgressLinear" @closeResultDialog="closeResultDialog"/>
         </v-dialog>
-        <v-dialog
-          v-model="completeDialog"
-          max-width="600px"
-          persistent>
+        <v-dialog v-model="completeDialog" max-width="600px" persistent>
           <v-card>
             <v-card-title class="text-h5">
               Practice session is finished !
             </v-card-title>
-            <v-card-text> Correct answers : {{progress}} <br> Incorrect answers : {{total-progress}}</v-card-text>
+            <v-card-text>
+              Correct answers : {{ progress }} <br />
+              Incorrect answers : {{ total - progress }}</v-card-text
+            >
             <v-rating
               empty-icon="mdi-star-outline"
               full-icon="mdi-star"
@@ -40,32 +40,26 @@
               length="5"
               readonly
               size="32"
-              :value="progress * 5 / total"
+              :value="(progress * 5) / total"
             ></v-rating>
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn
-                color="red darken-1"
-                text
-                @click="closePracticeDialog"
-              >
+              <v-btn color="red darken-1" text @click="closePracticeDialog">
                 Quit
               </v-btn>
 
-              <v-btn color="green darken-1" text @click="keepPracticing"> Keep practicing</v-btn>
+              <v-btn color="green darken-1" text @click="keepPracticing">
+                Keep practicing</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-container>
-          <Card
-            :card="card"
-            :items="items"
-            @postAnswer="postAnswer($event)"
-          />
+          <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
           <TodayProgressLinear
             :progress="progress"
-            :progressBuffer="progressBuffer"
+            :progress-buffer="progressBuffer"
             :total="total"
           />
         </v-container>
@@ -76,22 +70,24 @@
 
 <script>
 export default {
-  name: "PracticeDialog",
+  name: 'PracticeDialog',
   props: {
     selectedDeck: {
       type: Object,
       default() {},
-    }
+    },
   },
   data() {
     return {
       resDialog: false,
       completeDialog: false,
       card: {},
-      cards: [{
-        "Card": {},
-        "Answers": []
-      }],
+      cards: [
+        {
+          Card: {},
+          Answers: [],
+        },
+      ],
       cardIndex: 0,
       items: [],
       res: [],
@@ -119,8 +115,9 @@ export default {
       this.total = 0
       this.progressBuffer = 0
       this.progress = 0
+      this.cardIndex = 0
       this.completeDialog = false
-      this.$emit("closePracticeDialog")
+      this.$emit('closePracticeDialog')
     },
     getCard() {
       this.card = this.cards[this.cardIndex].Card
@@ -139,17 +136,12 @@ export default {
     async getCards(ID) {
       try {
         await this.$axios
-          .get(
-            `https://api-memnix.yumenetwork.net/api/v1/cards/` +
-            ID +
-            `/training`,
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
+          .get(`https://api.memnix.app/api/v1/cards/` + ID + `/training`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          })
           .then((res) => {
             this.cards = res.data.data
             this.total = this.cards.length
@@ -164,15 +156,15 @@ export default {
       try {
         await this.$axios
           .post(
-            `https://api-memnix.yumenetwork.net/api/v1/cards/response`,
+            `https://api.memnix.app/api/v1/cards/response`,
             {
               card_id: this.card.ID,
               response: answer,
-              training: true
+              training: true,
             },
             {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               withCredentials: true,
             }
@@ -191,7 +183,7 @@ export default {
             this.progressBuffer += 1
 
             while (!this.$refs.resultProgressLinear) {
-              await new Promise(resolve => setTimeout(resolve, 100));
+              await new Promise((resolve) => setTimeout(resolve, 100))
             }
             this.$refs.resultProgressLinear.startDialogInterval(delay)
           })
@@ -199,10 +191,8 @@ export default {
         this.error = e.response.data.message
       }
     },
-  }
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
