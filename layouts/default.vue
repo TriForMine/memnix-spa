@@ -96,6 +96,7 @@ export default {
 
         { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
         { icon: 'mdi-plus-circle', title: 'Public decks', to: '/public' },
+        { icon:'mdi-pencil', title: "Deck Creator", to: '/creator'}
 
       ],
 
