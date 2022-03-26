@@ -98,6 +98,10 @@ export default {
       type: Object,
       default(){},
     },
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
   },
 
   validations: {
@@ -140,7 +144,7 @@ export default {
       return errors
     },
     confirmButtonText() {
-      if (this.selectedDeck) {
+      if (this.isEdit) {
         return 'Edit'
       } else {
         return 'Create'
@@ -162,7 +166,7 @@ export default {
         "deck_banner": this.deckImageUrl
       }
       try {
-        if (this.selectedDeck) {
+        if (this.isEdit) {
           await this.$axios
             .put(
               `https://api.memnix.app/api/v1/decks/${this.selectedDeck.ID}/edit`,
