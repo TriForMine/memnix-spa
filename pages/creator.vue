@@ -82,11 +82,7 @@ export default {
 
   methods: {
     createDeck() {
-      this.selectedDeck = {
-        deck_name: '',
-        deck_description: '',
-        deck_banner: '',
-      }
+      this.selectedDeck = {}
       this.createMode = true
 
       this.editor = true

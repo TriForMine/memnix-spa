@@ -116,6 +116,7 @@
 
       <v-tab-item>
         <DeckForm
+          :is-edit="!isCreateMode"
           :selected-deck="selectedDeck"
           @closeEditDeck="closeEditDeck"
           @createDeckSave="createDeckSave"
