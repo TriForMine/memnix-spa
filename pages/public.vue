@@ -23,14 +23,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {Deck} from "~/types/types";
 export default Vue.extend({
   middleware: 'authentificated',
 
-  data(): {decks: any[], dialogConfirmation: boolean, selectedDeck: any, res: any[], error: ''} {
+  data(): {decks: Deck[], dialogConfirmation: boolean, selectedDeck?: Deck, res: Array<Object>, error: ''} {
     return {
       decks: [],
       dialogConfirmation: false,
-      selectedDeck: [],
+      selectedDeck: undefined,
       res: [],
       error: ''
     }
@@ -41,7 +42,7 @@ export default Vue.extend({
   },
 
   methods: {
-    subToDeckConfirmation(n: []) {
+    subToDeckConfirmation(n: Deck) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
@@ -51,6 +52,8 @@ export default Vue.extend({
     },
 
     async subToDeck() {
+      if(!this.selectedDeck)
+        return;
       try {
         await this.$axios
           .post(
@@ -66,6 +69,8 @@ export default Vue.extend({
             }
           )
           .then(() => {
+            if(!this.selectedDeck)
+              return;
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })

@@ -101,28 +101,30 @@
   </v-main>
 </template>
 
-<script>
-import { validationMixin, useVuelidate } from 'vuelidate'
+<script lang="ts">
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+import Vue from 'vue'
+import {validationMixin} from "vuelidate";
 
-export default {
+export default Vue.extend({
   mixins: [validationMixin],
   layout: 'login',
   middleware: 'guest',
-  setup: () => ({ v$: useVuelidate() }),
 
-  validations: {
-    username: { required, maxLength: maxLength(15), minLength: minLength(4) },
-    password: { required, maxLength: maxLength(50), minLength: minLength(8) },
-    email: { required, email },
-    checkbox: {
-      checked(val) {
-        return val
+  validations() {
+    return {
+      username: { required, maxLength: maxLength(15), minLength: minLength(4) },
+      password: { required, maxLength: maxLength(50), minLength: minLength(8) },
+      email: { required, email },
+      checkbox: {
+        checked(val: boolean) {
+          return val
+        },
       },
-    },
+    }
   },
 
-  data() {
+  data(): {username: string, email: string, password: string, checkbox: boolean, error: string, alert: boolean} {
     return {
       username: '',
       email: '',
@@ -135,13 +137,13 @@ export default {
 
   computed: {
     checkboxErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.checkbox.$dirty) return errors
       !this.$v.checkbox.checked && errors.push('You must agree to continue!')
       return errors
     },
     nameErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.username.$dirty) return errors
       !this.$v.username.maxLength &&
         errors.push('Username must be at most 15 characters long')
@@ -151,7 +153,7 @@ export default {
       return errors
     },
     passwordErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength &&
         errors.push('Password must be at most 50 characters long')
@@ -161,7 +163,7 @@ export default {
       return errors
     },
     emailErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.email.$dirty) return errors
       !this.$v.email.email && errors.push('Must be valid e-mail')
       !this.$v.email.required && errors.push('E-mail is required')
@@ -203,11 +205,10 @@ export default {
                 withCredentials: true,
               }
             )
-            .then(async (res) => {
-              this.res = res.data
+            .then(async () => {
               await this.$router.push('/login')
             })
-        } catch (e) {
+        } catch (e: any) {
           this.error = e.response.data.message
           this.alert = true
           window.setInterval(() => {
@@ -217,5 +218,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

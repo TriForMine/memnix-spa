@@ -21,7 +21,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/vue-snip.js'],
+  plugins: ['~/plugins/vue-snip'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -129,6 +129,6 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: '1814',
+    port: 1814,
   },
 }
