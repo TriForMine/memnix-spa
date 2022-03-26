@@ -66,7 +66,7 @@ export default {
     return {
       decks: [],
       dialog: false,
-      selectedDeck: {},
+      selectedDeck: undefined,
       editor: false,
       createMode: false,
       snackbar: false,
