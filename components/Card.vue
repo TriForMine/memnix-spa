@@ -93,19 +93,24 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate'
+import Vue from 'vue'
+import {validationMixin} from "vuelidate";
 import { required, maxLength } from 'vuelidate/lib/validators'
 
-export default {
+export default Vue.extend({
   mixins: [validationMixin],
 
-  validations: {
-    answer: { required, maxLength: maxLength(100) },
+  validations() {
+    return {
+      answer: { required, maxLength: maxLength(100) }
+    }
   },
+
   props: {
     card: {
       type: Object,
-      default() {},
+      default() {
+      },
     },
     items: {
       type: Array,
@@ -113,7 +118,7 @@ export default {
     },
   },
 
-  data() {
+  data(){
     return {
       answer: '',
     }
@@ -141,7 +146,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style>

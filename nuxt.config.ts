@@ -129,6 +129,6 @@ export default {
 
   server: {
     host: '0.0.0.0',
-    port: 1814,
+    port: '1814',
   },
 }
