@@ -59,20 +59,35 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {DeckCreator} from "~/types/types";
+
+export default Vue.extend({
   middleware: 'authentificated',
-  data() {
+  data(): {
+    decks: DeckCreator[],
+    dialog: boolean,
+    selectedDeck?: DeckCreator,
+    editor: boolean,
+    createMode: boolean,
+    snackbar: boolean,
+    snackbarText: string,
+    loaderOverlay: boolean,
+    timeout: number,
+    error: string
+  } {
     return {
       decks: [],
       dialog: false,
-      selectedDeck: {},
+      selectedDeck: undefined,
       editor: false,
       createMode: false,
       snackbar: false,
       snackbarText: "",
       loaderOverlay: false,
       timeout: 2000,
+      error: ''
     }
   },
 
@@ -82,16 +97,12 @@ export default {
 
   methods: {
     createDeck() {
-      this.selectedDeck = {
-        deck_name: '',
-        deck_description: '',
-        deck_banner: '',
-      }
+      this.selectedDeck = undefined
       this.createMode = true
 
       this.editor = true
     },
-    async editDeck(value) {
+    async editDeck(value: DeckCreator) {
       this.selectedDeck = value
       this.createMode = false
       this.editor = true
@@ -99,7 +110,9 @@ export default {
       while (!this.$refs.deckEditorDialog) {
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
+      // @ts-ignore
       await this.$refs.deckEditorDialog.getCards(value.ID)
+      // @ts-ignore
       await this.$refs.deckEditorDialog.getMCQS(value.ID)
 
     },
@@ -126,18 +139,18 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             for (let i = 0; i < res.data.count; i++) {
               this.decks.push(res.data.data[i].Deck)
             }
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
     },
   },
-}
+})
 </script>
 
 <style>

@@ -21,16 +21,19 @@
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import {Deck} from "~/types/types";
+export default Vue.extend({
   middleware: 'authentificated',
 
-  data() {
+  data(): {decks: Deck[], dialogConfirmation: boolean, selectedDeck?: Deck, res: Array<Object>, error: ''} {
     return {
       decks: [],
       dialogConfirmation: false,
-      selectedDeck: [],
+      selectedDeck: undefined,
       res: [],
+      error: ''
     }
   },
 
@@ -39,7 +42,7 @@ export default {
   },
 
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: Deck) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
@@ -49,6 +52,8 @@ export default {
     },
 
     async subToDeck() {
+      if(!this.selectedDeck)
+        return;
       try {
         await this.$axios
           .post(
@@ -63,11 +68,13 @@ export default {
               withCredentials: true,
             }
           )
-          .then((res) => {
+          .then(() => {
+            if(!this.selectedDeck)
+              return;
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -81,17 +88,17 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             for (let i = 0; i < res.data.count; i++) {
               this.decks.push(res.data.data[i].Deck)
             }
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 <style>

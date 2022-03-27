@@ -13,8 +13,10 @@
   </v-progress-linear>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "TodayProgressLinear",
   props: {
     progress: {
@@ -30,7 +32,7 @@ export default {
       default: 0
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -12,12 +12,16 @@
 
 
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import {User} from "~/types/types";
+
+export default Vue.extend({
   middleware: 'authentificated',
-  data() {
+  data(): {user?: User, error: string} {
     return {
-      user: {},
+      user: undefined,
+      error: ''
     }
   },
   beforeMount() {
@@ -37,7 +41,7 @@ export default {
           }
         )
         await this.$router.push('/login')
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -51,15 +55,15 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.user = res.data
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 

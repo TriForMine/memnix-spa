@@ -7,15 +7,20 @@
   </v-progress-linear>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "ResultProgressLinear",
   props: {
   },
-  data() {
+  data(): {
+    dialogValue: number,
+    interval?: NodeJS.Timeout
+  } {
     return {
       dialogValue: 0,
-      interval: 0
+      interval: undefined
     }
   },
 
@@ -24,21 +29,23 @@ export default {
       this.$emit('closeResultDialog')
     },
 
-    startDialogInterval(delay) {
+    startDialogInterval(delay: number) {
       this.dialogValue = 0
 
-      clearInterval(this.interval)
+      if (this.interval)
+        clearInterval(this.interval)
       this.interval = setInterval(()=> {
         this.dialogValue += 1
         if (this.dialogValue > 100) {
-          clearInterval(this.interval)
+          if (this.interval)
+            clearInterval(this.interval)
           this.closeResultDialog()
         }
       }, delay)
     },
   },
 
-}
+})
 </script>
 
 <style scoped>

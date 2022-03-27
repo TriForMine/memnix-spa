@@ -60,11 +60,13 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import {Mcq, McqType} from "~/types/types";
 
-export default {
+export default Vue.extend({
   name: 'DeckMCQForm',
   mixins: [validationMixin],
 
@@ -78,18 +80,26 @@ export default {
       default() {},
     },
   },
+
   validations: {
     mcqName: { required, maxLength: maxLength(50), minLength: minLength(1) },
     mcqAnswers: { maxLength: maxLength(500), minLength: minLength(1) },
   },
-  data() {
+
+  data(): {
+    mcqName: Mcq['mcq_name'],
+    mcqStandalone: boolean,
+    mcqAnswers: Mcq['mcq_answers'],
+    error: string
+  } {
     return {
       mcqName: this.mcq?.mcq_name ?? '',
-      mcqStandalone: this.mcq?.mcq_type===0 ?? false,
+      mcqStandalone: this.mcq?.mcq_type===McqType.Standalone ?? false,
       mcqAnswers: this.mcq?.mcq_answers ?? '',
       error: 'An error occurred !',
     }
   },
+
   computed: {
     requiresAnswers() {
       return this.mcqStandalone ?? true
@@ -103,7 +113,7 @@ export default {
     },
 
     nameErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.mcqName.$dirty) return errors
       !this.$v.mcqName.maxLength &&
         errors.push('Name must be at most 50 characters long')
@@ -113,7 +123,7 @@ export default {
       return errors
     },
     answersErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.mcqAnswers.$dirty) return errors
       !this.$v.mcqAnswers.maxLength &&
         errors.push('Answers must be at most 500 characters long')
@@ -126,7 +136,7 @@ export default {
   watch: {
     mcq(newVal) {
       this.mcqName = newVal.mcq_name ?? ''
-      this.mcqStandalone = newVal.mcq_type===0 ?? false
+      this.mcqStandalone = newVal.mcq_type===McqType.Standalone ?? false
       this.mcqAnswers = newVal.mcq_answers ?? ''
     },
   },
@@ -169,7 +179,7 @@ export default {
             this.createMCQSave()
           })
         }
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.res.data.message
       }
     },
@@ -187,7 +197,7 @@ export default {
       this.$emit('createMCQSave')
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

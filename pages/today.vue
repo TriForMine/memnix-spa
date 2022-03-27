@@ -42,31 +42,45 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import {Card, CardResponseValidation} from "~/types/types";
 
-export default {
+export default Vue.extend({
   middleware: 'authentificated',
-  data() {
+  data(): {
+    card?: Card,
+    cards: {Card: Card, Answers: string}[],
+    answer: string,
+    cardIndex: number,
+
+    items?: string,
+    resDialog: boolean,
+    res?: CardResponseValidation,
+
+    delay: number,
+    progress: number,
+    total: number,
+    progressBuffer: number,
+    loaderOverlay: boolean,
+    error: string
+  } {
     return {
-      card: {},
-      cards: [
-        {
-          Card: {},
-          Answers: [],
-        },
-      ],
+      card: undefined,
+      cards: [],
       answer: '',
       cardIndex: 0,
 
-      items: [],
+      items: undefined,
       resDialog: false,
-      res: [],
+      res: undefined,
 
       delay:0,
       progress: 0,
       total: 0,
       progressBuffer: 0,
       loaderOverlay: false,
+      error: ''
     }
   },
 
@@ -88,13 +102,13 @@ export default {
       this.answer = ''
     },
 
-    async postAnswer(answer) {
+    async postAnswer(answer: string) {
       try {
         await this.$axios
           .post(
             `https://api.memnix.app/api/v1/cards/response`,
             {
-              card_id: this.card.ID,
+              card_id: this.card?.ID,
               response: answer,
               training: false,
             },
@@ -105,10 +119,10 @@ export default {
               withCredentials: true,
             }
           )
-          .then(async (res) => {
+          .then(async (res: any) => {
             this.res = res.data.data
             this.delay = 50
-            if (this.res.validate) {
+            if (this.res?.validate) {
               this.progress += 1
               this.delay = 30
             }
@@ -119,9 +133,10 @@ export default {
               await new Promise(resolve => setTimeout(resolve, 100));
             }
 
+            // @ts-ignore
             this.$refs.resultProgressLinear.startDialogInterval(this.delay)
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.res.data.message
       }
     },
@@ -153,7 +168,7 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.cards = res.data.data ?? []
             this.cardIndex = 0
             if (this.total === 0) {
@@ -167,12 +182,12 @@ export default {
             }
             this.loaderOverlay = false
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 <style>

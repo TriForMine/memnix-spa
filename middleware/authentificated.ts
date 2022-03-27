@@ -1,7 +1,7 @@
 import axios from 'axios'
+import {Middleware} from "@nuxt/types";
 
-export default function ({ redirect }) {
-
+const authenticatedMiddleware: Middleware = ({ redirect }) => {
   axios.get(
     `https://api.memnix.app/api/user/`,
     {
@@ -24,3 +24,5 @@ export default function ({ redirect }) {
       return redirect('/login')
     })
 }
+
+export default authenticatedMiddleware

@@ -9,7 +9,7 @@
     <v-item>
       <DeckCardForm
         :deck-id="getDeckId"
-        :card.sync="card"
+        :card="card"
         :mcqs="mcqs"
         @closeCardDialog="closeDialog"
         @createCardSave="editCardSave"
@@ -18,8 +18,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+export default Vue.extend({
   name: 'DeckEditorEditCardDialog',
   props: {
     selectedDeck: {
@@ -37,7 +39,7 @@ export default {
   },
   computed: {
     getDeckId() {
-      return this.selectedDeck.ID
+      return (this.selectedDeck as Deck).ID
     },
   },
   methods: {
@@ -48,7 +50,7 @@ export default {
       this.$emit('editCardSave')
     }
   },
-}
+})
 </script>
 
 <style scoped></style>

@@ -81,8 +81,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: 'DeckEditor',
   props: {
     deckObject: {
@@ -90,7 +92,9 @@ export default {
       default() {},
     },
   },
-  data() {
+  data(): {
+    show: boolean,
+  } {
     return {
       show: false,
     }
@@ -102,5 +106,5 @@ export default {
       this.$emit('editDeck')
     },
   },
-}
+})
 </script>

@@ -8,7 +8,6 @@
         transition="dialog-bottom-transition"
       >
         <PracticeDialog
-          ref="practiceDialog"
           :selected-deck="selectedDeck"
           @closePracticeDialog="closePracticeDialog"
         />
@@ -53,34 +52,50 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue"
+import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
+
+export default Vue.extend({
   middleware: 'authentificated',
 
-  data() {
+  data(): {
+    decks: DeckWithOwner[],
+    dialog: boolean,
+    dialogConfirmation: boolean,
+    selectedDeck?: DeckWithOwner,
+    resDialog: boolean,
+    card?: Card,
+    cards: {Card: Card, Answers: string}[],
+    cardIndex: number,
+    items: string,
+    res?: CardResponseValidation,
+    loaderOverlay: boolean,
+    userID: string,
+    error: string
+  }
+  {
     return {
       decks: [],
       dialog: false,
       dialogConfirmation: false,
-      selectedDeck: [],
+      selectedDeck: undefined,
       resDialog: false,
-      card: {},
-      cards: [
-        {
-          Card: {},
-          Answers: [],
-        },
-      ],
+      card: undefined,
+      cards: [],
       cardIndex: 0,
-      items: {},
-      res: [],
+      items: '',
+      res: undefined,
       loaderOverlay: false,
-      userID: 0,
+      userID: '',
+      error: ''
     }
   },
+
   beforeMount() {
     this.getSubDeck()
   },
+
   mounted() {
     if (localStorage.userID) {
       this.userID = localStorage.userID
@@ -88,30 +103,26 @@ export default {
   },
 
   methods: {
-    isOwner(n) {
+    isOwner(n: DeckWithOwner) {
       return parseInt(n.owner) === parseInt(this.userID)
     },
 
-    async openDialog(value) {
+    openDialog(value: DeckWithOwner) {
       this.selectedDeck = value
       this.dialog = true
-      while (!this.$refs.practiceDialog) {
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      }
-      await this.$refs.practiceDialog.getCards(value.deck.ID)
     },
 
     closeDialogConfirmation() {
       this.dialogConfirmation = false
     },
 
-    unsubToDeckConfirmation(n) {
+    unsubToDeckConfirmation(n: DeckWithOwner) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
 
     closePracticeDialog() {
-      this.dialog = false
+      this.dialog = false;
     },
 
     async unsubToDeck() {
@@ -119,8 +130,8 @@ export default {
         await this.$axios
           .post(
             `https://api.memnix.app/api/v1/decks/` +
-              this.selectedDeck.deck.ID +
-              `/unsubscribe`,
+            this.selectedDeck?.deck.ID +
+            `/unsubscribe`,
             {},
             {
               headers: {
@@ -129,11 +140,13 @@ export default {
               withCredentials: true,
             }
           )
-          .then((_) => {
+          .then(() => {
+            if (!this.selectedDeck)
+              return
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
             this.dialogConfirmation = false
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -148,7 +161,7 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             for (let i = 0; i < res.data.count; i++) {
               this.decks.push({
                 deck: res.data.data[i].Deck,
@@ -159,12 +172,12 @@ export default {
 
             this.loaderOverlay = false
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 <style>
