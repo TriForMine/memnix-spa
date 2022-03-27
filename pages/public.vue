@@ -88,7 +88,7 @@ export default Vue.extend({
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             for (let i = 0; i < res.data.count; i++) {
               this.decks.push(res.data.data[i].Deck)
             }

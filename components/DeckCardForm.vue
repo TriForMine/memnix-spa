@@ -131,11 +131,13 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import {Card, CardType} from "~/types/types";
 
-export default {
+export default Vue.extend({
   name: 'DeckCardForm',
   mixins: [validationMixin],
 
@@ -159,7 +161,18 @@ export default {
     cardImage: { maxLength: maxLength(200), minLength: minLength(1) },
     cardFormat: { required, maxLength: maxLength(50), minLength: minLength(1) },
   },
-  data() {
+  data(): {
+    cardTypes: {name: string, value: number}[],
+    cardQuestion: Card['card_question'],
+    cardAnswer: Card['card_answer'],
+    cardFormat: Card['card_format'],
+    cardImage: Card['card_image'],
+    cardType: Card['card_type'],
+    cardMCQId: number,
+    cardCase: Card['card_case'],
+    cardSpaces: Card['card_spaces'],
+    error: string
+  } {
     return {
       cardTypes: [
         {name: 'String', value: 0},
@@ -180,7 +193,7 @@ export default {
   },
   computed: {
     answerFieldType() {
-      if (this.cardType === 1)
+      if (this.cardType === CardType.Int)
         return 'number'
       else
         return 'string'
@@ -193,7 +206,7 @@ export default {
       }
     },
     questionErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.cardQuestion.$dirty) return errors
       !this.$v.cardQuestion.maxLength &&
       errors.push('Question must be at most 200 characters long')
@@ -203,7 +216,7 @@ export default {
       return errors
     },
     answerErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.cardAnswer.$dirty) return errors
       !this.$v.cardAnswer.maxLength &&
       errors.push('Answer must be at most 200 characters long')
@@ -213,7 +226,7 @@ export default {
       return errors
     },
     formatErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.cardFormat.$dirty) return errors
       !this.$v.cardFormat.maxLength &&
       errors.push('Format must be at most 50 characters long')
@@ -223,7 +236,7 @@ export default {
       return errors
     },
     imageErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.cardImage.$dirty) return errors
       !this.$v.cardImage.maxLength &&
       errors.push('Image must be at most 200 characters long')
@@ -233,7 +246,7 @@ export default {
     },
   },
   watch: {
-    card(newVal) {
+    card(newVal: Card) {
       this.cardQuestion = newVal.card_question ?? ''
       this.cardAnswer = newVal.card_answer ?? ''
       this.cardFormat = newVal.card_format ?? ''
@@ -293,7 +306,7 @@ export default {
               this.createCardSave()
             })
         }
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.res.data.message
       }
     },
@@ -311,7 +324,7 @@ export default {
       this.$emit('createCardSave')
     }
   },
-}
+})
 </script>
 
 <style scoped></style>

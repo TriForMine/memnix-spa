@@ -243,19 +243,44 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, {PropType} from "vue";
+import {Card, CardType, Deck, Mcq, McqType} from "~/types/types";
+
+export default Vue.extend({
   name: 'DeckEditorDialog',
   props: {
     selectedDeck: {
-      type: Object,
-      default() {},
+      type: Object as PropType<Deck>,
+      required: true
     },
     create: {
       type: Boolean,
+      required: true
     },
   },
-  data() {
+  data(): {
+    loaderOverlay: boolean,
+    snackbar: boolean,
+    snackbarText: string,
+    timeout: number,
+    selectedCard?: Card,
+    selectedMCQ?: Mcq,
+    createMode: boolean,
+    createCardDialog: boolean,
+    editCardDialog: boolean,
+    createMCQDialog: boolean,
+    editMCQDialog: boolean,
+    cardDeleteConfirmationDialog: boolean,
+    mcqDeleteConfirmationDialog: boolean,
+    cards: Card[],
+    mcqs: Mcq[],
+    total: number,
+    search: string,
+    headersMCQ: { text: string, align?: string, value: string, sortable?: boolean }[],
+    headers:{ text: string, align?: string, value: string, sortable?: boolean }[],
+    error: string
+  } {
     return {
       loaderOverlay: false,
       snackbar: false,
@@ -290,6 +315,7 @@ export default {
         { text: 'MCQ', value: 'Mcq.mcq_name' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
+      error: ''
     }
   },
   computed: {
@@ -297,10 +323,11 @@ export default {
       if (this.isCreateMode) {
         return 'New deck'
       }
-      return this.selectedDeck.deck_name
+      return (this.selectedDeck as Deck).deck_name
     },
     isCreateMode() {
-      return this.create & this.createMode
+      // @ts-ignore ts is dumb
+      return (this.create as boolean) && (this.createMode as boolean)
     },
   },
   methods: {
@@ -310,17 +337,17 @@ export default {
       }
     },
 
-    getMcqType(type) {
-      if (type === 0) {
+    getMcqType(type: McqType) {
+      if (type === McqType.Standalone) {
         return 'Standalone'
       } else {
         return 'Linked'
       }
     },
-    getCardType(type) {
-      if (type === 0) {
+    getCardType(type: CardType) {
+      if (type === CardType.String) {
         return 'String'
-      } else if (type === 1) {
+      } else if (type === CardType.Int) {
         return 'Integer'
       } else {
         return 'MCQ Only'
@@ -357,7 +384,7 @@ export default {
       this.createCardDialog = true
     },
 
-    openEditCardDialog(card) {
+    openEditCardDialog(card: Card) {
       this.selectedCard = card
       this.editCardDialog = true
     },
@@ -366,17 +393,17 @@ export default {
       this.createMCQDialog = true
     },
 
-    openEditMCQDialog(mcq) {
+    openEditMCQDialog(mcq: Mcq) {
       this.selectedMCQ = mcq
       this.editMCQDialog = true
     },
 
-    openDeleteCardDialog(card) {
+    openDeleteCardDialog(card: Card) {
       this.selectedCard = card
       this.cardDeleteConfirmationDialog = true
     },
 
-    openDeleteMCQDialog(mcq) {
+    openDeleteMCQDialog(mcq: Mcq) {
       this.selectedMCQ = mcq
       this.mcqDeleteConfirmationDialog = true
     },
@@ -392,7 +419,6 @@ export default {
     },
 
     createDeckSave() {
-      this.createDeck = false
       if (this.isCreateMode) {
         this.createMode = false
         this.$emit('createDeckSave')
@@ -436,7 +462,7 @@ export default {
         this.loaderOverlay = true
         await this.$axios
           .delete(
-            `https://api.memnix.app/api/v1/cards/${this.selectedCard.ID}`,
+            `https://api.memnix.app/api/v1/cards/${this.selectedCard?.ID}`,
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -448,7 +474,7 @@ export default {
             this.snackbarText = 'Successfully deleted the card !'
             await this.getCards(this.selectedDeck.ID)
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
@@ -459,7 +485,7 @@ export default {
         this.mcqDeleteConfirmationDialog = false
         this.loaderOverlay = true
         await this.$axios
-          .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ.ID}`, {
+          .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ?.ID}`, {
             headers: {
               'Content-Type': 'application/json',
             },
@@ -469,13 +495,13 @@ export default {
             this.snackbarText = 'Successfully deleted the card !'
             await this.getMCQS(this.selectedDeck.ID)
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
     },
 
-    async getCards(ID) {
+    async getCards(ID: number) {
       this.loaderOverlay = true
       try {
         await this.$axios
@@ -485,17 +511,17 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.cards = res.data.data
             this.total = this.cards.length
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
     },
 
-    async getMCQS(ID) {
+    async getMCQS(ID: number) {
       this.loaderOverlay = true
       try {
         await this.$axios
@@ -505,17 +531,17 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.mcqs = res.data.data
             this.total = this.cards.length
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
       this.loaderOverlay = false
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

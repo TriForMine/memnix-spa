@@ -92,12 +92,12 @@
 </template>
 
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 
-export default {
-
+export default Vue.extend({
   mixins: [validationMixin],
   layout: 'login',
   middleware: 'guest',
@@ -107,7 +107,12 @@ export default {
     email: { required, email },
   },
 
-  data() {
+  data(): {
+    email: string,
+    password: string,
+    error: string,
+    alert: boolean
+  } {
     return {
       email: '',
       password: '',
@@ -118,7 +123,7 @@ export default {
 
   computed: {
     passwordErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength &&
         errors.push('Password must be at most 20 characters long')
@@ -128,7 +133,7 @@ export default {
       return errors
     },
     emailErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.email.$dirty) return errors
       !this.$v.email.email && errors.push('Must be valid e-mail')
       !this.$v.email.required && errors.push('E-mail is required')
@@ -167,7 +172,7 @@ export default {
           )
 
           await this.$router.push('/today')
-        } catch (e) {
+        } catch (e: any) {
           this.error = e.response.data.message
           this.alert = true
           window.setInterval(() => {
@@ -177,5 +182,5 @@ export default {
         }
       }
   },
-}
+})
 </script>

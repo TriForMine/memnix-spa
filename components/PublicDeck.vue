@@ -56,8 +56,11 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+
+export default Vue.extend({
   name: 'PublicDeck',
   props: {
     item: {
@@ -66,11 +69,11 @@ export default {
     },
   },
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: Deck) {
       this.$emit('subToDeckConfirmation', n)
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

@@ -79,14 +79,25 @@
   </v-app>
 </template>
 
-<script>
-export default {
-  data() {
+<script lang="ts">
+import Vue from "vue";
+import {User} from "~/types/types";
+
+export default Vue.extend({
+  data():  {
+    clipped: boolean,
+    drawer: boolean,
+    fixed: boolean,
+    user?: User,
+    items: {icon: string, title: string, to: string}[],
+    title: string,
+    error: string
+  } {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
-      user: {},
+      user: undefined,
       items: [
         {
           icon: 'mdi-chart-bubble',
@@ -97,10 +108,10 @@ export default {
         { icon: 'mdi-view-list', title: 'My decks', to: '/decks' },
         { icon: 'mdi-plus-circle', title: 'Public decks', to: '/public' },
         { icon:'mdi-pencil', title: "Deck Creator", to: '/creator'}
-
       ],
 
       title: 'Memnix',
+      error: ''
     }
   },
   computed: {
@@ -121,10 +132,10 @@ export default {
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.user = res.data
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -141,10 +152,10 @@ export default {
           }
         )
         await this.$router.push('/login')
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   }
-}
+})
 </script>

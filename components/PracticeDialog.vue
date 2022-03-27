@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import {Card, DeckWithOwner} from "~/types/types";
+import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
 
 export default Vue.extend({
   name: 'PracticeDialog',
@@ -86,8 +86,8 @@ export default Vue.extend({
     card?: Card,
     cards: {Card: Card, Answers: string}[]
     cardIndex : number,
-    items: any,
-    res: any,
+    items?: string,
+    res?: CardResponseValidation,
     progress: number,
     total: number,
     progressBuffer: number,
@@ -99,8 +99,8 @@ export default Vue.extend({
       card: undefined,
       cards: [],
       cardIndex: 0,
-      items: [],
-      res: [],
+      items: undefined,
+      res: undefined,
       progress: 0,
       total: 0,
       progressBuffer: 0,
@@ -164,7 +164,7 @@ export default Vue.extend({
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.cards = res.data.data
             if (!this.cards)
               return;
@@ -193,7 +193,7 @@ export default Vue.extend({
               withCredentials: true,
             }
           )
-          .then(async (res) => {
+          .then(async (res: any) => {
             let delay = 50
 
             this.res = res.data.data
@@ -201,7 +201,7 @@ export default Vue.extend({
 
             // @ts-ignore
             this.dialogValue = 0
-            if (this.res.validate) {
+            if (this.res?.validate) {
               this.progress += 1
               delay = 30
             }

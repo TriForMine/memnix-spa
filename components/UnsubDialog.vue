@@ -22,8 +22,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "UnsubDialog",
   data() {
     return {
@@ -37,7 +39,7 @@ export default {
       this.$emit('unsubToDeck')
     },
   },
-}
+})
 </script>
 
 <style scoped>

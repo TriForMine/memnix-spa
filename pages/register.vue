@@ -111,8 +111,7 @@ export default Vue.extend({
   layout: 'login',
   middleware: 'guest',
 
-  validations() {
-    return {
+  validations: {
       username: { required, maxLength: maxLength(15), minLength: minLength(4) },
       password: { required, maxLength: maxLength(50), minLength: minLength(8) },
       email: { required, email },
@@ -121,7 +120,6 @@ export default Vue.extend({
           return val
         },
       },
-    }
   },
 
   data(): {username: string, email: string, password: string, checkbox: boolean, error: string, alert: boolean} {

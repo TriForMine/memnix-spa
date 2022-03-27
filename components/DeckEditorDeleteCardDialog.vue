@@ -21,13 +21,11 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "DeleteCardDialog",
-  data() {
-    return {
-    }
-  },
   methods: {
     closeDialogConfirmation() {
       this.$emit("closeDialogConfirmation")
@@ -36,7 +34,7 @@ export default {
       this.$emit('deleteCard')
     },
   },
-}
+})
 </script>
 
 <style scoped>

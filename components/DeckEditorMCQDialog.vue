@@ -16,8 +16,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+export default Vue.extend({
   name: 'DeckEditorMCQDialog',
   props: {
     selectedDeck: {
@@ -27,7 +29,7 @@ export default {
   },
   computed: {
     getDeckId() {
-      return this.selectedDeck.ID
+      return (this.selectedDeck as Deck).ID
     }
   },
   methods: {
@@ -38,7 +40,7 @@ export default {
       this.$emit('createMCQSave')
     }
   },
-}
+})
 </script>
 
 <style scoped></style>

@@ -87,8 +87,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   props: {
     deckObject: {
       type: Object,
@@ -98,9 +100,15 @@ export default {
       type: Boolean,
     }
   },
-  data() {
+  data(): {
+    show: boolean,
+    error: string,
+    menu: boolean
+  } {
     return {
       show: false,
+      error: '',
+      menu: false
     }
   },
 
@@ -109,7 +117,7 @@ export default {
       this.$emit('openDialog')
     },
 
-    async setTodaySettings(daily) {
+    async setTodaySettings(daily: boolean) {
       try {
         await this.$axios
           .post(
@@ -127,7 +135,7 @@ export default {
           .then(() => {
               this.menu = false
             })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
@@ -136,5 +144,5 @@ export default {
       this.$emit('unsubToDeck')
     },
   },
-}
+})
 </script>

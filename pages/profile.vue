@@ -55,7 +55,7 @@ export default Vue.extend({
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.user = res.data
           })
       } catch (e: any) {

@@ -92,7 +92,7 @@
   </v-col>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import {validationMixin} from "vuelidate";
 import { required, maxLength } from 'vuelidate/lib/validators'
@@ -100,25 +100,24 @@ import { required, maxLength } from 'vuelidate/lib/validators'
 export default Vue.extend({
   mixins: [validationMixin],
 
-  validations() {
-    return {
+  validations: {
       answer: { required, maxLength: maxLength(100) }
-    }
   },
 
   props: {
     card: {
       type: Object,
-      default() {
-      },
+      default() {},
     },
     items: {
       type: Array,
-      default() {},
+      default: () => [],
     },
   },
 
-  data(){
+  data(): {
+    answer: string,
+  } {
     return {
       answer: '',
     }
@@ -134,7 +133,7 @@ export default Vue.extend({
       this.clearMessage()
     },
 
-    buttonAnswer(n) {
+    buttonAnswer(n: string) {
       this.answer = n
       this.postAnswer()
     },

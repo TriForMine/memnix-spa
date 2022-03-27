@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import Vue from "vue"
-import {DeckWithOwner} from "~/types/types";
+import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
 
 export default Vue.extend({
   middleware: 'authentificated',
@@ -65,11 +65,11 @@ export default Vue.extend({
     dialogConfirmation: boolean,
     selectedDeck?: DeckWithOwner,
     resDialog: boolean,
-    card?: any,
-    cards: any,
+    card?: Card,
+    cards: {Card: Card, Answers: string}[],
     cardIndex: number,
-    items: any,
-    res: any,
+    items: string,
+    res?: CardResponseValidation,
     loaderOverlay: boolean,
     userID: string,
     error: string
@@ -82,15 +82,10 @@ export default Vue.extend({
       selectedDeck: undefined,
       resDialog: false,
       card: undefined,
-      cards: [
-        {
-          Card: {},
-          Answers: [],
-        },
-      ],
+      cards: [],
       cardIndex: 0,
-      items: {},
-      res: [],
+      items: '',
+      res: undefined,
       loaderOverlay: false,
       userID: '',
       error: ''
@@ -145,7 +140,7 @@ export default Vue.extend({
               withCredentials: true,
             }
           )
-          .then((_) => {
+          .then(() => {
             if (!this.selectedDeck)
               return
             this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
@@ -166,7 +161,7 @@ export default Vue.extend({
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             for (let i = 0; i < res.data.count; i++) {
               this.decks.push({
                 deck: res.data.data[i].Deck,

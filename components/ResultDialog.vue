@@ -36,21 +36,22 @@
     </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   props: {
     res: {
       type: Object,
       default() {},
     },
   },
-  data() {
+  data(): {
+    value: number
+  } {
     return {
       value :0
     }
-  },
-
-  mounted() {
   },
 
   methods: {
@@ -58,5 +59,5 @@ export default {
       this.$emit('closeResultDialog')
     },
   },
-}
+})
 </script>
