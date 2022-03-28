@@ -96,6 +96,46 @@ export async function postAnswerAPI(cardID: number, answer: string, training: bo
   }
 }
 
+export async function editMCQAPI(mcqObject: Object, mcqID: number) {
+  try {
+    const { data } = await axiosClient
+      .put(
+        `v1/mcqs/${mcqID}/edit`,
+        mcqObject,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function createMCQAPI(mcqObject: Object) {
+  try {
+    const { data } = await axiosClient
+      .post(
+        `v1/mcqs/new`,
+        mcqObject,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
 export async function editCardAPI(cardObject: Object, cardID: number) {
   try {
     const { data } = await axiosClient

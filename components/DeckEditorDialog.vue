@@ -325,7 +325,7 @@ export default Vue.extend({
       if (this.isCreateMode) {
         return 'New deck'
       }
-      return (this.selectedDeck as Deck).deck_name
+      return (this.selectedDeck as Deck)?.deck_name
     },
     isCreateMode() {
       // @ts-ignore ts is dumb
@@ -416,8 +416,8 @@ export default Vue.extend({
     },
 
     async initialize() {
-      await this.getCards(this.selectedDeck.ID)
-      await this.getMCQS(this.selectedDeck.ID)
+      await this.getCards(this.selectedDeck?.ID)
+      await this.getMCQS(this.selectedDeck?.ID)
     },
 
     createDeckSave() {
