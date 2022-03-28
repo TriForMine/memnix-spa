@@ -163,4 +163,12 @@ export default {
   deck_description_min_len:
     'Deck description must be at least 5 characters long',
   deck_description_required: 'Deck description is required',
+
+  // default.vue
+  logged_in: 'Logged In',
+  logout: 'Logout',
+  today: 'Today',
+  my_decks: 'My decks',
+  public_decks: 'Public decks',
+  deck_creator: 'Deck Creator'
 }
