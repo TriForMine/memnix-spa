@@ -17,7 +17,7 @@
           solo-inverted
           hide-details
           prepend-inner-icon="mdi-magnify"
-          label="Search"
+          :label="$i18n.t('search')"
         ></v-text-field>
       </v-toolbar>
     </template>

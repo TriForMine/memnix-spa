@@ -36,7 +36,7 @@
 
     <v-toolbar color="primary" dark flat mb-10>
       <v-spacer></v-spacer>
-      <v-btn text x-large @click="createDeck"> Create a deck </v-btn>
+      <v-btn text x-large @click="createDeck"> {{ $t('create_deck') }} </v-btn>
     </v-toolbar>
     <v-card-text>
       <v-row>
@@ -123,7 +123,7 @@ export default Vue.extend({
 
     async createDeckSave() {
       this.editor = false
-      this.snackbarText = 'Success creating a new deck !'
+      this.snackbarText = this.$i18n.t("success_deck")
       this.snackbar = true
       await this.getEditorsDeck()
     },

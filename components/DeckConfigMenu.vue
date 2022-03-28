@@ -18,14 +18,16 @@
           <v-list-item-action>
             <v-switch v-model="daily" color="purple"></v-switch>
           </v-list-item-action>
-          <v-list-item-title>Enable daily</v-list-item-title>
+          <v-list-item-title>{{ $t('enable_daily') }}</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn text @click="menu = false"> Cancel </v-btn>
-        <v-btn color="primary" text @click="setTodaySettings"> Save </v-btn>
+        <v-btn text @click="menu = false"> {{ $t('cancel') }} </v-btn>
+        <v-btn color="primary" text @click="setTodaySettings">
+          {{ $t('save') }}
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -33,31 +35,29 @@
 
 <script lang="ts">
 export default {
-  name: "DeckConfigMenu",
+  name: 'DeckConfigMenu',
   props: {
     today: {
       type: Boolean,
-      default(){}
-    }
+      default() {},
+    },
   },
   data(): {
-    menu: boolean,
+    menu: boolean
     daily: boolean
   } {
     return {
       menu: false,
-      daily: this.today
+      daily: this.today,
     }
   },
   methods: {
     setTodaySettings() {
       this.menu = false
-      this.$emit("setTodaySettings", this.daily)
-    }
-  }
+      this.$emit('setTodaySettings', this.daily)
+    },
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

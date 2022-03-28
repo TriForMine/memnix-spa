@@ -47,7 +47,7 @@
       </v-overlay>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
-      <h1>You are not sub to any deck yet!</h1>
+      <h1> {{ $t('not_sub') }}</h1>
     </v-row>
   </v-container>
 </template>

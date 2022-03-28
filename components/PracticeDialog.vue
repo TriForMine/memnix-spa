@@ -25,11 +25,12 @@
         <v-dialog v-model="completeDialog" max-width="600px" persistent>
           <v-card>
             <v-card-title class="text-h5">
-              Practice session is finished !
+              {{ $t('practice_session_over') }}
             </v-card-title>
             <v-card-text>
-              Correct answers : {{ progress }} <br />
-              Incorrect answers : {{ total - progress }}</v-card-text
+              {{ $t('correct_answers') }} : {{ progress }} <br />
+              {{ $t('incorrect_answers') }} :
+              {{ total - progress }}</v-card-text
             >
             <v-rating
               empty-icon="mdi-star-outline"
@@ -46,17 +47,22 @@
               <v-spacer></v-spacer>
 
               <v-btn color="red darken-1" text @click="closePracticeDialog">
-                Quit
+                {{ $t('quit') }}
               </v-btn>
 
               <v-btn color="green darken-1" text @click="keepPracticing">
-                Keep practicing</v-btn
+                {{ $t('keep_practicing') }}</v-btn
               >
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-container>
-          <Card v-if="!!card" :card="card" :items="items" @postAnswer="postAnswer($event)" />
+          <Card
+            v-if="!!card"
+            :card="card"
+            :items="items"
+            @postAnswer="postAnswer($event)"
+          />
           <TodayProgressLinear
             :progress="progress"
             :progress-buffer="progressBuffer"
@@ -70,8 +76,8 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
-import {getTrainingAPI, postAnswerAPI} from "~/api/card.api";
+import { Card, CardResponseValidation, DeckWithOwner } from '~/types/types'
+import { getTrainingAPI, postAnswerAPI } from '~/api/card.api'
 
 export default Vue.extend({
   name: 'PracticeDialog',
@@ -82,16 +88,16 @@ export default Vue.extend({
     } as PropOptions<DeckWithOwner>,
   },
   data(): {
-    resDialog: boolean,
-    completeDialog: boolean,
-    card?: Card,
-    cards: {Card: Card, Answers: string}[]
-    cardIndex : number,
-    items?: string,
-    res?: CardResponseValidation,
-    progress: number,
-    total: number,
-    progressBuffer: number,
+    resDialog: boolean
+    completeDialog: boolean
+    card?: Card
+    cards: { Card: Card; Answers: string }[]
+    cardIndex: number
+    items?: string
+    res?: CardResponseValidation
+    progress: number
+    total: number
+    progressBuffer: number
     error: string
   } {
     return {
@@ -105,17 +111,17 @@ export default Vue.extend({
       progress: 0,
       total: 0,
       progressBuffer: 0,
-      error: ''
+      error: '',
     }
   },
 
   watch: {
-    selectedDeck (newValue) {
+    selectedDeck(newValue) {
       this.getCards(newValue.deck.ID)
-    }
+    },
   },
 
-  beforeMount () {
+  beforeMount() {
     this.getCards(this.selectedDeck.deck.ID)
   },
 
@@ -161,15 +167,13 @@ export default Vue.extend({
       if (error) this.error = error.res.data.message
       else {
         this.cards = data.data
-        if (!this.cards)
-          return;
+        if (!this.cards) return
         this.total = this.cards.length
         this.getCard()
       }
-
     },
     async postAnswer(answer: string) {
-      const [error, data] = await postAnswerAPI(this.card?.ID, answer, true);
+      const [error, data] = await postAnswerAPI(this.card?.ID, answer, true)
       if (error) this.error = error.res.data.message
       else {
         let delay = 50

@@ -4,13 +4,15 @@
       <v-row justify="center" align="center">
         <v-col cols="12" sm="8" md="4" log="4">
           <v-card elevation="0">
-            <v-card-title class="headline"> Register !</v-card-title>
+            <v-card-title class="headline">
+              {{ $t('register') }} !</v-card-title
+            >
             <v-card-text>
               <v-form @submit.prevent="register">
                 <v-text-field
                   v-model="username"
                   :error-messages="nameErrors"
-                  label="Enter your username"
+                  :label="this.$i18n.t('enter_username')"
                   name="username"
                   prepend-inner-icon="mdi-account"
                   type="text"
@@ -23,7 +25,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="emailErrors"
-                  label="Enter your email"
+                  :label="this.$i18n.t('enter_mail')"
                   name="email"
                   prepend-inner-icon="mdi-email"
                   type="email"
@@ -36,7 +38,7 @@
                 <v-text-field
                   v-model="password"
                   :error-messages="passwordErrors"
-                  label="Enter your password"
+                  :label="this.$i18n.t('enter_password')"
                   name="password"
                   prepend-inner-icon="mdi-lock"
                   type="password"
@@ -49,7 +51,7 @@
                 <v-checkbox
                   v-model="checkbox"
                   :error-messages="checkboxErrors"
-                  label="Do you agree to our TOS ?"
+                  :label="this.$i18n.t('do_agree')"
                   required
                   @change="$v.checkbox.$touch()"
                   @blur="$v.checkbox.$touch()"
@@ -61,26 +63,22 @@
                   x-large
                   dark
                   block
-                  >Register</v-btn
+                  >{{ $t('register') }}</v-btn
                 >
               </v-form>
               <v-spacer></v-spacer>
-              Already got an account?
-              <nuxt-link to="/login">Login</nuxt-link>
+              {{ $t('already_account') }}
+              <nuxt-link :to="this.localePath('/login')">
+                {{ $t('login') }}</nuxt-link
+              >
             </v-card-text>
             <v-card-actions class="ml-6 mr-6 text-center">
               <p>
-                By continuing, you agree to Memnix's
-                <a
+                {{ $t('agree')
+                }}<a
                   href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md"
                   class="pl-2"
-                  >Policy</a
-                >
-                and
-                <a
-                  href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md"
-                  class="pl-2"
-                  >Terms of Use</a
+                  >{{ $t('policy_tos') }}</a
                 >
               </p>
             </v-card-actions>
@@ -104,9 +102,8 @@
 <script lang="ts">
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 import Vue from 'vue'
-import {validationMixin} from "vuelidate";
-import { login, register } from "~/api/user.api"
-
+import { validationMixin } from 'vuelidate'
+import { login, register } from '~/api/user.api'
 
 export default Vue.extend({
   mixins: [validationMixin],
@@ -114,17 +111,24 @@ export default Vue.extend({
   middleware: 'guest',
 
   validations: {
-      username: { required, maxLength: maxLength(15), minLength: minLength(4) },
-      password: { required, maxLength: maxLength(50), minLength: minLength(8) },
-      email: { required, email },
-      checkbox: {
-        checked(val: boolean) {
-          return val
-        },
+    username: { required, maxLength: maxLength(15), minLength: minLength(4) },
+    password: { required, maxLength: maxLength(50), minLength: minLength(8) },
+    email: { required, email },
+    checkbox: {
+      checked(val: boolean) {
+        return val
       },
+    },
   },
 
-  data(): {username: string, email: string, password: string, checkbox: boolean, error: string, alert: boolean} {
+  data(): {
+    username: string
+    email: string
+    password: string
+    checkbox: boolean
+    error: string
+    alert: boolean
+  } {
     return {
       username: '',
       email: '',
@@ -139,34 +143,36 @@ export default Vue.extend({
     checkboxErrors() {
       const errors: string[] = []
       if (!this.$v.checkbox.$dirty) return errors
-      !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+      !this.$v.checkbox.checked && errors.push(this.$i18n.t('must_agree'))
       return errors
     },
     nameErrors() {
       const errors: string[] = []
       if (!this.$v.username.$dirty) return errors
       !this.$v.username.maxLength &&
-        errors.push('Username must be at most 15 characters long')
+        errors.push(this.$i18n.t('username_max_len'))
       !this.$v.username.minLength &&
-        errors.push('Username must be at least 4 characters long')
-      !this.$v.username.required && errors.push('Username is required.')
+        errors.push(this.$i18n.t('username_min_len'))
+      !this.$v.username.required &&
+        errors.push(this.$i18n.t('username_required'))
       return errors
     },
     passwordErrors() {
       const errors: string[] = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength &&
-        errors.push('Password must be at most 50 characters long')
+        errors.push(this.$i18n.t('password_max_len'))
       !this.$v.password.minLength &&
-        errors.push('Password must be at least 8 characters long')
-      !this.$v.password.required && errors.push('Password is required.')
+        errors.push(this.$i18n.t('password_min_len'))
+      !this.$v.password.required &&
+        errors.push(this.$i18n.t('password_required'))
       return errors
     },
     emailErrors() {
       const errors: string[] = []
       if (!this.$v.email.$dirty) return errors
-      !this.$v.email.email && errors.push('Must be valid e-mail')
-      !this.$v.email.required && errors.push('E-mail is required')
+      !this.$v.email.email && errors.push(this.$i18n.t('email_valid'))
+      !this.$v.email.required && errors.push(this.$i18n.t('email_required'))
       return errors
     },
   },
@@ -176,19 +182,19 @@ export default Vue.extend({
       this.error = errorMessage
       this.alert = true
       window.setInterval(() => {
-        this.alert = false;
+        this.alert = false
       }, 10000)
     },
 
     async register() {
       await this.$v.$touch()
       if (!this.$v.$invalid) {
-        let [error] = await register(this.email, this.password, this.username);
+        let [error] = await register(this.email, this.password, this.username)
         if (error) this.displayErrors(error.response.data.message)
         else {
-          [error] = await login(this.email, this.password);
+          ;[error] = await login(this.email, this.password)
           if (error) this.displayErrors(error.response.data.message)
-          else await this.$router.push('/')
+          else await this.$router.push(this.localePath('/'))
         }
       }
     },

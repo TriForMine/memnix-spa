@@ -8,7 +8,7 @@
               v-model="mcqName"
               name="mcqName"
               :error-messages="nameErrors"
-              label="Name *"
+              :label="$i18n.t('name') + '*'"
               required
               outlined
               shaped
@@ -36,7 +36,7 @@
               v-model="mcqAnswers"
               name="mcqAnswers"
               :error-messages="answersErrors"
-              label="Answers *"
+              :label="$i18n.t('answers') + '*'"
               outlined
               shaped
               maxlength="500"
@@ -47,12 +47,12 @@
           </v-col>
         </v-row>
 
-        <small>*indicates required field</small>
+        <small>{{$t('required_field')}}</small>
       </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeMCQDialog"> Close </v-btn>
+      <v-btn color="info" text @click="closeMCQDialog"> {{ $t('close') }} </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
@@ -107,9 +107,9 @@ export default Vue.extend({
     },
     confirmButtonText() {
       if (this.mcq) {
-        return 'Edit'
+        return this.$i18n.t('edit')
       } else {
-        return 'Create'
+        return this.$i18n.t('create')
       }
     },
 
@@ -117,20 +117,20 @@ export default Vue.extend({
       const errors: string[] = []
       if (!this.$v.mcqName.$dirty) return errors
       !this.$v.mcqName.maxLength &&
-        errors.push('Name must be at most 50 characters long')
+        errors.push(this.$i18n.t('mcq_name_max_len'))
       !this.$v.mcqName.minLength &&
-        errors.push('Name must be at least 1 character long')
-      !this.$v.mcqName.required && errors.push('Name is required.')
+        errors.push(this.$i18n.t('mcq_name_min_len'))
+      !this.$v.mcqName.required && errors.push(this.$i18n.t('mcq_name_required'))
       return errors
     },
     answersErrors() {
       const errors: string[] = []
       if (!this.$v.mcqAnswers.$dirty) return errors
       !this.$v.mcqAnswers.maxLength &&
-        errors.push('Answers must be at most 500 characters long')
+        errors.push(this.$i18n.t('answers_max_len'))
       !this.$v.mcqAnswers.minLength &&
-        errors.push('Answers must be at least 1 character long')
-      !this.$v.mcqAnswers.required && errors.push('Answers is required.')
+        errors.push(this.$i18n.t('answers_min_len'))
+      !this.$v.mcqAnswers.required && errors.push(this.$i18n.t('answers_required'))
       return errors
     },
   },

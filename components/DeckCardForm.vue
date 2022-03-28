@@ -8,7 +8,7 @@
               v-model="cardQuestion"
               name="cardQuestion"
               :error-messages="questionErrors"
-              label="Question *"
+              :label="this.$i18n.t('question') + '*'"
               required
               outlined
               shaped
@@ -24,7 +24,7 @@
           <v-col cols="12">
             <v-select
               v-model="cardType"
-              label="Type"
+              :label="this.$i18n.t('type')"
               outlined
               shaped
               :items="cardTypes"
@@ -38,7 +38,7 @@
           <v-col cols="12">
             <v-select
               v-model="cardMCQId"
-              label="MCQ"
+              :label="this.$i18n.t('mcq')"
               outlined
               shaped
               :items="mcqs"
@@ -55,7 +55,7 @@
               name="cardQuestion"
               :error-messages="answerErrors"
               :type="answerFieldType"
-              label="Answer *"
+              :label="this.$i18n.t('answer') + '*'"
               required
               outlined
               shaped
@@ -90,7 +90,7 @@
               v-model="cardFormat"
               name="cardFormat"
               :error-messages="formatErrors"
-              label="Format *"
+              :label="this.$i18n.t('format') + '*'"
               required
               outlined
               shaped
@@ -108,7 +108,7 @@
               v-model="cardImage"
               name="cardFormat"
               :error-messages="imageErrors"
-              label="Image"
+              :label="this.$i18n.t('image')"
               outlined
               shaped
               maxlength="200"
@@ -119,11 +119,11 @@
         </v-row>
       </v-form>
 
-      <small>*indicates required field</small>
+      <small>{{  $t("required_field") }}</small>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeCardDialog"> Close </v-btn>
+      <v-btn color="info" text @click="closeCardDialog"> {{ $t("close") }} </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
@@ -176,9 +176,9 @@ export default Vue.extend({
   } {
     return {
       cardTypes: [
-        {name: 'String', value: 0},
-        {name: 'Number', value: 1},
-        {name: 'MCQ', value: 2}
+        {name: this.$i18n.t('string').toString(), value: 0},
+        {name: this.$i18n.t('number').toString(), value: 1},
+        {name: this.$i18n.t('mcq').toString(), value: 2}
       ],
 
       cardQuestion: this.card?.card_question ?? '',
@@ -195,54 +195,54 @@ export default Vue.extend({
   computed: {
     answerFieldType() {
       if (this.cardType === CardType.Int)
-        return 'number'
+        return this.$i18n.t('number').toString()
       else
-        return 'string'
+        return this.$i18n.t('string').toString()
     },
     confirmButtonText() {
       if (this.card) {
-        return 'Edit'
+        return this.$i18n.t('edit').toString()
       } else {
-        return 'Create'
+        return this.$i18n.t('create').toString()
       }
     },
     questionErrors() {
       const errors: string[] = []
       if (!this.$v.cardQuestion.$dirty) return errors
       !this.$v.cardQuestion.maxLength &&
-      errors.push('Question must be at most 200 characters long')
+      errors.push(this.$i18n.t('question_max_len'))
       !this.$v.cardQuestion.minLength &&
-      errors.push('Question must be at least 5 character long')
-      !this.$v.cardQuestion.required && errors.push('Question is required.')
+      errors.push(this.$i18n.t('question_min_len'))
+      !this.$v.cardQuestion.required && errors.push(this.$i18n.t('question_required'))
       return errors
     },
     answerErrors() {
       const errors: string[] = []
       if (!this.$v.cardAnswer.$dirty) return errors
       !this.$v.cardAnswer.maxLength &&
-      errors.push('Answer must be at most 200 characters long')
+      errors.push(this.$i18n.t('answer_max_len'))
       !this.$v.cardAnswer.minLength &&
-      errors.push('Answer must be at least 1 character long')
-      !this.$v.cardAnswer.required && errors.push('Answer is required.')
+      errors.push(this.$i18n.t('answer_min_len'))
+      !this.$v.cardAnswer.required && errors.push(this.$i18n.t('answer_required'))
       return errors
     },
     formatErrors() {
       const errors: string[] = []
       if (!this.$v.cardFormat.$dirty) return errors
       !this.$v.cardFormat.maxLength &&
-      errors.push('Format must be at most 50 characters long')
+      errors.push(this.$i18n.t('format_max_len'))
       !this.$v.cardFormat.minLength &&
-      errors.push('Format must be at least 1 character long')
-      !this.$v.cardFormat.required && errors.push('Format is required.')
+      errors.push(this.$i18n.t('format_min_len'))
+      !this.$v.cardFormat.required && errors.push(this.$i18n.t('format_required'))
       return errors
     },
     imageErrors() {
       const errors: string[] = []
       if (!this.$v.cardImage.$dirty) return errors
       !this.$v.cardImage.maxLength &&
-      errors.push('Image must be at most 200 characters long')
+      errors.push(this.$i18n.t('image_max_len'))
       !this.$v.cardImage.minLength &&
-      errors.push('Image must be at least 1 character long')
+      errors.push(this.$i18n.t('image_min_len'))
       return errors
     },
   },
