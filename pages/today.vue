@@ -45,6 +45,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Card, CardResponseValidation} from "~/types/types";
+import {getTodayAPI, postAnswerAPI} from "~/components/api/card.api";
 
 export default Vue.extend({
   middleware: 'authentificated',
@@ -103,41 +104,23 @@ export default Vue.extend({
     },
 
     async postAnswer(answer: string) {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/cards/response`,
-            {
-              card_id: this.card?.ID,
-              response: answer,
-              training: false,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-          .then(async (res: any) => {
-            this.res = res.data.data
-            this.delay = 50
-            if (this.res?.validate) {
-              this.progress += 1
-              this.delay = 30
-            }
-            this.progressBuffer += 1
-            this.resDialog = true
+      const [error, data] = await postAnswerAPI(this.card?.ID, answer, false);
+      if (error) this.error = error.res.data.message
+      else {
+        this.res = data.data
+        this.delay = 50
+        if (this.res?.validate) {
+          this.progress += 1
+          this.delay = 30
+        }
+        this.progressBuffer += 1
+        this.resDialog = true
 
-            while (!this.$refs.resultProgressLinear) {
-              await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            // @ts-ignore
-            this.$refs.resultProgressLinear.startDialogInterval(this.delay)
-          })
-      } catch (e: any) {
-        this.error = e.res.data.message
+        while (!this.$refs.resultProgressLinear) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        // @ts-ignore
+        this.$refs.resultProgressLinear.startDialogInterval(this.delay)
       }
     },
     getCard() {
@@ -160,30 +143,21 @@ export default Vue.extend({
 
     async getToday() {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/cards/today`, {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            this.cards = res.data.data ?? []
-            this.cardIndex = 0
-            if (this.total === 0) {
-              this.total = this.cards.length
-            }
-            if (res.data.data === null) {
-              this.total = 0
-              this.progress = 0
-            } else {
-              this.getCard()
-            }
-            this.loaderOverlay = false
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getTodayAPI()
+      if (error) this.error = error.res.data.message
+      else {
+          this.cards = data.data ?? []
+          this.cardIndex = 0
+          if (this.total === 0) {
+            this.total = this.cards.length
+          }
+          if (data.data === null) {
+            this.total = 0
+            this.progress = 0
+          } else {
+            this.getCard()
+          }
+          this.loaderOverlay = false
       }
     },
   },

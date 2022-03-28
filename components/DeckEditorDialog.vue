@@ -246,6 +246,7 @@
 
 <script lang="ts">
 import Vue, {PropType} from "vue";
+import {deleteCardAPI, deleteMCQAPI, getCardsAPI, getMCQSAPI} from "./api/card.api";
 import {Card, CardType, Deck, Mcq, McqType} from "~/types/types";
 
 export default Vue.extend({
@@ -458,87 +459,52 @@ export default Vue.extend({
     },
 
     async deleteCard() {
-      try {
-        this.cardDeleteConfirmationDialog = false
-        this.loaderOverlay = true
-        await this.$axios
-          .delete(
-            `https://api.memnix.app/api/v1/cards/${this.selectedCard?.ID}`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then(async () => {
-            this.snackbarText = 'Successfully deleted the card !'
-            await this.getCards(this.selectedDeck.ID)
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      this.cardDeleteConfirmationDialog = false
+      this.loaderOverlay = true
+      const [error] = await deleteCardAPI(this.selectedCard?.ID)
+      if (error)  this.error = error.response.data.message
+      else {
+        this.snackbarText = 'Successfully deleted the card !'
+        await this.getCards(this.selectedDeck.ID)
       }
+
       this.loaderOverlay = false
     },
 
     async deleteMCQ() {
-      try {
-        this.mcqDeleteConfirmationDialog = false
-        this.loaderOverlay = true
-        await this.$axios
-          .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ?.ID}`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then(async () => {
-            this.snackbarText = 'Successfully deleted the card !'
-            await this.getMCQS(this.selectedDeck.ID)
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      this.mcqDeleteConfirmationDialog = false
+      this.loaderOverlay = true
+      const [error] = await deleteMCQAPI(this.selectedMCQ?.ID)
+      if (error)  this.error = error.response.data.message
+      else {
+        this.snackbarText = 'Successfully deleted the mcq !'
+        await this.getMCQS(this.selectedDeck.ID)
       }
+
       this.loaderOverlay = false
     },
 
     async getCards(ID: number) {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/cards/deck/` + ID, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            this.cards = res.data.data
-            this.total = this.cards.length
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getCardsAPI(ID)
+      if (error)  this.error = error.response.data.message
+      else {
+        this.cards = data.data
+        this.total = this.cards.length
       }
+
       this.loaderOverlay = false
     },
 
     async getMCQS(ID: number) {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/mcqs/` + ID, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            this.mcqs = res.data.data
-            this.total = this.cards.length
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getMCQSAPI(ID)
+      if (error)  this.error = error.response.data.message
+      else {
+        this.mcqs = data.data
+        this.total = this.cards.length
       }
+
       this.loaderOverlay = false
     },
   },
