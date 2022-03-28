@@ -59,10 +59,12 @@ export default {
     locales: [
       {
         code: 'en',
+        iso: 'en-US',
         file: 'en-US.json',
       },
       {
         code: 'fr',
+        iso: 'fr-FR',
         file: 'fr-FR.json',
       },
     ],
