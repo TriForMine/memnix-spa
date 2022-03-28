@@ -58,12 +58,12 @@
                   <v-btn
                     color="secondary"
                     nuxt
-                    to="/register"
+                    :to="this.localePath('/register')"
                     x-large
                     dark
                     block
                   >
-                    {{ $t('Sign up') }}</v-btn
+                    {{ $t('register') }}</v-btn
                   >
                 </v-form>
               </v-card-text>
