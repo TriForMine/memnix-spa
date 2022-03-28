@@ -59,11 +59,11 @@ export default {
     locales: [
       {
         code: 'en',
-        file: 'en-US.ts',
+        file: 'en-US.json',
       },
       {
         code: 'fr',
-        file: 'fr-FR.ts',
+        file: 'fr-FR.json',
       },
     ],
     vueI18n: {
