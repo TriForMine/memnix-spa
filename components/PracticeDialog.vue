@@ -56,7 +56,7 @@
           </v-card>
         </v-dialog>
         <v-container>
-          <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
+          <Card v-if="!!card" :card="card" :items="items" @postAnswer="postAnswer($event)" />
           <TodayProgressLinear
             :progress="progress"
             :progress-buffer="progressBuffer"
@@ -68,34 +68,56 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropOptions } from 'vue'
+import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
+
+export default Vue.extend({
   name: 'PracticeDialog',
   props: {
     selectedDeck: {
       type: Object,
       default() {},
-    },
+    } as PropOptions<DeckWithOwner>,
   },
-  data() {
+  data(): {
+    resDialog: boolean,
+    completeDialog: boolean,
+    card?: Card,
+    cards: {Card: Card, Answers: string}[]
+    cardIndex : number,
+    items?: string,
+    res?: CardResponseValidation,
+    progress: number,
+    total: number,
+    progressBuffer: number,
+    error: string
+  } {
     return {
       resDialog: false,
       completeDialog: false,
-      card: {},
-      cards: [
-        {
-          Card: {},
-          Answers: [],
-        },
-      ],
+      card: undefined,
+      cards: [],
       cardIndex: 0,
-      items: [],
-      res: [],
+      items: undefined,
+      res: undefined,
       progress: 0,
       total: 0,
       progressBuffer: 0,
+      error: ''
     }
   },
+
+  watch: {
+    selectedDeck (newValue) {
+      this.getCards(newValue.deck.ID)
+    }
+  },
+
+  beforeMount () {
+    this.getCards(this.selectedDeck.deck.ID)
+  },
+
   methods: {
     closeResultDialog() {
       if (this.resDialog) {
@@ -112,12 +134,12 @@ export default {
     },
 
     closePracticeDialog() {
+      this.$emit('closePracticeDialog')
       this.total = 0
       this.progressBuffer = 0
       this.progress = 0
       this.cardIndex = 0
       this.completeDialog = false
-      this.$emit('closePracticeDialog')
     },
     getCard() {
       this.card = this.cards[this.cardIndex].Card
@@ -126,39 +148,41 @@ export default {
       }
     },
     updateIndex() {
-      if (this.cardIndex === this.cards.length - 1) {
+      if (this.cards && this.cardIndex === this.cards.length - 1) {
         this.completeDialog = true
       } else {
         this.cardIndex += 1
       }
     },
 
-    async getCards(ID) {
+    async getCards(ID: number) {
       try {
         await this.$axios
-          .get(`https://api.memnix.app/api/v1/cards/` + ID + `/training`, {
+          .get(`https://api.memnix.app/api/v1/cards/${ID}/training`, {
             headers: {
               'Content-Type': 'application/json',
             },
             withCredentials: true,
           })
-          .then((res) => {
+          .then((res: any) => {
             this.cards = res.data.data
+            if (!this.cards)
+              return;
             this.total = this.cards.length
 
             this.getCard()
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
-    async postAnswer(answer) {
+    async postAnswer(answer: string) {
       try {
         await this.$axios
           .post(
             `https://api.memnix.app/api/v1/cards/response`,
             {
-              card_id: this.card.ID,
+              card_id: this.card?.ID,
               response: answer,
               training: true,
             },
@@ -169,14 +193,15 @@ export default {
               withCredentials: true,
             }
           )
-          .then(async (res) => {
+          .then(async (res: any) => {
             let delay = 50
 
             this.res = res.data.data
             this.resDialog = true
 
+            // @ts-ignore
             this.dialogValue = 0
-            if (this.res.validate) {
+            if (this.res?.validate) {
               this.progress += 1
               delay = 30
             }
@@ -185,14 +210,15 @@ export default {
             while (!this.$refs.resultProgressLinear) {
               await new Promise((resolve) => setTimeout(resolve, 100))
             }
+            // @ts-ignore
             this.$refs.resultProgressLinear.startDialogInterval(delay)
           })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
       }
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

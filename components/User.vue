@@ -65,12 +65,16 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {User} from "~/types/types";
+
+export default Vue.extend({
   name: "UserComponent",
   props: {
     user: {
-      type: Object,
+      type: Object as () => User,
+      required: true,
       default() {},
     },
   },
@@ -80,9 +84,9 @@ export default {
   },
   computed: {
     url() {
-      return "https://source.boringavatars.com/beam/120/"+this.user.user_name+"?colors=070705,3E4B51,6F737E,89A09A,C1C0AE"
+      return "https://source.boringavatars.com/beam/120/"+(this.user as User).user_name+"?colors=070705,3E4B51,6F737E,89A09A,C1C0AE"
     }
   },
   methods: {},
-}
+})
 </script>

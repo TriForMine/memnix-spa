@@ -84,11 +84,13 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import {Deck} from "~/types/types";
 
-export default {
+export default Vue.extend({
   name: 'DeckForm',
 
   mixins: [validationMixin],
@@ -113,7 +115,13 @@ export default {
     },
     deckImageUrl: { maxLength: maxLength(200) },
   },
-  data() {
+  data(): {
+    deckName: Deck['deck_name'],
+    deckDescription: Deck['deck_description'],
+    deckImageUrl: Deck['deck_banner'],
+    error: string,
+    errorDialog: boolean
+  } {
     return {
       deckName: this.selectedDeck?.deck_name ?? '',
       deckDescription: this.selectedDeck?.deck_description ?? '',
@@ -124,7 +132,7 @@ export default {
   },
   computed: {
     nameErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.deckName.$dirty) return errors
       !this.$v.deckName.maxLength &&
         errors.push('Deck name must be at most 42 characters long')
@@ -134,7 +142,7 @@ export default {
       return errors
     },
     descriptionErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.deckDescription.$dirty) return errors
       !this.$v.deckName.maxLength &&
         errors.push('Deck description must be at most 120 characters long')
@@ -196,7 +204,7 @@ export default {
           .then(() => {
             this.createDeckSave()
           })}
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.response.data.message
         this.errorDialog = true
       }
@@ -215,7 +223,7 @@ export default {
       this.$emit("createDeckSave")
     }
   },
-}
+})
 </script>
 
 <style scoped></style>

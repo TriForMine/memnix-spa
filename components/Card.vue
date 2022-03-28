@@ -1,4 +1,3 @@
-/* eslint-disable vue/require-default-prop */
 <template>
   <v-col class="text-center">
     <v-card
@@ -30,77 +29,81 @@
       </v-card-text>
     </v-card>
     <v-container v-if="card.card_type < 2">
-    <v-form @submit.prevent="validateAnswer">
-      <v-col cols="12">
-        <v-text-field
-          v-model="answer"
-          required
-          counter
-          maxlength="100"
-          class="rounded-lg"
-          :label="card.card_format"
-          placeholder="your answer"
-          :append-outer-icon="answer ? 'mdi-send' : ''"
-          clear-icon="mdi-close-circle"
-          clearable
-          name="answer"
-          filled
-          @input="$v.answer.$touch()"
-          @blur="$v.answer.$touch()"
-          @click:append-outer="validateAnswer"
-          @click:clear="clearMessage"
-        ></v-text-field>
-      </v-col>
-      <div class="text-center">
+      <v-form @submit.prevent="validateAnswer">
+        <v-col cols="12">
+          <v-text-field
+            v-model="answer"
+            required
+            counter
+            maxlength="100"
+            class="rounded-lg"
+            :label="card.card_format"
+            placeholder="your answer"
+            :append-outer-icon="answer ? 'mdi-send' : ''"
+            clear-icon="mdi-close-circle"
+            clearable
+            name="answer"
+            filled
+            @input="$v.answer.$touch()"
+            @blur="$v.answer.$touch()"
+            @click:append-outer="validateAnswer"
+            @click:clear="clearMessage"
+          ></v-text-field>
+        </v-col>
+        <div class="text-center">
 
-        <v-chip v-if="card.card_case"
-                class="ma-2"
-                color="secondary"
-                text-color="white"
-                outlined
-        >
-          <v-avatar left>
-            <v-icon>mdi-alert-circle</v-icon>
-          </v-avatar>
-          Case sensitive
-        </v-chip>
-        <v-chip v-if="card.card_spaces"
-                class="ma-2"
-                color="error"
-                text-color="white"
-                outlined
-        >
-          <v-avatar left>
-            <v-icon>mdi-alert-octagram</v-icon>
-          </v-avatar>
-          Space sensitive
-        </v-chip>
-      </div>
-    </v-form>
+          <v-chip
+            v-if="card.card_case"
+            class="ma-2"
+            color="secondary"
+            text-color="white"
+            outlined
+          >
+            <v-avatar left>
+              <v-icon>mdi-alert-circle</v-icon>
+            </v-avatar>
+            Case sensitive
+          </v-chip>
+          <v-chip
+            v-if="card.card_spaces"
+            class="ma-2"
+            color="error"
+            text-color="white"
+            outlined
+          >
+            <v-avatar left>
+              <v-icon>mdi-alert-octagram</v-icon>
+            </v-avatar>
+            Space sensitive
+          </v-chip>
+        </div>
+      </v-form>
     </v-container>
 
     <v-container v-else>
       <v-row>
         <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
           <v-btn color="primary" x-large dark block @click="buttonAnswer(n)">{{
-            n
-          }}</v-btn>
+              n
+            }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
   </v-col>
 </template>
 
-<script>
-import { validationMixin } from 'vuelidate'
+<script lang="ts">
+import Vue from 'vue'
+import {validationMixin} from "vuelidate";
 import { required, maxLength } from 'vuelidate/lib/validators'
 
-export default {
+export default Vue.extend({
   mixins: [validationMixin],
 
   validations: {
-    answer: { required, maxLength: maxLength(100) },
+      answer: { required, maxLength: maxLength(100) }
   },
+
   props: {
     card: {
       type: Object,
@@ -108,11 +111,13 @@ export default {
     },
     items: {
       type: Array,
-      default() {},
+      default: () => [],
     },
   },
 
-  data() {
+  data(): {
+    answer: string,
+  } {
     return {
       answer: '',
     }
@@ -128,7 +133,7 @@ export default {
       this.clearMessage()
     },
 
-    buttonAnswer(n) {
+    buttonAnswer(n: string) {
       this.answer = n
       this.postAnswer()
     },
@@ -140,7 +145,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style>

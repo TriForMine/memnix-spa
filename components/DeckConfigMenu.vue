@@ -31,7 +31,7 @@
   </v-menu>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "DeckConfigMenu",
   props: {
@@ -40,7 +40,10 @@ export default {
       default(){}
     }
   },
-  data() {
+  data(): {
+    menu: boolean,
+    daily: boolean
+  } {
     return {
       menu: false,
       daily: this.today
