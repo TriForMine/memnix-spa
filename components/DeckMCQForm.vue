@@ -8,14 +8,14 @@
               v-model="mcqName"
               name="mcqName"
               :error-messages="nameErrors"
-              @input="$v.mcqName.$touch()"
-              @blur="$v.mcqName.$touch()"
-              label="Name *"
+              :label="$i18n.t('name') + '*'"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.mcqName.$touch()"
+              @blur="$v.mcqName.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -36,23 +36,23 @@
               v-model="mcqAnswers"
               name="mcqAnswers"
               :error-messages="answersErrors"
-              @input="$v.mcqAnswers.$touch()"
-              @blur="$v.mcqAnswers.$touch()"
-              label="Answers *"
+              :label="$i18n.t('answers') + '*'"
               outlined
               shaped
               maxlength="500"
               :required="requiresAnswers"
+              @input="$v.mcqAnswers.$touch()"
+              @blur="$v.mcqAnswers.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
 
-        <small>*indicates required field</small>
+        <small>{{$t('required_field')}}</small>
       </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeMCQDialog"> Close </v-btn>
+      <v-btn color="info" text @click="closeMCQDialog"> {{ $t('close') }} </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
@@ -60,11 +60,14 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import {Mcq, McqType} from "~/types/types";
+import {createMCQAPI, editMCQAPI} from "~/api/card.api";
 
-export default {
+export default Vue.extend({
   name: 'DeckMCQForm',
   mixins: [validationMixin],
 
@@ -78,56 +81,64 @@ export default {
       default() {},
     },
   },
+
   validations: {
     mcqName: { required, maxLength: maxLength(50), minLength: minLength(1) },
     mcqAnswers: { maxLength: maxLength(500), minLength: minLength(1) },
   },
-  data() {
+
+  data(): {
+    mcqName: Mcq['mcq_name'],
+    mcqStandalone: boolean,
+    mcqAnswers: Mcq['mcq_answers'],
+    error: string
+  } {
     return {
       mcqName: this.mcq?.mcq_name ?? '',
-      mcqStandalone: this.mcq?.mcq_type===0 ?? false,
+      mcqStandalone: this.mcq?.mcq_type===McqType.Standalone ?? false,
       mcqAnswers: this.mcq?.mcq_answers ?? '',
       error: 'An error occurred !',
     }
   },
-  watch: {
-    mcq(newVal) {
-      this.mcqName = newVal.mcq_name ?? ''
-      this.mcqStandalone = newVal.mcq_type===0 ?? false
-      this.mcqAnswers = newVal.mcq_answers ?? ''
-    },
-  },
+
   computed: {
     requiresAnswers() {
       return this.mcqStandalone ?? true
     },
     confirmButtonText() {
       if (this.mcq) {
-        return 'Edit'
+        return this.$i18n.t('edit')
       } else {
-        return 'Create'
+        return this.$i18n.t('create')
       }
     },
 
     nameErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.mcqName.$dirty) return errors
       !this.$v.mcqName.maxLength &&
-        errors.push('Name must be at most 50 characters long')
+        errors.push(this.$i18n.t('mcq_name_max_len'))
       !this.$v.mcqName.minLength &&
-        errors.push('Name must be at least 1 character long')
-      !this.$v.mcqName.required && errors.push('Name is required.')
+        errors.push(this.$i18n.t('mcq_name_min_len'))
+      !this.$v.mcqName.required && errors.push(this.$i18n.t('mcq_name_required'))
       return errors
     },
     answersErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.mcqAnswers.$dirty) return errors
       !this.$v.mcqAnswers.maxLength &&
-        errors.push('Answers must be at most 500 characters long')
+        errors.push(this.$i18n.t('answers_max_len'))
       !this.$v.mcqAnswers.minLength &&
-        errors.push('Answers must be at least 1 character long')
-      !this.$v.mcqAnswers.required && errors.push('Answers is required.')
+        errors.push(this.$i18n.t('answers_min_len'))
+      !this.$v.mcqAnswers.required && errors.push(this.$i18n.t('answers_required'))
       return errors
+    },
+  },
+  watch: {
+    mcq(newVal) {
+      this.mcqName = newVal.mcq_name ?? ''
+      this.mcqStandalone = newVal.mcq_type===McqType.Standalone ?? false
+      this.mcqAnswers = newVal.mcq_answers ?? ''
     },
   },
   methods: {
@@ -138,40 +149,17 @@ export default {
         mcq_type: this.mcqStandalone ? 0 : 1,
         mcq_answers: this.mcqAnswers,
       }
-      try {
+
         if (this.mcq) {
-          await this.$axios
-            .put(
-              `https://api.memnix.app/api/v1/mcqs/${this.mcq.ID}/edit`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createMCQSave()
-            })
+          const [error] = await editMCQAPI(data, this.mcq?.ID)
+          if (error) this.error = error.res.data.message
+          else this.createMCQSave()
+
         } else {
-          await this.$axios.post(
-            `https://api.memnix.app/api/v1/mcqs/new`,
-            data,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-            .then(() => {
-            this.createMCQSave()
-          })
+          const [error] = await createMCQAPI(data)
+          if (error) this.error = error.res.data.message
+          else this.createMCQSave()
         }
-      } catch (e) {
-        this.error = e.res.data.message
-      }
     },
 
     validateAnswer() {
@@ -187,7 +175,7 @@ export default {
       this.$emit('createMCQSave')
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

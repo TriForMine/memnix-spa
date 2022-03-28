@@ -103,22 +103,23 @@
     <v-tabs :value="isCreateMode ? 0 : 1">
       <v-tab>
         <v-icon left> mdi-cog </v-icon>
-        Deck
+        {{ $t('deck') }}
       </v-tab>
       <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-cards </v-icon>
-        Cards
+        {{ $t('cards') }}
       </v-tab>
       <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-checkbox-multiple-marked </v-icon>
-        MCQ
+        {{ $t('mcq') }}
       </v-tab>
 
       <v-tab-item>
         <DeckForm
+          :is-edit="!isCreateMode"
+          :selected-deck="selectedDeck"
           @closeEditDeck="closeEditDeck"
           @createDeckSave="createDeckSave"
-          :selected-deck="selectedDeck"
         />
       </v-tab-item>
 
@@ -142,7 +143,7 @@
                   x-large
                   @click="openCardCreatorDialog"
                 >
-                  Create new card
+                  {{ $t('create_card') }}
                 </v-btn>
               </v-card-title>
               <v-data-table :headers="headers" :items="cards" :search="search">
@@ -170,7 +171,9 @@
                   {{ getCardType(item.card_type) }}
                 </template>
                 <template #no-data>
-                  <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                  <v-btn color="primary" @click="initialize">
+                    {{ $t('reset') }}
+                  </v-btn>
                 </template>
               </v-data-table>
             </v-card>
@@ -197,7 +200,7 @@
                   x-large
                   @click="openMCQCreatorDialog"
                 >
-                  Create new MCQ
+                  {{ $t('create_mcq') }}
                 </v-btn>
               </v-card-title>
               <v-data-table
@@ -232,7 +235,9 @@
                   </v-icon>
                 </template>
                 <template #no-data>
-                  <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                  <v-btn color="primary" @click="initialize">
+                    {{ $t('reset') }}
+                  </v-btn>
                 </template>
               </v-data-table>
             </v-card>
@@ -243,19 +248,60 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+import {
+  deleteCardAPI,
+  deleteMCQAPI,
+  getCardsAPI,
+  getMCQSAPI,
+} from '../api/card.api'
+import { Card, CardType, Deck, Mcq, McqType } from '~/types/types'
+
+export default Vue.extend({
   name: 'DeckEditorDialog',
   props: {
     selectedDeck: {
-      type: Object,
-      default() {},
+      type: Object as PropType<Deck>,
+      required: true,
     },
     create: {
       type: Boolean,
+      required: true,
     },
   },
-  data() {
+  data(): {
+    loaderOverlay: boolean
+    snackbar: boolean
+    snackbarText: string
+    timeout: number
+    selectedCard?: Card
+    selectedMCQ?: Mcq
+    createMode: boolean
+    createCardDialog: boolean
+    editCardDialog: boolean
+    createMCQDialog: boolean
+    editMCQDialog: boolean
+    cardDeleteConfirmationDialog: boolean
+    mcqDeleteConfirmationDialog: boolean
+    cards: Card[]
+    mcqs: Mcq[]
+    total: number
+    search: string
+    headersMCQ: {
+      text: string
+      align?: string
+      value: string
+      sortable?: boolean
+    }[]
+    headers: {
+      text: string
+      align?: string
+      value: string
+      sortable?: boolean
+    }[]
+    error: string
+  } {
     return {
       loaderOverlay: false,
       snackbar: false,
@@ -290,6 +336,7 @@ export default {
         { text: 'MCQ', value: 'Mcq.mcq_name' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
+      error: '',
     }
   },
   computed: {
@@ -297,10 +344,11 @@ export default {
       if (this.isCreateMode) {
         return 'New deck'
       }
-      return this.selectedDeck.deck_name
+      return (this.selectedDeck as Deck)?.deck_name
     },
     isCreateMode() {
-      return this.create & this.createMode
+      // @ts-ignore ts is dumb
+      return (this.create as boolean) && (this.createMode as boolean)
     },
   },
   methods: {
@@ -310,20 +358,20 @@ export default {
       }
     },
 
-    getMcqType(type) {
-      if (type === 0) {
-        return 'Standalone'
+    getMcqType(type: McqType) {
+      if (type === McqType.Standalone) {
+        return this.$i18n.t('standalone').toString()
       } else {
-        return 'Linked'
+        return this.$i18n.t('linked').toString()
       }
     },
-    getCardType(type) {
-      if (type === 0) {
-        return 'String'
-      } else if (type === 1) {
-        return 'Integer'
+    getCardType(type: CardType) {
+      if (type === CardType.String) {
+        return this.$i18n.t('string').toString()
+      } else if (type === CardType.Int) {
+        return this.$i18n.t('int').toString()
       } else {
-        return 'MCQ Only'
+        return this.$i18n.t('mcq_only').toString()
       }
     },
 
@@ -357,7 +405,7 @@ export default {
       this.createCardDialog = true
     },
 
-    openEditCardDialog(card) {
+    openEditCardDialog(card: Card) {
       this.selectedCard = card
       this.editCardDialog = true
     },
@@ -366,17 +414,17 @@ export default {
       this.createMCQDialog = true
     },
 
-    openEditMCQDialog(mcq) {
+    openEditMCQDialog(mcq: Mcq) {
       this.selectedMCQ = mcq
       this.editMCQDialog = true
     },
 
-    openDeleteCardDialog(card) {
+    openDeleteCardDialog(card: Card) {
       this.selectedCard = card
       this.cardDeleteConfirmationDialog = true
     },
 
-    openDeleteMCQDialog(mcq) {
+    openDeleteMCQDialog(mcq: Mcq) {
       this.selectedMCQ = mcq
       this.mcqDeleteConfirmationDialog = true
     },
@@ -387,17 +435,16 @@ export default {
     },
 
     async initialize() {
-      await this.getCards(this.selectedDeck.ID)
-      await this.getMCQS(this.selectedDeck.ID)
+      await this.getCards(this.selectedDeck?.ID)
+      await this.getMCQS(this.selectedDeck?.ID)
     },
 
     createDeckSave() {
-      this.createDeck = false
       if (this.isCreateMode) {
         this.createMode = false
         this.$emit('createDeckSave')
       } else {
-        this.snackbarText = 'Success edited a deck !'
+        this.snackbarText = this.$i18n.t('success_edit_deck').toString()
         this.snackbar = true
       }
     },
@@ -405,117 +452,82 @@ export default {
     async createCardSave() {
       this.createCardDialog = false
       this.snackbar = true
-      this.snackbarText = 'Success creating a new card !'
+      this.snackbarText = this.$i18n.t('success_create_card').toString()
       await this.getCards(this.selectedDeck.ID)
     },
 
     async editCardSave() {
       this.editCardDialog = false
-      this.snackbarText = 'Success edited a card !'
+      this.snackbarText = this.$i18n.t('success_edit_card').toString()
       this.snackbar = true
       await this.getCards(this.selectedDeck.ID)
     },
 
     async createMCQSave() {
       this.createMCQDialog = false
-      this.snackbarText = 'Success creating a new MCQ !'
+      this.snackbarText = this.$i18n.t('success_create_mcq').toString()
       this.snackbar = true
       await this.getMCQS(this.selectedDeck.ID)
     },
 
     async editMCQSave() {
       this.editMCQDialog = false
-      this.snackbarText = 'Success edited a MCQ !'
+      this.snackbarText = this.$i18n.t('success_edit_mcq').toString()
       this.snackbar = true
       await this.getMCQS(this.selectedDeck.ID)
     },
 
     async deleteCard() {
-      try {
-        this.cardDeleteConfirmationDialog = false
-        this.loaderOverlay = true
-        await this.$axios
-          .delete(
-            `https://api.memnix.app/api/v1/cards/${this.selectedCard.ID}`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then(async () => {
-            this.snackbarText = 'Successfully deleted the card !'
-            await this.getCards(this.selectedDeck.ID)
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      this.cardDeleteConfirmationDialog = false
+      this.loaderOverlay = true
+      const [error] = await deleteCardAPI(this.selectedCard?.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        this.snackbarText = this.$i18n.t('success_delete_card').toString()
+        await this.getCards(this.selectedDeck.ID)
       }
+
       this.loaderOverlay = false
     },
 
     async deleteMCQ() {
-      try {
-        this.mcqDeleteConfirmationDialog = false
-        this.loaderOverlay = true
-        await this.$axios
-          .delete(`https://api.memnix.app/api/v1/mcqs/${this.selectedMCQ.ID}`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then(async () => {
-            this.snackbarText = 'Successfully deleted the card !'
-            await this.getMCQS(this.selectedDeck.ID)
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      this.mcqDeleteConfirmationDialog = false
+      this.loaderOverlay = true
+      const [error] = await deleteMCQAPI(this.selectedMCQ?.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        this.snackbarText = this.$i18n.t('success_delete_mcq').toString()
+        await this.getMCQS(this.selectedDeck.ID)
       }
+
       this.loaderOverlay = false
     },
 
-    async getCards(ID) {
+    async getCards(ID: number) {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/cards/deck/` + ID, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res) => {
-            this.cards = res.data.data
-            this.total = this.cards.length
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error, data] = await getCardsAPI(ID)
+      if (error) this.error = error.response.data.message
+      else {
+        this.cards = data.data
+        this.total = this.cards.length
       }
+
       this.loaderOverlay = false
     },
 
-    async getMCQS(ID) {
+    async getMCQS(ID: number) {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/mcqs/` + ID, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res) => {
-            this.mcqs = res.data.data
-            this.total = this.cards.length
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error, data] = await getMCQSAPI(ID)
+      if (error) this.error = error.response.data.message
+      else {
+        this.mcqs = data.data
+        this.total = this.cards.length
       }
+
       this.loaderOverlay = false
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

@@ -4,7 +4,7 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Create a new Card</v-toolbar-title>
+      <v-toolbar-title>{{  $t('create_card') }}</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckCardForm
@@ -17,12 +17,16 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+
+export default Vue.extend({
   name: 'DeckEditorCardDialog',
   props: {
     selectedDeck: {
-      type: Object,
+      type: Object as () => Deck,
+      required: true,
       default() {},
     },
     mcqs: {
@@ -32,7 +36,7 @@ export default {
   },
   computed: {
     getDeckId() {
-      return this.selectedDeck.ID
+      return (this.selectedDeck as Deck).ID
     }
   },
   methods: {
@@ -43,7 +47,7 @@ export default {
       this.$emit('createCardSave')
     }
   },
-}
+})
 </script>
 
 <style scoped></style>

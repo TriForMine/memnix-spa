@@ -5,6 +5,7 @@ export default {
   ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
+
   head: {
     titleTemplate: '%s - Memnix',
     title: 'Memnix',
@@ -21,11 +22,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/vue-snip.js'],
+  plugins: ['~/plugins/vue-snip'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
-
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -33,10 +33,13 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxt/typescript-build',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/i18n',
+
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
@@ -45,14 +48,43 @@ export default {
     '@nuxtjs/sitemap',
   ],
 
+  i18n: {
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'memnix_i18n',
+      redirectOn: 'root', // recommended
+    },
+    seo: true,
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        file: 'en-US.json',
+      },
+      {
+        code: 'fr',
+        iso: 'fr-FR',
+        file: 'fr-FR.json',
+      },
+    ],
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+    defaultLocale: 'en',
+    lazy: true,
+    langDir: 'locales/',
+    baseUrl: 'https://memnix.app/',
+  },
+
   robots: {
     UserAgent: '*',
     Allow: '/',
-    Sitemap: 'https://memnix.yumenetwork.net/sitemap.xml',
+    Sitemap: 'https://memnix.app/sitemap.xml',
   },
 
   sitemap: {
-    hostname: 'https://memnix.yumenetwork.net',
+    hostname: 'https://memnix.app',
     gzip: true,
   },
 
@@ -70,8 +102,8 @@ export default {
       short_name: 'Memnix',
       lang: 'en',
       display: 'standalone',
-      theme_color: "#ffffff",
-      background_color: "#ffffff",
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
       icons: [
         {
           src: '/android-chrome-192x192.png',
@@ -92,7 +124,7 @@ export default {
           src: '/safari-pinned-tab.png',
           sizes: '512x512',
           type: 'image/png',
-          purpose: "monochrome"
+          purpose: 'monochrome',
         },
         {
           src: '/icon.png',

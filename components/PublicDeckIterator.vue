@@ -17,7 +17,7 @@
           solo-inverted
           hide-details
           prepend-inner-icon="mdi-magnify"
-          label="Search"
+          :label="$i18n.t('search')"
         ></v-text-field>
       </v-toolbar>
     </template>
@@ -83,16 +83,24 @@
   </v-data-iterator>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+
+export default Vue.extend({
   name: 'PublicDeckIterator',
   props: {
     decks: {
-      type: Array[Object],
-      default() {},
+      type: Array,
+      default: () => [],
     },
   },
-  data() {
+  data(): {
+    page: number,
+    itemsPerPage: number,
+    search: string,
+    headers: {text: string, value: string, align: string, divider?: boolean, width?: string, sortable?: boolean}[]
+  } {
     return {
       page: 1,
       itemsPerPage: 10,
@@ -134,7 +142,7 @@ export default {
     },
   },
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: Deck) {
       this.$emit('subToDeckConfirmation', n)
     },
 
@@ -145,7 +153,7 @@ export default {
       if (this.hasFormerPage) this.page -= 1
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

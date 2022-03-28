@@ -25,15 +25,16 @@
         <span> {{ item.deck_description }}</span>
       </v-tooltip>
     </v-card-text>
-    <v-chip v-if="item.ID === 13"
-            class="ma-2"
-            color="accent"
-            text-color="white"
+    <v-chip
+      v-if="item.ID === 13"
+      class="ma-2"
+      color="accent"
+      text-color="white"
     >
       <v-icon left>
         mdi-star
       </v-icon>
-      Sponsored
+      {{ $t("sponsored") }}
     </v-chip>
 
     <v-divider></v-divider>
@@ -49,14 +50,17 @@
         color="orange"
         @click="subToDeckConfirmation(item)"
       >
-        Subscribe Now
+        {{ $t("subscribe_now") }}
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {Deck} from "~/types/types";
+
+export default Vue.extend({
   name: 'PublicDeck',
   props: {
     item: {
@@ -65,11 +69,11 @@ export default {
     },
   },
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: Deck) {
       this.$emit('subToDeckConfirmation', n)
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

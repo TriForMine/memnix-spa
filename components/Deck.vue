@@ -42,7 +42,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock-open </v-icon>
-      Public
+      {{ $t('public') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.deck_status === 1"
@@ -51,7 +51,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock </v-icon>
-      Private
+      {{ $t('private') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.deck_status === 2"
@@ -60,7 +60,7 @@
       text-color="white"
     >
       <v-icon left> mdi-clock-alert </v-icon>
-      Waiting for approval
+      {{ $t('waiting_approval') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.ID === 13"
@@ -69,13 +69,14 @@
       text-color="white"
     >
       <v-icon left> mdi-star </v-icon>
-      Sponsored
+      {{ $t('sponsored') }}
+
     </v-chip>
     <v-divider></v-divider>
 
     <v-card-actions>
       <v-btn color="orange lighten-2" text @click="openDialog">
-        Practice
+        {{ $t('practice') }}
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -87,8 +88,12 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {setSettingsAPI} from "~/api/deck.api";
+
+export default Vue.extend({
+  name: 'Deck',
   props: {
     deckObject: {
       type: Object,
@@ -98,9 +103,15 @@ export default {
       type: Boolean,
     }
   },
-  data() {
+  data(): {
+    show: boolean,
+    error: string,
+    menu: boolean
+  } {
     return {
       show: false,
+      error: '',
+      menu: false
     }
   },
 
@@ -109,26 +120,11 @@ export default {
       this.$emit('openDialog')
     },
 
-    async setTodaySettings(daily) {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/users/settings/` + this.deckObject.deck.ID+ '/today',
-            {
-              "settings_today" : daily
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-              this.menu = false
-            })
-      } catch (e) {
-        this.error = e.response.data.message
+    async setTodaySettings(daily: boolean) {
+      const [error] = await setSettingsAPI(this.deckObject?.deck.ID, daily)
+      if (error) this.error = error.response.data.message
+      else {
+        this.menu = false
       }
     },
 
@@ -136,5 +132,5 @@ export default {
       this.$emit('unsubToDeck')
     },
   },
-}
+})
 </script>

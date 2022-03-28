@@ -36,7 +36,7 @@
 
     <v-toolbar color="primary" dark flat mb-10>
       <v-spacer></v-spacer>
-      <v-btn text x-large @click="createDeck"> Create a deck </v-btn>
+      <v-btn text x-large @click="createDeck"> {{ $t('create_deck') }} </v-btn>
     </v-toolbar>
     <v-card-text>
       <v-row>
@@ -59,20 +59,36 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+import {DeckCreator} from "~/types/types";
+import {getEditorAPI} from "~/api/deck.api";
+
+export default Vue.extend({
   middleware: 'authentificated',
-  data() {
+  data(): {
+    decks: DeckCreator[],
+    dialog: boolean,
+    selectedDeck?: DeckCreator,
+    editor: boolean,
+    createMode: boolean,
+    snackbar: boolean,
+    snackbarText: string,
+    loaderOverlay: boolean,
+    timeout: number,
+    error: string
+  } {
     return {
       decks: [],
       dialog: false,
-      selectedDeck: {},
+      selectedDeck: undefined,
       editor: false,
       createMode: false,
       snackbar: false,
       snackbarText: "",
       loaderOverlay: false,
       timeout: 2000,
+      error: ''
     }
   },
 
@@ -82,16 +98,12 @@ export default {
 
   methods: {
     createDeck() {
-      this.selectedDeck = {
-        deck_name: '',
-        deck_description: '',
-        deck_banner: '',
-      }
+      this.selectedDeck = undefined
       this.createMode = true
 
       this.editor = true
     },
-    async editDeck(value) {
+    async editDeck(value: DeckCreator) {
       this.selectedDeck = value
       this.createMode = false
       this.editor = true
@@ -99,7 +111,9 @@ export default {
       while (!this.$refs.deckEditorDialog) {
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
+      // @ts-ignore
       await this.$refs.deckEditorDialog.getCards(value.ID)
+      // @ts-ignore
       await this.$refs.deckEditorDialog.getMCQS(value.ID)
 
     },
@@ -109,7 +123,7 @@ export default {
 
     async createDeckSave() {
       this.editor = false
-      this.snackbarText = 'Success creating a new deck !'
+      this.snackbarText = this.$i18n.t("success_deck")
       this.snackbar = true
       await this.getEditorsDeck()
     },
@@ -118,26 +132,18 @@ export default {
       this.loaderOverlay = true
       this.decks = []
 
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/decks/editor`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res) => {
-            for (let i = 0; i < res.data.count; i++) {
-              this.decks.push(res.data.data[i].Deck)
-            }
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error, data] = await getEditorAPI()
+      if (error) this.error = error.response.data.message
+      else {
+        for (let i = 0; i < data.count; i++) {
+          this.decks.push(data.data[i].Deck)
+        }
       }
+
       this.loaderOverlay = false
     },
   },
-}
+})
 </script>
 
 <style>

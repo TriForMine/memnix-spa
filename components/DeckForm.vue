@@ -1,27 +1,19 @@
 <template>
   <v-card flat>
-    <v-dialog
-      v-model="errorDialog"
-    >
+    <v-dialog v-model="errorDialog">
       <v-card>
         <v-card-title class="text-h5 error lighten-2">
-          {{error}}
+          {{ error }}
         </v-card-title>
 
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="errorDialog = false"
-          >
-            Ok
+          <v-btn color="primary" text @click="errorDialog = false">
+            {{ $t('ok') }}
           </v-btn>
         </v-card-actions>
       </v-card>
-
-
     </v-dialog>
     <v-card-text>
       <v-form @submit.prevent="validateAnswer">
@@ -72,11 +64,13 @@
         </v-row>
       </v-form>
 
-      <small>*indicates required field</small>
+      <small>{{ $t('required_field') }}</small>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeEditDeck"> Close </v-btn>
+      <v-btn color="info" text @click="closeEditDeck">
+        {{ $t('close') }}
+      </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
@@ -84,11 +78,14 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import { Deck } from '~/types/types'
+import { createDeckAPI, editDeckAPI } from '~/api/deck.api'
 
-export default {
+export default Vue.extend({
   name: 'DeckForm',
 
   mixins: [validationMixin],
@@ -96,7 +93,11 @@ export default {
   props: {
     selectedDeck: {
       type: Object,
-      default(){},
+      default() {},
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -109,7 +110,13 @@ export default {
     },
     deckImageUrl: { maxLength: maxLength(200) },
   },
-  data() {
+  data(): {
+    deckName: Deck['deck_name']
+    deckDescription: Deck['deck_description']
+    deckImageUrl: Deck['deck_banner']
+    error: string
+    errorDialog: boolean
+  } {
     return {
       deckName: this.selectedDeck?.deck_name ?? '',
       deckDescription: this.selectedDeck?.deck_description ?? '',
@@ -118,85 +125,67 @@ export default {
       errorDialog: false,
     }
   },
-  watch: {
-    selectedDeck(newVal) {
-      this.deckName = newVal.deck_name ?? ''
-      this.deckDescription = newVal.deck_description ?? ''
-      this.deckImageUrl = newVal.deck_banner ?? ''
-    }
-  },
   computed: {
     nameErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.deckName.$dirty) return errors
       !this.$v.deckName.maxLength &&
-        errors.push('Deck name must be at most 42 characters long')
+        errors.push(this.$i18n.t('deck_name_max_len'))
       !this.$v.deckName.minLength &&
-        errors.push('Deck name must be at least 5 characters long')
-      !this.$v.deckName.required && errors.push('Deck name is required.')
+        errors.push(this.$i18n.t('deck_name_min_len'))
+      !this.$v.deckName.required &&
+        errors.push(this.$i18n.t('deck_name_required'))
       return errors
     },
     descriptionErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.deckDescription.$dirty) return errors
       !this.$v.deckName.maxLength &&
-        errors.push('Deck description must be at most 120 characters long')
+        errors.push(this.$i18n.t('deck_description_max_len'))
       !this.$v.deckName.minLength &&
-        errors.push('Deck description must be at least 5 characters long')
-      !this.$v.deckName.required && errors.push('Deck name is required.')
+        errors.push(this.$i18n.t('deck_description_min_len'))
+      !this.$v.deckName.required &&
+        errors.push(this.$i18n.t('deck_description_required'))
       return errors
     },
     confirmButtonText() {
-      if (this.selectedDeck) {
-        return 'Edit'
+      if (this.isEdit) {
+        return this.$i18n.t('edit')
       } else {
-        return 'Create'
+        return this.$i18n.t('create')
       }
+    },
+  },
+  watch: {
+    selectedDeck(newVal) {
+      this.deckName = newVal?.deck_name ?? ''
+      this.deckDescription = newVal?.deck_description ?? ''
+      this.deckImageUrl = newVal?.deck_banner ?? ''
     },
   },
   methods: {
     async createDeck() {
       const data = {
-        "deck_name": this.deckName,
-        "deck_description": this.deckDescription,
-        "deck_banner": this.deckImageUrl
+        deck_name: this.deckName,
+        deck_description: this.deckDescription,
+        deck_banner: this.deckImageUrl,
       }
-      try {
-        if (this.selectedDeck) {
-          await this.$axios
-            .put(
-              `https://api.memnix.app/api/v1/decks/${this.selectedDeck.ID}/edit`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createDeckSave()
-            })
-        } else {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/decks/new`,
-            data,
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-          .then(() => {
-            this.createDeckSave()
-          })}
-      } catch (e) {
-        this.error = e.response.data.message
-        this.errorDialog = true
+
+      if (this.isEdit) {
+        const [error] = await editDeckAPI(data, this.selectedDeck?.ID)
+        if (error) {
+          this.error = error.response.data.message
+          this.errorDialog = true
+        } else this.createDeckSave()
+      } else {
+        const [error] = await createDeckAPI(data)
+        if (error) {
+          this.error = error.response.data.message
+          this.errorDialog = true
+        } else this.createDeckSave()
       }
     },
+
     validateAnswer() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
@@ -208,10 +197,10 @@ export default {
     },
 
     createDeckSave() {
-      this.$emit("createDeckSave")
-    }
+      this.$emit('createDeckSave')
+    },
   },
-}
+})
 </script>
 
 <style scoped></style>

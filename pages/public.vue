@@ -21,16 +21,20 @@
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import {Deck} from "~/types/types";
+import {getAvailableAPI, subToDeckAPI} from "~/api/deck.api";
+export default Vue.extend({
   middleware: 'authentificated',
 
-  data() {
+  data(): {decks: Deck[], dialogConfirmation: boolean, selectedDeck?: Deck, res: Array<Object>, error: ''} {
     return {
       decks: [],
       dialogConfirmation: false,
-      selectedDeck: [],
+      selectedDeck: undefined,
       res: [],
+      error: ''
     }
   },
 
@@ -39,7 +43,7 @@ export default {
   },
 
   methods: {
-    subToDeckConfirmation(n) {
+    subToDeckConfirmation(n: Deck) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
@@ -49,49 +53,27 @@ export default {
     },
 
     async subToDeck() {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/decks/` +
-              this.selectedDeck.ID +
-              `/subscribe`,
-            {},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
-            this.dialogConfirmation = false
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error] = await subToDeckAPI(this.selectedDeck?.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        if(!this.selectedDeck)
+          return;
+        this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
+        this.dialogConfirmation = false
       }
     },
 
     async getAvailableDeck() {
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/decks/available`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res) => {
-            for (let i = 0; i < res.data.count; i++) {
-              this.decks.push(res.data.data[i].Deck)
-            }
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error, data] = await getAvailableAPI()
+      if (error) this.error = error.response.data.message
+      else {
+        for (let i = 0; i < data.count; i++) {
+          this.decks.push(data.data[i].Deck)
+        }
       }
     },
   },
-}
+})
 </script>
 
 <style>

@@ -11,13 +11,15 @@
                 contain
                 height="200"
               ></v-img>
-              <v-card-title class="headline"> Welcome to Memnix </v-card-title>
+              <v-card-title class="headline">
+                {{ $t('welcome') }}
+              </v-card-title>
               <v-card-text>
                 <v-form @submit.prevent="login">
                   <v-text-field
                     v-model="email"
                     :error-messages="emailErrors"
-                    label="Enter your email"
+                    :label="$t('enter_mail')"
                     name="email"
                     prepend-inner-icon="mdi-email"
                     type="email"
@@ -30,7 +32,7 @@
                   <v-text-field
                     v-model="password"
                     :error-messages="passwordErrors"
-                    label="Enter your password"
+                    :label="$t('enter_password')"
                     name="password"
                     prepend-inner-icon="mdi-lock"
                     type="password"
@@ -47,29 +49,31 @@
                     x-large
                     dark
                     block
-                    >Login</v-btn
+                  >
+                    {{ $t('login') }}</v-btn
                   >
                   <v-spacer></v-spacer>
 
-                  No account?
+                  {{ $t('no_account') }}
                   <v-btn
                     color="secondary"
                     nuxt
-                    to="/register"
+                    :to="this.localePath('/register')"
                     x-large
                     dark
                     block
-                    >Sign Up</v-btn
+                  >
+                    {{ $t('register') }}</v-btn
                   >
                 </v-form>
               </v-card-text>
               <v-card-actions class="ml-6 mr-6 text-center">
                 <p>
-                  By continuing, you agree to Memnix's
-                  <a href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md" class="pl-2">Policy</a> and<a
+                  {{ $t('agree')
+                  }}<a
                     href="https://github.com/memnix/community-guidelines/blob/main/PRIVACY.md"
                     class="pl-2"
-                    >Terms of Use</a
+                    >{{ $t('policy_tos') }}</a
                   >
                 </p>
               </v-card-actions>
@@ -91,13 +95,13 @@
   </v-app>
 </template>
 
-
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+import { login, user } from '~/api/user.api'
 
-export default {
-
+export default Vue.extend({
   mixins: [validationMixin],
   layout: 'login',
   middleware: 'guest',
@@ -107,7 +111,12 @@ export default {
     email: { required, email },
   },
 
-  data() {
+  data(): {
+    email: string
+    password: string
+    error: string
+    alert: boolean
+  } {
     return {
       email: '',
       password: '',
@@ -118,64 +127,45 @@ export default {
 
   computed: {
     passwordErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength &&
-        errors.push('Password must be at most 20 characters long')
+        errors.push( this.$i18n.t('password_max_len') )
       !this.$v.password.minLength &&
-        errors.push('Password must be at least 8 characters long')
-      !this.$v.password.required && errors.push('Password is required.')
+        errors.push(this.$i18n.t('password_min_len'))
+      !this.$v.password.required && errors.push(this.$i18n.t('password_required'))
       return errors
     },
     emailErrors() {
-      const errors = []
+      const errors: string[] = []
       if (!this.$v.email.$dirty) return errors
-      !this.$v.email.email && errors.push('Must be valid e-mail')
-      !this.$v.email.required && errors.push('E-mail is required')
+      !this.$v.email.email && errors.push(this.$i18n.t('email_valid'))
+      !this.$v.email.required && errors.push(this.$i18n.t('email_required'))
       return errors
     },
   },
 
   methods: {
+    displayErrors(errorMessage: string) {
+      this.error = errorMessage
+      this.alert = true
+      window.setInterval(() => {
+        this.alert = false
+      }, 10000)
+    },
+
     async login() {
       await this.$v.$touch()
       if (!this.$v.$invalid) {
-        try {
-          await this.$axios
-            .post(
-              `https://api.memnix.app/api/login/`,
-              {
-                email: this.email.toLowerCase(),
-                password: this.password,
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-
-          await this.$axios.get(
-            `https://api.memnix.app/api/user/`,
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-
-          await this.$router.push('/today')
-        } catch (e) {
-          this.error = e.response.data.message
-          this.alert = true
-          window.setInterval(() => {
-            this.alert = false;
-          }, 10000)
-        }
+        let [error] = await login(this.email, this.password)
+        if (error) this.displayErrors(error.response.data.message)
+        else {
+          ;[error] = await user()
+          if (error) this.displayErrors(error.response.data.message)
+          else await this.$router.push(this.localePath('/today'))
         }
       }
+    },
   },
-}
+})
 </script>

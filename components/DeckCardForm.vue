@@ -8,14 +8,14 @@
               v-model="cardQuestion"
               name="cardQuestion"
               :error-messages="questionErrors"
-              @input="$v.cardQuestion.$touch()"
-              @blur="$v.cardQuestion.$touch()"
-              label="Question *"
+              :label="$i18n.t('question') + '*'"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.cardQuestion.$touch()"
+              @blur="$v.cardQuestion.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -23,8 +23,8 @@
         <v-row>
           <v-col cols="12">
             <v-select
-              label="Type"
               v-model="cardType"
+              :label="$i18n.t('type')"
               outlined
               shaped
               :items="cardTypes"
@@ -37,8 +37,8 @@
         <v-row>
           <v-col cols="12">
             <v-select
-              label="MCQ"
               v-model="cardMCQId"
+              :label="$i18n.t('mcq')"
               outlined
               shaped
               :items="mcqs"
@@ -54,15 +54,15 @@
               v-model="cardAnswer"
               name="cardQuestion"
               :error-messages="answerErrors"
-              @input="$v.cardAnswer.$touch()"
-              @blur="$v.cardAnswer.$touch()"
               :type="answerFieldType"
-              label="Answer *"
+              :label="$i18n.t('answer') + '*'"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.cardAnswer.$touch()"
+              @blur="$v.cardAnswer.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -90,14 +90,14 @@
               v-model="cardFormat"
               name="cardFormat"
               :error-messages="formatErrors"
-              @input="$v.cardFormat.$touch()"
-              @blur="$v.cardFormat.$touch()"
-              label="Format *"
+              :label="$i18n.t('format') + '*'"
               required
               outlined
               shaped
               counter
               maxlength="200"
+              @input="$v.cardFormat.$touch()"
+              @blur="$v.cardFormat.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -108,22 +108,24 @@
               v-model="cardImage"
               name="cardFormat"
               :error-messages="imageErrors"
-              @input="$v.cardImage.$touch()"
-              @blur="$v.cardImage.$touch()"
-              label="Image"
+              :label="$i18n.t('image')"
               outlined
               shaped
               maxlength="200"
+              @input="$v.cardImage.$touch()"
+              @blur="$v.cardImage.$touch()"
             ></v-text-field>
           </v-col>
         </v-row>
       </v-form>
 
-      <small>*indicates required field</small>
+      <small>{{ $t('required_field') }}</small>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeCardDialog"> Close </v-btn>
+      <v-btn color="info" text @click="closeCardDialog">
+        {{ $t('close') }}
+      </v-btn>
       <v-btn color="warning" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
@@ -131,40 +133,62 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+import { Card, CardType } from '~/types/types'
+import { createCardAPI, editCardAPI } from '~/api/card.api'
 
-export default {
+export default Vue.extend({
   name: 'DeckCardForm',
   mixins: [validationMixin],
 
   props: {
     card: {
       type: Object,
-      default() {}
+      default() {},
     },
     deckId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     mcqs: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   validations: {
-    cardQuestion: { required, maxLength: maxLength(200), minLength: minLength(5) },
-    cardAnswer: { required, maxLength: maxLength(200), minLength: minLength(1) },
+    cardQuestion: {
+      required,
+      maxLength: maxLength(200),
+      minLength: minLength(5),
+    },
+    cardAnswer: {
+      required,
+      maxLength: maxLength(200),
+      minLength: minLength(1),
+    },
     cardImage: { maxLength: maxLength(200), minLength: minLength(1) },
     cardFormat: { required, maxLength: maxLength(50), minLength: minLength(1) },
   },
-  data() {
+  data(): {
+    cardTypes: { name: string; value: number }[]
+    cardQuestion: Card['card_question']
+    cardAnswer: Card['card_answer']
+    cardFormat: Card['card_format']
+    cardImage: Card['card_image']
+    cardType: Card['card_type']
+    cardMCQId: number
+    cardCase: Card['card_case']
+    cardSpaces: Card['card_spaces']
+    error: string
+  } {
     return {
       cardTypes: [
-        {name: 'String', value: 0},
-        {name: 'Number', value: 1},
-        {name: 'MCQ', value: 2}
+        { name: this.$i18n.t('string').toString(), value: 0 },
+        { name: this.$i18n.t('number').toString(), value: 1 },
+        { name: this.$i18n.t('mcq').toString(), value: 2 },
       ],
 
       cardQuestion: this.card?.card_question ?? '',
@@ -178,8 +202,62 @@ export default {
       error: 'An error occurred !',
     }
   },
+  computed: {
+    answerFieldType() {
+      if (this.cardType === CardType.Int)
+        return this.$i18n.t('number').toString()
+      else return this.$i18n.t('string').toString()
+    },
+    confirmButtonText() {
+      if (this.card) {
+        return this.$i18n.t('edit').toString()
+      } else {
+        return this.$i18n.t('create').toString()
+      }
+    },
+    questionErrors() {
+      const errors: string[] = []
+      if (!this.$v.cardQuestion.$dirty) return errors
+      !this.$v.cardQuestion.maxLength &&
+        errors.push(this.$i18n.t('question_max_len'))
+      !this.$v.cardQuestion.minLength &&
+        errors.push(this.$i18n.t('question_min_len'))
+      !this.$v.cardQuestion.required &&
+        errors.push(this.$i18n.t('question_required'))
+      return errors
+    },
+    answerErrors() {
+      const errors: string[] = []
+      if (!this.$v.cardAnswer.$dirty) return errors
+      !this.$v.cardAnswer.maxLength &&
+        errors.push(this.$i18n.t('answer_max_len'))
+      !this.$v.cardAnswer.minLength &&
+        errors.push(this.$i18n.t('answer_min_len'))
+      !this.$v.cardAnswer.required &&
+        errors.push(this.$i18n.t('answer_required'))
+      return errors
+    },
+    formatErrors() {
+      const errors: string[] = []
+      if (!this.$v.cardFormat.$dirty) return errors
+      !this.$v.cardFormat.maxLength &&
+        errors.push(this.$i18n.t('format_max_len'))
+      !this.$v.cardFormat.minLength &&
+        errors.push(this.$i18n.t('format_min_len'))
+      !this.$v.cardFormat.required &&
+        errors.push(this.$i18n.t('format_required'))
+      return errors
+    },
+    imageErrors() {
+      const errors: string[] = []
+      if (!this.$v.cardImage.$dirty) return errors
+      !this.$v.cardImage.maxLength && errors.push(this.$i18n.t('image_max_len'))
+      !this.$v.cardImage.minLength && errors.push(this.$i18n.t('image_min_len'))
+      return errors
+    },
+  },
   watch: {
-    card(newVal) {
+    card(newVal: Card) {
       this.cardQuestion = newVal.card_question ?? ''
       this.cardAnswer = newVal.card_answer ?? ''
       this.cardFormat = newVal.card_format ?? ''
@@ -188,60 +266,6 @@ export default {
       this.cardMCQId = newVal.mcq_id?.Int32 ?? -1
       this.cardCase = newVal.card_case ?? false
       this.cardSpaces = newVal.card_spaces ?? false
-    }
-  },
-  computed: {
-    answerFieldType() {
-      if (this.cardType === 1)
-        return 'number'
-      else
-        return 'string'
-    },
-    confirmButtonText() {
-      if (this.card) {
-        return 'Edit'
-      } else {
-        return 'Create'
-      }
-    },
-    questionErrors() {
-      const errors = []
-      if (!this.$v.cardQuestion.$dirty) return errors
-      !this.$v.cardQuestion.maxLength &&
-      errors.push('Question must be at most 200 characters long')
-      !this.$v.cardQuestion.minLength &&
-      errors.push('Question must be at least 5 character long')
-      !this.$v.cardQuestion.required && errors.push('Question is required.')
-      return errors
-    },
-    answerErrors() {
-      const errors = []
-      if (!this.$v.cardAnswer.$dirty) return errors
-      !this.$v.cardAnswer.maxLength &&
-      errors.push('Answer must be at most 200 characters long')
-      !this.$v.cardAnswer.minLength &&
-      errors.push('Answer must be at least 1 character long')
-      !this.$v.cardAnswer.required && errors.push('Answer is required.')
-      return errors
-    },
-    formatErrors() {
-      const errors = []
-      if (!this.$v.cardFormat.$dirty) return errors
-      !this.$v.cardFormat.maxLength &&
-      errors.push('Format must be at most 50 characters long')
-      !this.$v.cardFormat.minLength &&
-      errors.push('Format must be at least 1 character long')
-      !this.$v.cardFormat.required && errors.push('Format is required.')
-      return errors
-    },
-    imageErrors() {
-      const errors = []
-      if (!this.$v.cardImage.$dirty) return errors
-      !this.$v.cardImage.maxLength &&
-      errors.push('Image must be at most 200 characters long')
-      !this.$v.cardImage.minLength &&
-      errors.push('Image must be at least 1 character long')
-      return errors
     },
   },
   methods: {
@@ -254,47 +278,21 @@ export default {
         card_type: this.cardType,
         deck_id: this.deckId,
         mcq_id: {
-          "Int32": this.cardMCQId,
-          "Valid": this.cardMCQId !== 0
+          Int32: this.cardMCQId,
+          Valid: this.cardMCQId !== 0,
         },
         card_case: this.cardCase,
-        card_spaces: this.cardSpaces
+        card_spaces: this.cardSpaces,
       }
 
-      try {
-        if (this.card) {
-          await this.$axios
-            .put(
-              `https://api.memnix.app/api/v1/cards/${this.card.ID}/edit`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createCardSave()
-            })
-        } else {
-          await this.$axios
-            .post(
-              `https://api.memnix.app/api/v1/cards/new`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createCardSave()
-            })
-        }
-      } catch (e) {
-        this.error = e.res.data.message
+      if (this.card) {
+        const [error] = await editCardAPI(data, this.card.ID)
+        if (error) this.error = error.res.data.message
+        else this.createCardSave()
+      } else {
+        const [error] = await createCardAPI(data)
+        if (error) this.error = error.res.data.message
+        else this.createCardSave()
       }
     },
 
@@ -309,9 +307,9 @@ export default {
     },
     createCardSave() {
       this.$emit('createCardSave')
-    }
+    },
   },
-}
+})
 </script>
 
 <style scoped></style>

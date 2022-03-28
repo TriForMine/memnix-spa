@@ -4,7 +4,7 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Create a new MCQ</v-toolbar-title>
+      <v-toolbar-title>{{ $t('create_mcq') }}</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckMCQForm
@@ -16,8 +16,10 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Deck } from '~/types/types'
+export default Vue.extend({
   name: 'DeckEditorMCQDialog',
   props: {
     selectedDeck: {
@@ -27,8 +29,8 @@ export default {
   },
   computed: {
     getDeckId() {
-      return this.selectedDeck.ID
-    }
+      return (this.selectedDeck as Deck).ID
+    },
   },
   methods: {
     closeDialog() {
@@ -36,9 +38,9 @@ export default {
     },
     createMCQSave() {
       this.$emit('createMCQSave')
-    }
+    },
   },
-}
+})
 </script>
 
 <style scoped></style>

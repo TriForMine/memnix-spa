@@ -8,7 +8,6 @@
         transition="dialog-bottom-transition"
       >
         <PracticeDialog
-          ref="practiceDialog"
           :selected-deck="selectedDeck"
           @closePracticeDialog="closePracticeDialog"
         />
@@ -48,39 +47,56 @@
       </v-overlay>
     </v-row>
     <v-row v-else align="center" justify="center" no-gutters>
-      <h1>You are not sub to any deck yet!</h1>
+      <h1> {{ $t('not_sub') }}</h1>
     </v-row>
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue"
+import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
+import {getSubAPI, unsubToDeckAPI} from "~/api/deck.api";
+
+export default Vue.extend({
   middleware: 'authentificated',
 
-  data() {
+  data(): {
+    decks: DeckWithOwner[],
+    dialog: boolean,
+    dialogConfirmation: boolean,
+    selectedDeck?: DeckWithOwner,
+    resDialog: boolean,
+    card?: Card,
+    cards: {Card: Card, Answers: string}[],
+    cardIndex: number,
+    items: string,
+    res?: CardResponseValidation,
+    loaderOverlay: boolean,
+    userID: string,
+    error: string
+  }
+  {
     return {
       decks: [],
       dialog: false,
       dialogConfirmation: false,
-      selectedDeck: [],
+      selectedDeck: undefined,
       resDialog: false,
-      card: {},
-      cards: [
-        {
-          Card: {},
-          Answers: [],
-        },
-      ],
+      card: undefined,
+      cards: [],
       cardIndex: 0,
-      items: {},
-      res: [],
+      items: '',
+      res: undefined,
       loaderOverlay: false,
-      userID: 0,
+      userID: '',
+      error: ''
     }
   },
+
   beforeMount() {
     this.getSubDeck()
   },
+
   mounted() {
     if (localStorage.userID) {
       this.userID = localStorage.userID
@@ -88,83 +104,57 @@ export default {
   },
 
   methods: {
-    isOwner(n) {
+    isOwner(n: DeckWithOwner) {
       return parseInt(n.owner) === parseInt(this.userID)
     },
 
-    async openDialog(value) {
+    openDialog(value: DeckWithOwner) {
       this.selectedDeck = value
       this.dialog = true
-      while (!this.$refs.practiceDialog) {
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      }
-      await this.$refs.practiceDialog.getCards(value.deck.ID)
     },
 
     closeDialogConfirmation() {
       this.dialogConfirmation = false
     },
 
-    unsubToDeckConfirmation(n) {
+    unsubToDeckConfirmation(n: DeckWithOwner) {
       this.selectedDeck = n
       this.dialogConfirmation = true
     },
 
     closePracticeDialog() {
-      this.dialog = false
+      this.dialog = false;
     },
 
     async unsubToDeck() {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/decks/` +
-              this.selectedDeck.deck.ID +
-              `/unsubscribe`,
-            {},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then((_) => {
-            this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
-            this.dialogConfirmation = false
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error] = await unsubToDeckAPI(this.selectedDeck?.deck.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        if (!this.selectedDeck)
+          return
+        this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
+        this.dialogConfirmation = false
       }
     },
 
     async getSubDeck() {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/decks/sub`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res) => {
-            for (let i = 0; i < res.data.count; i++) {
-              this.decks.push({
-                deck: res.data.data[i].Deck,
-                owner: res.data.data[i].owner_id,
-                today: res.data.data[i].settings_today,
-              })
-            }
-
-            this.loaderOverlay = false
-          })
-      } catch (e) {
-        this.error = e.response.data.message
+      const [error, data] = await getSubAPI()
+      if (error) this.error = error.response.data.message
+      else {
+          for (let i = 0; i < data.count; i++) {
+            this.decks.push({
+              deck: data.data[i].Deck,
+              owner: data.data[i].owner_id,
+              today: data.data[i].settings_today,
+            })
+          }
       }
+      this.loaderOverlay = false
+
     },
   },
-}
+})
 </script>
 
 <style>

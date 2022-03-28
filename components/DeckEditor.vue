@@ -42,7 +42,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock-open </v-icon>
-      Public
+      {{ $t('public') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck_status === 1"
@@ -51,7 +51,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock </v-icon>
-      Private
+      {{ $t('private') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck_status === 2"
@@ -60,7 +60,7 @@
       text-color="white"
     >
       <v-icon left> mdi-clock-alert </v-icon>
-      Waiting for approval
+      {{ $t('waiting_approval') }}
     </v-chip>
     <v-chip
       v-if="deckObject.ID === 13"
@@ -69,20 +69,20 @@
       text-color="white"
     >
       <v-icon left> mdi-star </v-icon>
-      Sponsored
+      {{ $t('sponsored') }}
     </v-chip>
     <v-divider></v-divider>
 
     <v-card-actions>
-      <v-btn text color='info' @click="editDeck">
-        Edit
-      </v-btn>
+      <v-btn text color="info" @click="editDeck"> {{ $t('edit') }} </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'DeckEditor',
   props: {
     deckObject: {
@@ -90,17 +90,18 @@ export default {
       default() {},
     },
   },
-  data() {
+  data(): {
+    show: boolean
+  } {
     return {
       show: false,
     }
   },
 
   methods: {
-
     editDeck() {
       this.$emit('editDeck')
     },
   },
-}
+})
 </script>
