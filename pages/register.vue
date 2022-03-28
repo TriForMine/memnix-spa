@@ -12,7 +12,7 @@
                 <v-text-field
                   v-model="username"
                   :error-messages="nameErrors"
-                  :label="this.$i18n.t('enter_username')"
+                  :label="$i18n.t('enter_username')"
                   name="username"
                   prepend-inner-icon="mdi-account"
                   type="text"
@@ -25,7 +25,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="emailErrors"
-                  :label="this.$i18n.t('enter_mail')"
+                  :label="$i18n.t('enter_mail')"
                   name="email"
                   prepend-inner-icon="mdi-email"
                   type="email"
@@ -38,7 +38,7 @@
                 <v-text-field
                   v-model="password"
                   :error-messages="passwordErrors"
-                  :label="this.$i18n.t('enter_password')"
+                  :label="$i18n.t('enter_password')"
                   name="password"
                   prepend-inner-icon="mdi-lock"
                   type="password"
@@ -51,7 +51,7 @@
                 <v-checkbox
                   v-model="checkbox"
                   :error-messages="checkboxErrors"
-                  :label="this.$i18n.t('do_agree')"
+                  :label="$i18n.t('do_agree')"
                   required
                   @change="$v.checkbox.$touch()"
                   @blur="$v.checkbox.$touch()"
@@ -68,7 +68,7 @@
               </v-form>
               <v-spacer></v-spacer>
               {{ $t('already_account') }}
-              <nuxt-link :to="this.localePath('/login')">
+              <nuxt-link :to="localePath('/login')">
                 {{ $t('login') }}</nuxt-link
               >
             </v-card-text>

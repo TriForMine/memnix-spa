@@ -30,10 +30,12 @@
     <v-container mt-10>
       <h1>{{ $t('no_more_cards') }}</h1>
       <v-container mt-5>
-        <v-btn color="info" class="mx-auto" nuxt :to="this.localePath('/public')">
+        <v-btn color="info" class="mx-auto" nuxt :to="localePath('/public')">
           {{ $t('discover_decks') }}</v-btn
         >
-        <v-btn color="primary" nuxt :to="this.localePath('/decks')"> {{ $t('practice') }} </v-btn>
+        <v-btn color="primary" nuxt :to="localePath('/decks')">
+          {{ $t('practice') }}
+        </v-btn>
       </v-container>
     </v-container>
   </v-row>
