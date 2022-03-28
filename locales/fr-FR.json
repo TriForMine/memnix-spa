@@ -57,6 +57,8 @@
   "int": "Entier",
   "number": "Nombre",
   "answer": "Réponse",
+  "format": "Format",
+  "image": "Image",
   "required_field": "* indique un champ obligatoire",
   "question_max_len": "La question ne doit pas dépasser 200 caractères",
   "question_min_len": "La question doit comporter au moins 5 caractères",
