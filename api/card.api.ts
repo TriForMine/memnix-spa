@@ -1,4 +1,4 @@
-import {axiosClient} from "~/components/api/api";
+import {axiosClient} from "~/api/api";
 
 export async function getTodayAPI() {
   try {
@@ -18,11 +18,11 @@ export async function getTodayAPI() {
   }
 }
 
-export async function getEditorAPI() {
+export async function getTrainingAPI(ID: number) {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/decks/editor`,
+        `v1/cards/${ID}/training`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -36,11 +36,11 @@ export async function getEditorAPI() {
   }
 }
 
-export async function getSubAPI() {
+export async function getCardsAPI(ID: number) {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/decks/sub`,
+        `v1/cards/deck/${ID}`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -54,11 +54,11 @@ export async function getSubAPI() {
   }
 }
 
-export async function getAvailableAPI() {
+export async function getMCQSAPI(ID: number) {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/decks/available`,
+        `v1/mcqs/${ID}`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -72,12 +72,16 @@ export async function getAvailableAPI() {
   }
 }
 
-export async function subToDeckAPI(deckID: number) {
+export async function postAnswerAPI(cardID: number, answer: string, training: boolean) {
   try {
     const { data } = await axiosClient
       .post(
-        `v1/decks/${deckID}/subscribe`,
-        {},
+        `v1/cards/response`,
+        {
+          card_id: cardID,
+          response: answer,
+          training,
+        },
         {
           headers: {
             'Content-Type': 'application/json'
@@ -92,33 +96,12 @@ export async function subToDeckAPI(deckID: number) {
   }
 }
 
-export async function unsubToDeckAPI(deckID: number) {
-  try {
-    const { data } = await axiosClient
-      .post(
-        `v1/decks/${deckID}/unsubscribe`,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-
-export async function editDeckAPI(deckObject: Object, deckID: number) {
+export async function editMCQAPI(mcqObject: Object, mcqID: number) {
   try {
     const { data } = await axiosClient
       .put(
-        `v1/decks/${deckID}/edit`,
-        deckObject,
+        `v1/mcqs/${mcqID}/edit`,
+        mcqObject,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -133,12 +116,12 @@ export async function editDeckAPI(deckObject: Object, deckID: number) {
   }
 }
 
-export async function createDeckAPI(deckObject: Object) {
+export async function createMCQAPI(mcqObject: Object) {
   try {
     const { data } = await axiosClient
       .post(
-        `v1/decks/new`,
-        deckObject,
+        `v1/mcqs/new`,
+        mcqObject,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -153,15 +136,70 @@ export async function createDeckAPI(deckObject: Object) {
   }
 }
 
+export async function editCardAPI(cardObject: Object, cardID: number) {
+  try {
+    const { data } = await axiosClient
+      .put(
+        `v1/cards/${cardID}/edit`,
+        cardObject,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
 
-export async function setSettingsAPI(deckID: number, daily: boolean) {
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function createCardAPI(cardObject: Object) {
   try {
     const { data } = await axiosClient
       .post(
-        `v1/users/settings/${deckID}/today`,
+        `v1/cards/new`,
+        cardObject,
         {
-          settings_today : daily
-        },
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function deleteCardAPI(cardID: number) {
+  try {
+    const { data } = await axiosClient
+      .delete(
+        `v1/cards/${cardID}`,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function deleteMCQAPI(cardID: number) {
+  try {
+    const { data } = await axiosClient
+      .delete(
+        `v1/mcqs/${cardID}`,
         {
           headers: {
             'Content-Type': 'application/json'

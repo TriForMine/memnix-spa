@@ -71,7 +71,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
-import {getTrainingAPI, postAnswerAPI} from "~/components/api/card.api";
+import {getTrainingAPI, postAnswerAPI} from "~/api/card.api";
 
 export default Vue.extend({
   name: 'PracticeDialog',

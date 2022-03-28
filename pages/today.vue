@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Card, CardResponseValidation} from "~/types/types";
-import {getTodayAPI, postAnswerAPI} from "~/components/api/card.api";
+import {getTodayAPI, postAnswerAPI} from "~/api/card.api";
 
 export default Vue.extend({
   middleware: 'authentificated',

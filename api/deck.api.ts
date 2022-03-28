@@ -1,4 +1,4 @@
-import {axiosClient} from "~/components/api/api";
+import {axiosClient} from "~/api/api";
 
 export async function getTodayAPI() {
   try {
@@ -18,11 +18,11 @@ export async function getTodayAPI() {
   }
 }
 
-export async function getTrainingAPI(ID: number) {
+export async function getEditorAPI() {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/cards/${ID}/training`,
+        `v1/decks/editor`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -36,11 +36,11 @@ export async function getTrainingAPI(ID: number) {
   }
 }
 
-export async function getCardsAPI(ID: number) {
+export async function getSubAPI() {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/cards/deck/${ID}`,
+        `v1/decks/sub`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -54,11 +54,11 @@ export async function getCardsAPI(ID: number) {
   }
 }
 
-export async function getMCQSAPI(ID: number) {
+export async function getAvailableAPI() {
   try {
     const { data } = await axiosClient
       .get(
-        `v1/mcqs/${ID}`,
+        `v1/decks/available`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -72,134 +72,96 @@ export async function getMCQSAPI(ID: number) {
   }
 }
 
-export async function postAnswerAPI(cardID: number, answer: string, training: boolean) {
+export async function subToDeckAPI(deckID: number) {
   try {
     const { data } = await axiosClient
       .post(
-        `v1/cards/response`,
+        `v1/decks/${deckID}/subscribe`,
+        {},
         {
-          card_id: cardID,
-          response: answer,
-          training,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function unsubToDeckAPI(deckID: number) {
+  try {
+    const { data } = await axiosClient
+      .post(
+        `v1/decks/${deckID}/unsubscribe`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+
+export async function editDeckAPI(deckObject: Object, deckID: number) {
+  try {
+    const { data } = await axiosClient
+      .put(
+        `v1/decks/${deckID}/edit`,
+        deckObject,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+export async function createDeckAPI(deckObject: Object) {
+  try {
+    const { data } = await axiosClient
+      .post(
+        `v1/decks/new`,
+        deckObject,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true,
+        }
+      )
+
+    return [null, data];
+  } catch (e: any) {
+    return [e];
+  }
+}
+
+
+export async function setSettingsAPI(deckID: number, daily: boolean) {
+  try {
+    const { data } = await axiosClient
+      .post(
+        `v1/users/settings/${deckID}/today`,
+        {
+          settings_today : daily
         },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function editMCQAPI(mcqObject: Object, mcqID: number) {
-  try {
-    const { data } = await axiosClient
-      .put(
-        `v1/mcqs/${mcqID}/edit`,
-        mcqObject,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function createMCQAPI(mcqObject: Object) {
-  try {
-    const { data } = await axiosClient
-      .post(
-        `v1/mcqs/new`,
-        mcqObject,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function editCardAPI(cardObject: Object, cardID: number) {
-  try {
-    const { data } = await axiosClient
-      .put(
-        `v1/cards/${cardID}/edit`,
-        cardObject,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function createCardAPI(cardObject: Object) {
-  try {
-    const { data } = await axiosClient
-      .post(
-        `v1/cards/new`,
-        cardObject,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function deleteCardAPI(cardID: number) {
-  try {
-    const { data } = await axiosClient
-      .delete(
-        `v1/cards/${cardID}`,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        }
-      )
-
-    return [null, data];
-  } catch (e: any) {
-    return [e];
-  }
-}
-
-export async function deleteMCQAPI(cardID: number) {
-  try {
-    const { data } = await axiosClient
-      .delete(
-        `v1/mcqs/${cardID}`,
         {
           headers: {
             'Content-Type': 'application/json'

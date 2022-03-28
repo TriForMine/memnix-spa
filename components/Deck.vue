@@ -89,7 +89,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {setSettingsAPI} from "~/components/api/deck.api";
+import {setSettingsAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   name: 'Deck',

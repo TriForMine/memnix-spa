@@ -65,7 +65,7 @@ import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 import {Mcq, McqType} from "~/types/types";
-import {createMCQAPI, editMCQAPI} from "~/components/api/card.api";
+import {createMCQAPI, editMCQAPI} from "~/api/card.api";
 
 export default Vue.extend({
   name: 'DeckMCQForm',

@@ -136,7 +136,7 @@ import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 import {Card, CardType} from "~/types/types";
-import {createCardAPI, editCardAPI} from "~/components/api/card.api";
+import {createCardAPI, editCardAPI} from "~/api/card.api";
 
 export default Vue.extend({
   name: 'DeckCardForm',

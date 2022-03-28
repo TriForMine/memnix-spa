@@ -89,7 +89,7 @@ import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 import {Deck} from "~/types/types";
-import {createDeckAPI, editDeckAPI} from "~/components/api/deck.api";
+import {createDeckAPI, editDeckAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   name: 'DeckForm',
@@ -174,7 +174,7 @@ export default Vue.extend({
         deck_description: this.deckDescription,
         deck_banner: this.deckImageUrl
       }
-      
+
       if (this.isEdit) {
           const [error] = await editDeckAPI(data, this.selectedDeck?.ID)
           if (error) {

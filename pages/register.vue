@@ -105,7 +105,7 @@
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import {validationMixin} from "vuelidate";
-import { login, register } from "~/components/api/user.api"
+import { login, register } from "~/api/user.api"
 
 
 export default Vue.extend({

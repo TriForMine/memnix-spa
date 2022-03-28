@@ -96,7 +96,7 @@
 import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
-import { login, user } from "~/components/api/user.api"
+import { login, user } from "~/api/user.api"
 
 export default Vue.extend({
   mixins: [validationMixin],

@@ -55,7 +55,7 @@
 <script lang="ts">
 import Vue from "vue"
 import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
-import {getSubAPI, unsubToDeckAPI} from "~/components/api/deck.api";
+import {getSubAPI, unsubToDeckAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   middleware: 'authentificated',

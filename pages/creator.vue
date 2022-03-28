@@ -62,7 +62,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {DeckCreator} from "~/types/types";
-import {getEditorAPI} from "~/components/api/deck.api";
+import {getEditorAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   middleware: 'authentificated',

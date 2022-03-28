@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Deck} from "~/types/types";
-import {getAvailableAPI, subToDeckAPI} from "~/components/api/deck.api";
+import {getAvailableAPI, subToDeckAPI} from "~/api/deck.api";
 export default Vue.extend({
   middleware: 'authentificated',
 

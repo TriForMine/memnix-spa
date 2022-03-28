@@ -1,4 +1,4 @@
-import { axiosClient } from "~/components/api/api";
+import { axiosClient } from "~/api/api";
 
 export async function register(email: string, password: string, username: string) {
   try {
