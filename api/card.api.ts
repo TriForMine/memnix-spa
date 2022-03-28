@@ -1,9 +1,10 @@
 import {axiosClient} from "~/api/api";
+import {Card, CardResponseValidation, Mcq} from "~/types/types"
 
-export async function getTodayAPI() {
+export async function getTodayAPI(): Promise<[any] | [any, { data: { Card: Card, Answers: string }[] }]> {
   try {
     const { data } = await axiosClient
-      .get(
+      .get<{data: {Card: Card, Answers: string}[]}>(
         `v1/cards/today`,
         {
           headers: {
@@ -18,10 +19,10 @@ export async function getTodayAPI() {
   }
 }
 
-export async function getTrainingAPI(ID: number) {
+export async function getTrainingAPI(ID: number): Promise<[any] | [any, { data: { Card: Card, Answers: string }[] }]> {
   try {
     const { data } = await axiosClient
-      .get(
+      .get<{data: {Card: Card, Answers: string}[]}>(
         `v1/cards/${ID}/training`,
         {
           headers: {
@@ -36,10 +37,10 @@ export async function getTrainingAPI(ID: number) {
   }
 }
 
-export async function getCardsAPI(ID: number) {
+export async function getCardsAPI(ID: number): Promise<[any] | [any, { data: Card[] }]> {
   try {
     const { data } = await axiosClient
-      .get(
+      .get<{data: Card[]}>(
         `v1/cards/deck/${ID}`,
         {
           headers: {
@@ -54,10 +55,10 @@ export async function getCardsAPI(ID: number) {
   }
 }
 
-export async function getMCQSAPI(ID: number) {
+export async function getMCQSAPI(ID: number): Promise<[any] | [any, { data: Mcq[] }]> {
   try {
     const { data } = await axiosClient
-      .get(
+      .get<{data: Mcq[]}>(
         `v1/mcqs/${ID}`,
         {
           headers: {
@@ -72,10 +73,10 @@ export async function getMCQSAPI(ID: number) {
   }
 }
 
-export async function postAnswerAPI(cardID: number, answer: string, training: boolean) {
+export async function postAnswerAPI(cardID: number, answer: string, training: boolean): Promise<[any] | [any, { data: CardResponseValidation }]> {
   try {
     const { data } = await axiosClient
-      .post(
+      .post<{data: CardResponseValidation}>(
         `v1/cards/response`,
         {
           card_id: cardID,
@@ -96,7 +97,7 @@ export async function postAnswerAPI(cardID: number, answer: string, training: bo
   }
 }
 
-export async function editMCQAPI(mcqObject: Object, mcqID: number) {
+export async function editMCQAPI(mcqObject: Pick<Mcq, "mcq_name" | "deck_id" | "mcq_type" | "mcq_answers">, mcqID: number) {
   try {
     const { data } = await axiosClient
       .put(
@@ -116,7 +117,7 @@ export async function editMCQAPI(mcqObject: Object, mcqID: number) {
   }
 }
 
-export async function createMCQAPI(mcqObject: Object) {
+export async function createMCQAPI(mcqObject: Pick<Mcq, "mcq_name" | "deck_id" | "mcq_type" | "mcq_answers">) {
   try {
     const { data } = await axiosClient
       .post(
@@ -136,7 +137,7 @@ export async function createMCQAPI(mcqObject: Object) {
   }
 }
 
-export async function editCardAPI(cardObject: Object, cardID: number) {
+export async function editCardAPI(cardObject: Omit<Card, "ID" | "Mcq" | "deck">, cardID: number) {
   try {
     const { data } = await axiosClient
       .put(
@@ -156,7 +157,7 @@ export async function editCardAPI(cardObject: Object, cardID: number) {
   }
 }
 
-export async function createCardAPI(cardObject: Object) {
+export async function createCardAPI(cardObject: Omit<Card, "ID" | "Mcq" | "deck">) {
   try {
     const { data } = await axiosClient
       .post(
