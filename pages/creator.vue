@@ -62,6 +62,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {DeckCreator} from "~/types/types";
+import {getEditorAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   middleware: 'authentificated',
@@ -131,22 +132,14 @@ export default Vue.extend({
       this.loaderOverlay = true
       this.decks = []
 
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/decks/editor`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            for (let i = 0; i < res.data.count; i++) {
-              this.decks.push(res.data.data[i].Deck)
-            }
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getEditorAPI()
+      if (error) this.error = error.response.data.message
+      else {
+        for (let i = 0; i < data.count; i++) {
+          this.decks.push(data.data[i].Deck)
+        }
       }
+
       this.loaderOverlay = false
     },
   },

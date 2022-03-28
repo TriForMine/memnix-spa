@@ -136,6 +136,7 @@ import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 import {Card, CardType} from "~/types/types";
+import {createCardAPI, editCardAPI} from "~/api/card.api";
 
 export default Vue.extend({
   name: 'DeckCardForm',
@@ -274,40 +275,14 @@ export default Vue.extend({
         card_spaces: this.cardSpaces
       }
 
-      try {
-        if (this.card) {
-          await this.$axios
-            .put(
-              `https://api.memnix.app/api/v1/cards/${this.card.ID}/edit`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createCardSave()
-            })
-        } else {
-          await this.$axios
-            .post(
-              `https://api.memnix.app/api/v1/cards/new`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createCardSave()
-            })
-        }
-      } catch (e: any) {
-        this.error = e.res.data.message
+      if (this.card) {
+        const [error] = await editCardAPI(data, this.card.ID)
+        if (error)  this.error = error.res.data.message
+        else this.createCardSave()
+      } else {
+        const [error] = await createCardAPI(data)
+        if (error)  this.error = error.res.data.message
+        else this.createCardSave()
       }
     },
 

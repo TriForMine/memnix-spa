@@ -89,8 +89,10 @@
 
 <script lang="ts">
 import Vue from "vue";
+import {setSettingsAPI} from "~/api/deck.api";
 
 export default Vue.extend({
+  name: 'Deck',
   props: {
     deckObject: {
       type: Object,
@@ -118,25 +120,10 @@ export default Vue.extend({
     },
 
     async setTodaySettings(daily: boolean) {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/users/settings/` + this.deckObject.deck.ID+ '/today',
-            {
-              "settings_today" : daily
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-          .then(() => {
-              this.menu = false
-            })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error] = await setSettingsAPI(this.deckObject?.deck.ID, daily)
+      if (error) this.error = error.response.data.message
+      else {
+        this.menu = false
       }
     },
 

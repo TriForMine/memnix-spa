@@ -105,6 +105,8 @@
 import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import {validationMixin} from "vuelidate";
+import { login, register } from "~/api/user.api"
+
 
 export default Vue.extend({
   mixins: [validationMixin],
@@ -170,48 +172,23 @@ export default Vue.extend({
   },
 
   methods: {
+    displayErrors(errorMessage: string) {
+      this.error = errorMessage
+      this.alert = true
+      window.setInterval(() => {
+        this.alert = false;
+      }, 10000)
+    },
+
     async register() {
       await this.$v.$touch()
-
       if (!this.$v.$invalid) {
-        try {
-          await this.$axios.post(
-            `https://api.memnix.app/api/register/`,
-            {
-              username: this.username,
-              email: this.email,
-              password: this.password,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-            }
-          )
-
-          await this.$axios
-            .post(
-              `https://api.memnix.app/api/login/`,
-              {
-                email: this.email,
-                password: this.password,
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(async () => {
-              await this.$router.push('/login')
-            })
-        } catch (e: any) {
-          this.error = e.response.data.message
-          this.alert = true
-          window.setInterval(() => {
-            this.alert = false;
-          }, 10000)
+        let [error] = await register(this.email, this.password, this.username);
+        if (error) this.displayErrors(error.response.data.message)
+        else {
+          [error] = await login(this.email, this.password);
+          if (error) this.displayErrors(error.response.data.message)
+          else await this.$router.push('/')
         }
       }
     },

@@ -89,6 +89,7 @@ import Vue from "vue";
 import { validationMixin } from 'vuelidate'
 import { maxLength, minLength, required } from 'vuelidate/lib/validators'
 import {Deck} from "~/types/types";
+import {createDeckAPI, editDeckAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   name: 'DeckForm',
@@ -169,46 +170,27 @@ export default Vue.extend({
   methods: {
     async createDeck() {
       const data = {
-        "deck_name": this.deckName,
-        "deck_description": this.deckDescription,
-        "deck_banner": this.deckImageUrl
+        deck_name: this.deckName,
+        deck_description: this.deckDescription,
+        deck_banner: this.deckImageUrl
       }
-      try {
-        if (this.isEdit) {
-          await this.$axios
-            .put(
-              `https://api.memnix.app/api/v1/decks/${this.selectedDeck.ID}/edit`,
-              data,
-              {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                withCredentials: true,
-              }
-            )
-            .then(() => {
-              this.createDeckSave()
-            })
-        } else {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/decks/new`,
-            data,
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              withCredentials: true,
-            }
-          )
-          .then(() => {
-            this.createDeckSave()
-          })}
-      } catch (e: any) {
-        this.error = e.response.data.message
-        this.errorDialog = true
+
+      if (this.isEdit) {
+          const [error] = await editDeckAPI(data, this.selectedDeck?.ID)
+          if (error) {
+            this.error = error.response.data.message
+            this.errorDialog = true
+          }
+          else  this.createDeckSave()
+      } else {
+        const [error] = await createDeckAPI(data)
+        if (error) {
+          this.error = error.response.data.message
+          this.errorDialog = true
+        } else this.createDeckSave()
       }
     },
+
     validateAnswer() {
       this.$v.$touch()
       if (!this.$v.$invalid) {

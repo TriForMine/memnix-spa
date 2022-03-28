@@ -71,6 +71,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
+import {getTrainingAPI, postAnswerAPI} from "~/api/card.api";
 
 export default Vue.extend({
   name: 'PracticeDialog',
@@ -156,65 +157,39 @@ export default Vue.extend({
     },
 
     async getCards(ID: number) {
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/cards/${ID}/training`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            this.cards = res.data.data
-            if (!this.cards)
-              return;
-            this.total = this.cards.length
-
-            this.getCard()
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getTrainingAPI(ID)
+      if (error) this.error = error.res.data.message
+      else {
+        this.cards = data.data
+        if (!this.cards)
+          return;
+        this.total = this.cards.length
+        this.getCard()
       }
+
     },
     async postAnswer(answer: string) {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/cards/response`,
-            {
-              card_id: this.card?.ID,
-              response: answer,
-              training: true,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then(async (res: any) => {
-            let delay = 50
+      const [error, data] = await postAnswerAPI(this.card?.ID, answer, true);
+      if (error) this.error = error.res.data.message
+      else {
+        let delay = 50
 
-            this.res = res.data.data
-            this.resDialog = true
+        this.res = data.data
+        this.resDialog = true
 
-            // @ts-ignore
-            this.dialogValue = 0
-            if (this.res?.validate) {
-              this.progress += 1
-              delay = 30
-            }
-            this.progressBuffer += 1
+        // @ts-ignore
+        this.dialogValue = 0
+        if (this.res?.validate) {
+          this.progress += 1
+          delay = 30
+        }
+        this.progressBuffer += 1
 
-            while (!this.$refs.resultProgressLinear) {
-              await new Promise((resolve) => setTimeout(resolve, 100))
-            }
-            // @ts-ignore
-            this.$refs.resultProgressLinear.startDialogInterval(delay)
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+        while (!this.$refs.resultProgressLinear) {
+          await new Promise((resolve) => setTimeout(resolve, 100))
+        }
+        // @ts-ignore
+        this.$refs.resultProgressLinear.startDialogInterval(delay)
       }
     },
   },

@@ -55,6 +55,7 @@
 <script lang="ts">
 import Vue from "vue"
 import {Card, CardResponseValidation, DeckWithOwner} from "~/types/types";
+import {getSubAPI, unsubToDeckAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   middleware: 'authentificated',
@@ -126,55 +127,31 @@ export default Vue.extend({
     },
 
     async unsubToDeck() {
-      try {
-        await this.$axios
-          .post(
-            `https://api.memnix.app/api/v1/decks/` +
-            this.selectedDeck?.deck.ID +
-            `/unsubscribe`,
-            {},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          )
-          .then(() => {
-            if (!this.selectedDeck)
-              return
-            this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
-            this.dialogConfirmation = false
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error] = await unsubToDeckAPI(this.selectedDeck?.deck.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        if (!this.selectedDeck)
+          return
+        this.decks.splice(this.decks.indexOf(this.selectedDeck), 1)
+        this.dialogConfirmation = false
       }
     },
 
     async getSubDeck() {
       this.loaderOverlay = true
-      try {
-        await this.$axios
-          .get(`https://api.memnix.app/api/v1/decks/sub`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          })
-          .then((res: any) => {
-            for (let i = 0; i < res.data.count; i++) {
-              this.decks.push({
-                deck: res.data.data[i].Deck,
-                owner: res.data.data[i].owner_id,
-                today: res.data.data[i].settings_today,
-              })
-            }
-
-            this.loaderOverlay = false
-          })
-      } catch (e: any) {
-        this.error = e.response.data.message
+      const [error, data] = await getSubAPI()
+      if (error) this.error = error.response.data.message
+      else {
+          for (let i = 0; i < data.count; i++) {
+            this.decks.push({
+              deck: data.data[i].Deck,
+              owner: data.data[i].owner_id,
+              today: data.data[i].settings_today,
+            })
+          }
       }
+      this.loaderOverlay = false
+
     },
   },
 })
