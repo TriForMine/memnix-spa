@@ -92,6 +92,8 @@
   "subscribe_now": "S'abonner maintenant",
   "search": "Rechercher",
   "expected_answer": "Réponse attendue",
+  "correct": "Correct",
+  "incorrect": "Incorrect",
   "subscribe_deck_question": "Souhaitez vous vous abonner à ce deck ?",
   "unsubscribe_deck_question": "Se désabonner de ce deck ?",
   "progression_not_deleted": "Votre progression ne sera pas supprimée",
