@@ -1,4 +1,5 @@
 # memnix-spa
+[![gitlocalized ](https://gitlocalize.com/repo/7235/whole_project/badge.svg)](https://gitlocalize.com/repo/7235/whole_project?utm_source=badge)
 
 Learn in a playful and efficient way with Memnix !
 
