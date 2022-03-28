@@ -5,6 +5,7 @@ export default {
   ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
+
   head: {
     titleTemplate: '%s - Memnix',
     title: 'Memnix',
@@ -49,7 +50,12 @@ export default {
 
   i18n: {
     strategy: 'prefix_except_default',
-
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'memnix_i18n',
+      redirectOn: 'root',  // recommended
+    },
+    seo: true,
     locales: [
         {
           code: 'en',
@@ -66,6 +72,7 @@ export default {
     defaultLocale: 'en',
     lazy: true,
     langDir: 'locales/',
+    baseUrl: 'https://memnix.app/'
   },
 
   robots: {
