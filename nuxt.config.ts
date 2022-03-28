@@ -49,11 +49,11 @@ export default {
   robots: {
     UserAgent: '*',
     Allow: '/',
-    Sitemap: 'https://memnix.yumenetwork.net/sitemap.xml',
+    Sitemap: 'https://memnix.app/sitemap.xml',
   },
 
   sitemap: {
-    hostname: 'https://memnix.yumenetwork.net',
+    hostname: 'https://memnix.app',
     gzip: true,
   },
 
