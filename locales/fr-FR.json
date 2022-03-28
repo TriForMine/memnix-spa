@@ -100,6 +100,7 @@
   "able_to_play": "Vous pourrez y jouer",
   "name": "Nom",
   "answers": "Réponses",
+  "mcq_name_max_len": "Le nom doit comporter au maximum 50 caractères",
   "mcq_name_min_len": "Le nom doit comporter au moins 1 caractère",
   "mcq_name_required": "Le nom est requis",
   "answers_max_len": "Les réponses doivent comporter au maximum 500 caractères",
