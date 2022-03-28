@@ -38,8 +38,16 @@
   "enter_username": "Entrez votre nom d'utilisateur",
   "do_agree": "Acceptez-vous nos CGU ?",
   "already_account": "Vous avez déjà un compte ?",
+  "must_agree": "Vous devez accepter pour continuer !",
+  "username_max_len": "Le nom d'utilisateur doit comporter au maximum 15 caractères",
   "username_min_len": "Le nom d'utilisateur doit comporter au moins 4 caractères",
+  "username_required": "Le nom d'utilisateur est requis",
+  "no_more_cards": "Vous n'avez plus de cartes à jouer aujourd'hui !",
   "discover_decks": "Découvrez de nouveaux decks",
   "practice": "S'entrainer",
+  "public": "Public",
+  "private": "Privé",
+  "waiting_approval": "En attente d'approbation",
+  "sponsored": "Sponsorisé",
   "question": "Question"
 }
