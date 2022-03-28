@@ -40,5 +40,6 @@
   "already_account": "Vous avez déjà un compte ?",
   "username_min_len": "Le nom d'utilisateur doit comporter au moins 4 caractères",
   "discover_decks": "Découvrez de nouveaux decks",
-  "practice": "S'entrainer"
+  "practice": "S'entrainer",
+  "question": "Question"
 }
