@@ -4,7 +4,7 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Create a new Card</v-toolbar-title>
+      <v-toolbar-title>{{  $t('create_card') }}</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckCardForm

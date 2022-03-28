@@ -42,7 +42,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock-open </v-icon>
-      Public
+      {{ $t('public') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.deck_status === 1"
@@ -51,7 +51,7 @@
       text-color="white"
     >
       <v-icon left> mdi-lock </v-icon>
-      Private
+      {{ $t('private') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.deck_status === 2"
@@ -60,7 +60,7 @@
       text-color="white"
     >
       <v-icon left> mdi-clock-alert </v-icon>
-      Waiting for approval
+      {{ $t('waiting_approval') }}
     </v-chip>
     <v-chip
       v-if="deckObject.deck.ID === 13"
@@ -69,13 +69,14 @@
       text-color="white"
     >
       <v-icon left> mdi-star </v-icon>
-      Sponsored
+      {{ $t('sponsored') }}
+
     </v-chip>
     <v-divider></v-divider>
 
     <v-card-actions>
       <v-btn color="orange lighten-2" text @click="openDialog">
-        Practice
+        {{ $t('practice') }}
       </v-btn>
 
       <v-spacer></v-spacer>

@@ -4,7 +4,7 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Edit a MCQ</v-toolbar-title>
+      <v-toolbar-title>{{ $t('edit_mcq') }}</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckMCQForm
@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {Deck} from "~/types/types";
+import Vue from 'vue'
+import { Deck } from '~/types/types'
 
 export default Vue.extend({
   name: 'DeckEditorEditMCQDialog',
@@ -30,9 +30,8 @@ export default Vue.extend({
     },
     mcq: {
       type: Object,
-      default() {}
+      default() {},
     },
-
   },
   computed: {
     getDeckId() {
@@ -45,7 +44,7 @@ export default Vue.extend({
     },
     editMCQSave() {
       this.$emit('editMCQSave')
-    }
+    },
   },
 })
 </script>

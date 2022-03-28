@@ -34,7 +34,7 @@
       <v-icon left>
         mdi-star
       </v-icon>
-      Sponsored
+      {{ $t("sponsored") }}
     </v-chip>
 
     <v-divider></v-divider>
@@ -50,7 +50,7 @@
         color="orange"
         @click="subToDeckConfirmation(item)"
       >
-        Subscribe Now
+        {{ $t("subscribe_now") }}
       </v-btn>
     </v-card-actions>
   </v-card>

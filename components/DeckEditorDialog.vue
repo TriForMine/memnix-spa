@@ -103,15 +103,15 @@
     <v-tabs :value="isCreateMode ? 0 : 1">
       <v-tab>
         <v-icon left> mdi-cog </v-icon>
-        Deck
+        {{ $t('deck') }}
       </v-tab>
       <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-cards </v-icon>
-        Cards
+        {{ $t('cards') }}
       </v-tab>
       <v-tab :disabled="!!isCreateMode">
         <v-icon left> mdi-checkbox-multiple-marked </v-icon>
-        MCQ
+        {{ $t('mcq') }}
       </v-tab>
 
       <v-tab-item>
@@ -143,7 +143,7 @@
                   x-large
                   @click="openCardCreatorDialog"
                 >
-                  Create new card
+                  {{ $t('create_card') }}
                 </v-btn>
               </v-card-title>
               <v-data-table :headers="headers" :items="cards" :search="search">
@@ -171,7 +171,9 @@
                   {{ getCardType(item.card_type) }}
                 </template>
                 <template #no-data>
-                  <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                  <v-btn color="primary" @click="initialize">
+                    {{ $t('reset') }}
+                  </v-btn>
                 </template>
               </v-data-table>
             </v-card>
@@ -198,7 +200,7 @@
                   x-large
                   @click="openMCQCreatorDialog"
                 >
-                  Create new MCQ
+                  {{ $t('create_mcq') }}
                 </v-btn>
               </v-card-title>
               <v-data-table
@@ -233,7 +235,9 @@
                   </v-icon>
                 </template>
                 <template #no-data>
-                  <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                  <v-btn color="primary" @click="initialize">
+                    {{ $t('reset') }}
+                  </v-btn>
                 </template>
               </v-data-table>
             </v-card>
@@ -245,42 +249,57 @@
 </template>
 
 <script lang="ts">
-import Vue, {PropType} from "vue";
-import {deleteCardAPI, deleteMCQAPI, getCardsAPI, getMCQSAPI} from "../api/card.api";
-import {Card, CardType, Deck, Mcq, McqType} from "~/types/types";
+import Vue, { PropType } from 'vue'
+import {
+  deleteCardAPI,
+  deleteMCQAPI,
+  getCardsAPI,
+  getMCQSAPI,
+} from '../api/card.api'
+import { Card, CardType, Deck, Mcq, McqType } from '~/types/types'
 
 export default Vue.extend({
   name: 'DeckEditorDialog',
   props: {
     selectedDeck: {
       type: Object as PropType<Deck>,
-      required: true
+      required: true,
     },
     create: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   data(): {
-    loaderOverlay: boolean,
-    snackbar: boolean,
-    snackbarText: string,
-    timeout: number,
-    selectedCard?: Card,
-    selectedMCQ?: Mcq,
-    createMode: boolean,
-    createCardDialog: boolean,
-    editCardDialog: boolean,
-    createMCQDialog: boolean,
-    editMCQDialog: boolean,
-    cardDeleteConfirmationDialog: boolean,
-    mcqDeleteConfirmationDialog: boolean,
-    cards: Card[],
-    mcqs: Mcq[],
-    total: number,
-    search: string,
-    headersMCQ: { text: string, align?: string, value: string, sortable?: boolean }[],
-    headers:{ text: string, align?: string, value: string, sortable?: boolean }[],
+    loaderOverlay: boolean
+    snackbar: boolean
+    snackbarText: string
+    timeout: number
+    selectedCard?: Card
+    selectedMCQ?: Mcq
+    createMode: boolean
+    createCardDialog: boolean
+    editCardDialog: boolean
+    createMCQDialog: boolean
+    editMCQDialog: boolean
+    cardDeleteConfirmationDialog: boolean
+    mcqDeleteConfirmationDialog: boolean
+    cards: Card[]
+    mcqs: Mcq[]
+    total: number
+    search: string
+    headersMCQ: {
+      text: string
+      align?: string
+      value: string
+      sortable?: boolean
+    }[]
+    headers: {
+      text: string
+      align?: string
+      value: string
+      sortable?: boolean
+    }[]
     error: string
   } {
     return {
@@ -317,7 +336,7 @@ export default Vue.extend({
         { text: 'MCQ', value: 'Mcq.mcq_name' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
-      error: ''
+      error: '',
     }
   },
   computed: {
@@ -341,18 +360,18 @@ export default Vue.extend({
 
     getMcqType(type: McqType) {
       if (type === McqType.Standalone) {
-        return 'Standalone'
+        return this.$i18n.t('standalone').toString()
       } else {
-        return 'Linked'
+        return this.$i18n.t('linked').toString()
       }
     },
     getCardType(type: CardType) {
       if (type === CardType.String) {
-        return 'String'
+        return this.$i18n.t('string').toString()
       } else if (type === CardType.Int) {
-        return 'Integer'
+        return this.$i18n.t('int').toString()
       } else {
-        return 'MCQ Only'
+        return this.$i18n.t('mcq_only').toString()
       }
     },
 
@@ -425,7 +444,7 @@ export default Vue.extend({
         this.createMode = false
         this.$emit('createDeckSave')
       } else {
-        this.snackbarText = 'Success edited a deck !'
+        this.snackbarText = this.$i18n.t('success_edit_deck').toString()
         this.snackbar = true
       }
     },
@@ -433,27 +452,27 @@ export default Vue.extend({
     async createCardSave() {
       this.createCardDialog = false
       this.snackbar = true
-      this.snackbarText = 'Success creating a new card !'
+      this.snackbarText = this.$i18n.t('success_create_card').toString()
       await this.getCards(this.selectedDeck.ID)
     },
 
     async editCardSave() {
       this.editCardDialog = false
-      this.snackbarText = 'Success edited a card !'
+      this.snackbarText = this.$i18n.t('success_edit_card').toString()
       this.snackbar = true
       await this.getCards(this.selectedDeck.ID)
     },
 
     async createMCQSave() {
       this.createMCQDialog = false
-      this.snackbarText = 'Success creating a new MCQ !'
+      this.snackbarText = this.$i18n.t('success_create_mcq').toString()
       this.snackbar = true
       await this.getMCQS(this.selectedDeck.ID)
     },
 
     async editMCQSave() {
       this.editMCQDialog = false
-      this.snackbarText = 'Success edited a MCQ !'
+      this.snackbarText = this.$i18n.t('success_edit_mcq').toString()
       this.snackbar = true
       await this.getMCQS(this.selectedDeck.ID)
     },
@@ -462,9 +481,9 @@ export default Vue.extend({
       this.cardDeleteConfirmationDialog = false
       this.loaderOverlay = true
       const [error] = await deleteCardAPI(this.selectedCard?.ID)
-      if (error)  this.error = error.response.data.message
+      if (error) this.error = error.response.data.message
       else {
-        this.snackbarText = 'Successfully deleted the card !'
+        this.snackbarText = this.$i18n.t('success_delete_card').toString()
         await this.getCards(this.selectedDeck.ID)
       }
 
@@ -475,9 +494,9 @@ export default Vue.extend({
       this.mcqDeleteConfirmationDialog = false
       this.loaderOverlay = true
       const [error] = await deleteMCQAPI(this.selectedMCQ?.ID)
-      if (error)  this.error = error.response.data.message
+      if (error) this.error = error.response.data.message
       else {
-        this.snackbarText = 'Successfully deleted the mcq !'
+        this.snackbarText = this.$i18n.t('success_delete_mcq').toString()
         await this.getMCQS(this.selectedDeck.ID)
       }
 
@@ -487,7 +506,7 @@ export default Vue.extend({
     async getCards(ID: number) {
       this.loaderOverlay = true
       const [error, data] = await getCardsAPI(ID)
-      if (error)  this.error = error.response.data.message
+      if (error) this.error = error.response.data.message
       else {
         this.cards = data.data
         this.total = this.cards.length
@@ -499,7 +518,7 @@ export default Vue.extend({
     async getMCQS(ID: number) {
       this.loaderOverlay = true
       const [error, data] = await getMCQSAPI(ID)
-      if (error)  this.error = error.response.data.message
+      if (error) this.error = error.response.data.message
       else {
         this.mcqs = data.data
         this.total = this.cards.length

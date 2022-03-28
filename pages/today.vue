@@ -6,14 +6,14 @@
       persistent
       @keydown.enter="closeResultDialog"
     >
-      <ResultDialog :res="res" @closeResultDialog="closeResultDialog"/>
+      <ResultDialog :res="res" @closeResultDialog="closeResultDialog" />
       <ResultProgressLinear
         ref="resultProgressLinear"
         @closeResultDialog="closeResultDialog"
       />
     </v-dialog>
     <v-container>
-      <Card :card="card" :items="items" @postAnswer="postAnswer($event)"/>
+      <Card :card="card" :items="items" @postAnswer="postAnswer($event)" />
       <TodayProgressLinear
         :progress="progress"
         :progress-buffer="progressBuffer"
@@ -23,47 +23,46 @@
   </v-row>
   <v-row v-else-if="loaderOverlay">
     <v-overlay :value="loaderOverlay">
-      <v-progress-circular
-        indeterminate
-        size="64"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
   </v-row>
   <v-row v-else align="center" justify="center" no-gutters>
     <v-container mt-10>
-
-    <h1>You don't have more cards to play today !</h1>
+      <h1>{{ $t('no_more_cards') }}</h1>
       <v-container mt-5>
-
-      <v-btn color="info" class="mx-auto" nuxt to="/public"> Discover new decks </v-btn>
-      <v-btn color="primary"  nuxt to="/decks"> Practice </v-btn>
+        <v-btn color="info" class="mx-auto" nuxt :to="localePath('/public')">
+          {{ $t('discover_decks') }}</v-btn
+        >
+        <v-btn color="primary" nuxt :to="localePath('/decks')">
+          {{ $t('practice') }}
+        </v-btn>
       </v-container>
     </v-container>
   </v-row>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {Card, CardResponseValidation} from "~/types/types";
-import {getTodayAPI, postAnswerAPI} from "~/api/card.api";
+import Vue from 'vue'
+import { Card, CardResponseValidation } from '~/types/types'
+import { getTodayAPI, postAnswerAPI } from '~/api/card.api'
 
 export default Vue.extend({
   middleware: 'authentificated',
   data(): {
-    card?: Card,
-    cards: {Card: Card, Answers: string}[],
-    answer: string,
-    cardIndex: number,
+    card?: Card
+    cards: { Card: Card; Answers: string }[]
+    answer: string
+    cardIndex: number
 
-    items?: string,
-    resDialog: boolean,
-    res?: CardResponseValidation,
+    items?: string
+    resDialog: boolean
+    res?: CardResponseValidation
 
-    delay: number,
-    progress: number,
-    total: number,
-    progressBuffer: number,
-    loaderOverlay: boolean,
+    delay: number
+    progress: number
+    total: number
+    progressBuffer: number
+    loaderOverlay: boolean
     error: string
   } {
     return {
@@ -76,12 +75,12 @@ export default Vue.extend({
       resDialog: false,
       res: undefined,
 
-      delay:0,
+      delay: 0,
       progress: 0,
       total: 0,
       progressBuffer: 0,
       loaderOverlay: false,
-      error: ''
+      error: '',
     }
   },
 
@@ -104,7 +103,7 @@ export default Vue.extend({
     },
 
     async postAnswer(answer: string) {
-      const [error, data] = await postAnswerAPI(this.card?.ID, answer, false);
+      const [error, data] = await postAnswerAPI(this.card?.ID, answer, false)
       if (error) this.error = error.res.data.message
       else {
         this.res = data.data
@@ -117,7 +116,7 @@ export default Vue.extend({
         this.resDialog = true
 
         while (!this.$refs.resultProgressLinear) {
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100))
         }
         // @ts-ignore
         this.$refs.resultProgressLinear.startDialogInterval(this.delay)
@@ -146,18 +145,18 @@ export default Vue.extend({
       const [error, data] = await getTodayAPI()
       if (error) this.error = error.res.data.message
       else {
-          this.cards = data.data ?? []
-          this.cardIndex = 0
-          if (this.total === 0) {
-            this.total = this.cards.length
-          }
-          if (data.data === null) {
-            this.total = 0
-            this.progress = 0
-          } else {
-            this.getCard()
-          }
-          this.loaderOverlay = false
+        this.cards = data.data ?? []
+        this.cardIndex = 0
+        if (this.total === 0) {
+          this.total = this.cards.length
+        }
+        if (data.data === null) {
+          this.total = 0
+          this.progress = 0
+        } else {
+          this.getCard()
+        }
+        this.loaderOverlay = false
       }
     },
   },

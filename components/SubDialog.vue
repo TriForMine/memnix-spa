@@ -1,33 +1,31 @@
 <template>
   <v-card>
     <v-card-title class="text-h5">
-      Subscribe to this deck ?
+      {{ $t('subscribe_deck_question') }}
     </v-card-title>
-    <v-card-text> You will be able to play it.</v-card-text>
+    <v-card-text> {{ $t('able_to_play') }}</v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
 
-      <v-btn
-        color="red darken-1"
-        text
-        @click="closeDialogConfirmation"
-      >
-        No
+      <v-btn color="red darken-1" text @click="closeDialogConfirmation">
+        {{ $t('no') }}
       </v-btn>
 
-      <v-btn color="green darken-1" text @click="subToDeck"> Yes</v-btn>
+      <v-btn color="green darken-1" text @click="subToDeck">
+        {{ $t('yes') }}</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
-  name: "SubDialog",
+  name: 'SubDialog',
   methods: {
     closeDialogConfirmation() {
-      this.$emit("closeDialogConfirmation")
+      this.$emit('closeDialogConfirmation')
     },
     subToDeck() {
       this.$emit('subToDeck')
@@ -36,6 +34,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

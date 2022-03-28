@@ -4,7 +4,7 @@
       <v-btn dark icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Edit a Card</v-toolbar-title>
+      <v-toolbar-title>{{ $t('edit_card') }}</v-toolbar-title>
     </v-toolbar>
     <v-item>
       <DeckCardForm
@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {Deck} from "~/types/types";
+import Vue from 'vue'
+import { Deck } from '~/types/types'
 export default Vue.extend({
   name: 'DeckEditorEditCardDialog',
   props: {
@@ -30,12 +30,12 @@ export default Vue.extend({
     },
     card: {
       type: Object,
-      default() {}
+      default() {},
     },
     mcqs: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     getDeckId() {
@@ -48,7 +48,7 @@ export default Vue.extend({
     },
     editCardSave() {
       this.$emit('editCardSave')
-    }
+    },
   },
 })
 </script>

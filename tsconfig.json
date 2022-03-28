@@ -27,6 +27,7 @@
       "@types/node",
       "@nuxtjs/axios",
       "@nuxt/types",
+      "@nuxtjs/i18n",
       "vuetify"
     ]
   },

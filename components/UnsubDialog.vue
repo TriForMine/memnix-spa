@@ -1,39 +1,34 @@
 <template>
   <v-card>
     <v-card-title class="text-h5">
-      Unsubscribe to this deck ?
+      {{ $t('unsubscribe_deck_question') }}
     </v-card-title>
-    <v-card-text> Your progression won't be deleted.</v-card-text>
+    <v-card-text> {{ $t('progression_not_deleted') }} </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
 
-      <v-btn
-        color="red darken-1"
-        text
-        @click="closeDialogConfirmation"
-      >
-        No
+      <v-btn color="red darken-1" text @click="closeDialogConfirmation">
+        {{ $t('no') }}
       </v-btn>
 
       <v-btn color="green darken-1" text @click="unsubToDeck">
-        Yes
+        {{ $t('yes') }}
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
-  name: "UnsubDialog",
+  name: 'UnsubDialog',
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     closeDialogConfirmation() {
-      this.$emit("closeDialogConfirmation")
+      this.$emit('closeDialogConfirmation')
     },
     unsubToDeck() {
       this.$emit('unsubToDeck')
@@ -42,6 +37,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

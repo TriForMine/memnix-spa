@@ -5,6 +5,7 @@ export default {
   ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
+
   head: {
     titleTemplate: '%s - Memnix',
     title: 'Memnix',
@@ -26,18 +27,19 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/i18n',
+
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
@@ -45,6 +47,33 @@ export default {
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
   ],
+
+  i18n: {
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'memnix_i18n',
+      redirectOn: 'root',  // recommended
+    },
+    seo: true,
+    locales: [
+        {
+          code: 'en',
+          file: 'en-US.ts'
+        },
+        {
+          code: 'fr',
+          file: 'fr-FR.ts'
+        }
+      ],
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+    defaultLocale: 'en',
+    lazy: true,
+    langDir: 'locales/',
+    baseUrl: 'https://memnix.app/'
+  },
 
   robots: {
     UserAgent: '*',
@@ -71,8 +100,8 @@ export default {
       short_name: 'Memnix',
       lang: 'en',
       display: 'standalone',
-      theme_color: "#ffffff",
-      background_color: "#ffffff",
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
       icons: [
         {
           src: '/android-chrome-192x192.png',
@@ -93,7 +122,7 @@ export default {
           src: '/safari-pinned-tab.png',
           sizes: '512x512',
           type: 'image/png',
-          purpose: "monochrome"
+          purpose: 'monochrome',
         },
         {
           src: '/icon.png',
