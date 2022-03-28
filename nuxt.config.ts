@@ -53,26 +53,26 @@ export default {
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'memnix_i18n',
-      redirectOn: 'root',  // recommended
+      redirectOn: 'root', // recommended
     },
     seo: true,
     locales: [
-        {
-          code: 'en',
-          file: 'en-US.ts'
-        },
-        {
-          code: 'fr',
-          file: 'fr-FR.ts'
-        }
-      ],
+      {
+        code: 'en',
+        file: 'en-US.ts',
+      },
+      {
+        code: 'fr',
+        file: 'fr-FR.ts',
+      },
+    ],
     vueI18n: {
       fallbackLocale: 'en',
     },
     defaultLocale: 'en',
     lazy: true,
     langDir: 'locales/',
-    baseUrl: 'https://memnix.app/'
+    baseUrl: 'https://memnix.app/',
   },
 
   robots: {
