@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :style="{ background: $vuetify.theme.themes[theme].background }">
     <v-main>
       <v-container>
         <Nuxt />
@@ -40,6 +40,12 @@
 <script lang="ts">
 import Vue from "vue"
 export default Vue.extend({
-  name: "Landing"
-})
+  name: "Landing",
+  computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    },
+  }
+}
+)
 </script>

@@ -2,16 +2,15 @@
   <v-col class="text-center">
     <v-card
       class="overflow-auto mx-auto mt-5 mb-10 rounded-xl"
-      dark
       max-width="100%"
       max-height="550"
+      color="surface"
     >
       <v-img
         v-if="card.card_image !== ''"
         :src="card.card_image"
         max-height="450"
         class="mb-2"
-        dark
         contain
       >
         <template #placeholder>
@@ -55,8 +54,8 @@
           <v-chip
             v-if="card.card_case"
             class="ma-2"
-            color="secondary"
-            text-color="white"
+            color="accent"
+            text-color="onbackground"
             outlined
           >
             <v-avatar left>
@@ -68,7 +67,7 @@
             v-if="card.card_spaces"
             class="ma-2"
             color="error"
-            text-color="white"
+            text-color="onbackground"
             outlined
           >
             <v-avatar left>
@@ -83,7 +82,7 @@
     <v-container v-else>
       <v-row>
         <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
-          <v-btn color="primary" x-large dark block @click="buttonAnswer(n)">{{
+          <v-btn color="primarycontainer" x-large block @click="buttonAnswer(n)">{{
               n
             }}</v-btn>
         </v-col>

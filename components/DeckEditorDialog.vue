@@ -83,7 +83,7 @@
       shaped
       elevation="24"
       outlined
-      color="info"
+      color="primary"
     >
       {{ snackbarText }}
 
@@ -93,8 +93,8 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-toolbar color="primary" dark>
-      <v-btn dark icon @click="closeEditDeck">
+    <v-toolbar color="primarycontainer">
+      <v-btn icon @click="closeEditDeck">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       <v-toolbar-title>{{ getDeckName }}</v-toolbar-title>
@@ -139,7 +139,7 @@
                 <v-btn
                   text
                   outlined
-                  color="warning"
+                  color="primary"
                   x-large
                   @click="openCardCreatorDialog"
                 >
@@ -196,7 +196,7 @@
                 <v-btn
                   text
                   outlined
-                  color="warning"
+                  color="primary"
                   x-large
                   @click="openMCQCreatorDialog"
                 >
