@@ -67,6 +67,11 @@ export default {
         iso: 'fr-FR',
         file: 'fr-FR.json',
       },
+      {
+        code: 'ro',
+        iso: 'ro',
+        file: 'ro.json',
+      },
     ],
     vueI18n: {
       fallbackLocale: 'en',
