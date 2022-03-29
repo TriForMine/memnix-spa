@@ -2,7 +2,7 @@
   <v-card flat>
     <v-dialog v-model="errorDialog">
       <v-card>
-        <v-card-title class="text-h5 error lighten-2">
+        <v-card-title class="text-h5 error">
           {{ error }}
         </v-card-title>
 
