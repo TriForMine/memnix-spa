@@ -8,7 +8,7 @@
     :nudge-width="200"
   >
     <template #activator="{ on, attrs }">
-      <v-btn dark icon v-bind="attrs" v-on="on">
+      <v-btn icon color="onbackground" v-bind="attrs" v-on="on" >
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </template>
@@ -16,7 +16,7 @@
       <v-list>
         <v-list-item>
           <v-list-item-action>
-            <v-switch v-model="daily" color="purple"></v-switch>
+            <v-switch v-model="daily" color="accent"></v-switch>
           </v-list-item-action>
           <v-list-item-title>{{ $t('enable_daily') }}</v-list-item-title>
         </v-list-item>
@@ -24,8 +24,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn text @click="menu = false"> {{ $t('cancel') }} </v-btn>
-        <v-btn color="primary" text @click="setTodaySettings">
+        <v-btn text color="onbackground" @click="menu = false"> {{ $t('cancel') }} </v-btn>
+        <v-btn color="accent" text @click="setTodaySettings">
           {{ $t('save') }}
         </v-btn>
       </v-card-actions>

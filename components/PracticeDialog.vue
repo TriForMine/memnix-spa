@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-toolbar color="primary" dark>
-        <v-btn dark icon @click="closePracticeDialog">
+      <v-toolbar color="primarycontainer">
+        <v-btn icon @click="closePracticeDialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>{{ selectedDeck.deck.deck_name }}</v-toolbar-title>
@@ -36,7 +36,7 @@
               empty-icon="mdi-star-outline"
               full-icon="mdi-star"
               half-icon="mdi-star-half"
-              color="yellow darken-3"
+              color="primary"
               background-color="grey darken-1"
               length="5"
               readonly
@@ -46,11 +46,11 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="red darken-1" text @click="closePracticeDialog">
+              <v-btn color="error" text @click="closePracticeDialog">
                 {{ $t('quit') }}
               </v-btn>
 
-              <v-btn color="green darken-1" text @click="keepPracticing">
+              <v-btn color="success" text @click="keepPracticing">
                 {{ $t('keep_practicing') }}</v-btn
               >
             </v-card-actions>

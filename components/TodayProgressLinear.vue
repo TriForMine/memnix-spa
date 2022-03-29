@@ -5,9 +5,9 @@
     :buffer-value="(progressBuffer * 100) / total"
     stream
     height="20"
-    background-color="red"
-    color="green"
-    background-opacity="0.5"
+    background-color="error"
+    color="success"
+    background-opacity="0.7"
   >
     <strong>{{ progress }} / {{total }}</strong>
   </v-progress-linear>

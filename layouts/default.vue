@@ -1,6 +1,6 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
+  <v-app :style="{ background: $vuetify.theme.themes[theme].background }">
+    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app color="surface">
       <template #prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -13,6 +13,12 @@
             }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('logged_in') }}</v-list-item-subtitle>
           </v-list-item-content>
+          <v-btn
+            small
+            icon
+            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+          ><v-icon>mdi-weather-night</v-icon>
+          </v-btn>
         </v-list-item>
       </template>
       <v-divider></v-divider>
@@ -35,13 +41,13 @@
       </v-list>
       <template #append>
         <div class="pa-2">
-          <v-btn block color="accent" @click="logout">
+          <v-btn block class="oncolor--text" color="warning" @click="logout">
             {{ $t('logout') }}
           </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app color="surface">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
     </v-app-bar>
@@ -50,7 +56,7 @@
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer padless>
+    <v-footer padless color="surface">
       <v-col class="text-center" cols="12">
         <v-card class="flex transparent" flat tile>
           <v-card-text class="">
@@ -78,7 +84,7 @@
             </v-btn>
           </v-card-text>
 
-          <v-card-text class="py-2 white--text text-center">
+          <v-card-text class="py-2 onbackground--text text-center">
             {{ new Date().getFullYear() }} — <strong>Memnix</strong>
           </v-card-text>
         </v-card>
@@ -135,6 +141,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    },
     url() {
       return (
         'https://source.boringavatars.com/beam/120/' +

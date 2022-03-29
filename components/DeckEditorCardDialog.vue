@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-toolbar color="primary" dark>
-      <v-btn dark icon @click="closeDialog">
+    <v-toolbar color="primarycontainer" >
+      <v-btn icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       <v-toolbar-title>{{  $t('create_card') }}</v-toolbar-title>

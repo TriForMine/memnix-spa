@@ -8,7 +8,7 @@
     class="d-flex flex-column overflow-hidden mx-10 ma-3"
   >
     <template #header>
-      <v-toolbar class="mb-2 shrink" color="indigo" dark flat>
+      <v-toolbar class="mb-2 shrink" color="surface" shaped>
         <v-text-field
           v-model="search"
           class="d-flex flex-column mh-100 overflow-hidden"
@@ -60,8 +60,7 @@
           :disabled="!hasFormerPage"
           small
           rounded
-          dark
-          color="blue darken-3"
+          color="primary"
           class="mr-1"
           @click="formerPage"
         >
@@ -71,8 +70,7 @@
           :disabled="!hasNextPage"
           small
           rounded
-          dark
-          color="blue darken-3"
+          color="primary"
           class="ml-1"
           @click="nextPage"
         >

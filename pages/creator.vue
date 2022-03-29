@@ -34,7 +34,7 @@
       />
     </v-dialog>
 
-    <v-toolbar color="primary" dark flat mb-10>
+    <v-toolbar color="primarycontainer" flat mb-10>
       <v-spacer></v-spacer>
       <v-btn text x-large @click="createDeck"> {{ $t('create_deck') }} </v-btn>
     </v-toolbar>

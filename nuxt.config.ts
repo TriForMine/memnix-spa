@@ -1,5 +1,3 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -146,8 +144,49 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: true,
-      themes: {
-        dark: {
+      themes:
+        {
+          light: {
+            primary: '#00658e',
+            accent: '#9b432d',
+            primarycontainer: '#c4e7ff',
+            secondary: '#00668b',
+            info: '#c1e8ff',
+            warning: '#9b432d',
+            error: '#B3261E',
+            success: '#1eb325',
+            background: '#fbfdfd', // Not automatically applied
+            surface: '#fbfdfd',
+            surfacevariant: '#E7E0EC',
+            outline: '#79747E',
+            oncolor: '#ffffff',
+            onbackground: '#191c1d',
+            onsuccess: '#ffffff'
+
+          },
+          dark: {
+            primary: '#7fcfff',
+            primarycontainer: '#004c6c',
+            accent: '#ffb4a0',
+            secondary: '#75d1ff',
+            info: '#004c69',
+            warning: '#ffb4a0',
+            error: '#F2B8B5',
+            success: '#b5f2b8',
+            background: '#191c1d', // Not automatically applied
+            surface: '#191c1d',
+            surfacevariant: '#49454F',
+            outline: '#938F99',
+            oncolor: '#00344c',
+            onbackground: '#e0e3e3',
+            onsuccess: '#191c1d',
+
+          },
+        },
+        /*
+        {
+          name: "default",
+        light: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
@@ -156,7 +195,16 @@ export default {
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
         },
-      },
+        dark: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3,
+        }, */
+
     },
   },
 
