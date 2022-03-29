@@ -117,7 +117,8 @@ export default Vue.extend({
       await this.$refs.deckEditorDialog.getMCQS(value.ID)
 
     },
-    closeEditDeck() {
+    async closeEditDeck() {
+      await this.getEditorsDeck()
       this.editor = false
     },
 
