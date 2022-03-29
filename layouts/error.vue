@@ -29,17 +29,17 @@ export default Vue.extend({
       otherError: 'An error occurred',
     }
   },
-  computed: {
-    theme() {
-      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
-    },
-  },
   head() {
     const title =
       this.error.statusCode === 404 ? this.pageNotFound : this.otherError
     return {
       title,
     }
+  },
+  computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    },
   },
 })
 </script>

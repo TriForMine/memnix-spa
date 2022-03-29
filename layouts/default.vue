@@ -14,9 +14,9 @@
             <v-list-item-subtitle>{{ $t('logged_in') }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-btn
-            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
             small
             icon
+            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
           ><v-icon>mdi-weather-night</v-icon>
           </v-btn>
         </v-list-item>

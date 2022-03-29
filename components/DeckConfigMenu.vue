@@ -8,7 +8,7 @@
     :nudge-width="200"
   >
     <template #activator="{ on, attrs }">
-      <v-btn icon v-bind="attrs" v-on="on" color="onbackground">
+      <v-btn icon color="onbackground" v-bind="attrs" v-on="on" >
         <v-icon>mdi-cog</v-icon>
       </v-btn>
     </template>

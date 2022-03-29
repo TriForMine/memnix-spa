@@ -1,10 +1,8 @@
 <template>
-  <v-app>
-    <v-main>
       <v-container class="fill-height" fluid>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="8" md="4" log="4">
-            <v-card elevation="0">
+            <v-card color="surface">
               <v-img
                 src="moutmout.png"
                 alt="Memnix Logo"
@@ -43,11 +41,10 @@
                     @blur="$v.password.$touch()"
                   ></v-text-field>
                   <v-btn
-                    class="mb-2"
+                    class="mb-2 onsuccess--text"
                     type="submit"
                     color="primary"
                     x-large
-                    dark
                     block
                   >
                     {{ $t('login') }}</v-btn
@@ -56,11 +53,11 @@
 
                   {{ $t('no_account') }}
                   <v-btn
-                    color="secondary"
+                    color="warning"
+                    class="onsuccess--text"
                     nuxt
-                    :to="this.localePath('/register')"
+                    :to="localePath('/register')"
                     x-large
-                    dark
                     block
                   >
                     {{ $t('register') }}</v-btn
@@ -91,8 +88,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-main>
-  </v-app>
+
 </template>
 
 <script lang="ts">
