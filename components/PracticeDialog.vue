@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-card-title>
       <v-toolbar color="primarycontainer">
         <v-btn icon @click="closePracticeDialog">
