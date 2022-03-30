@@ -114,7 +114,7 @@
         {{ $t('mcq') }}
       </v-tab>
 
-      <v-tab-item>
+      <v-tab-item transition="false">
         <DeckForm
           :is-edit="!isCreateMode"
           :selected-deck="selectedDeck"
@@ -123,7 +123,7 @@
         />
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item transition="false">
         <v-card color="background">
           <v-card-text >
             <v-card color="background">
@@ -180,7 +180,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item transition="false">
         <v-card color="background">
           <v-card-text>
             <v-card color="background">

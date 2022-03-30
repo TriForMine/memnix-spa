@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="surface">
     <v-card-title class="text-h5">
       {{ $t('delete_mcq_confirmation') }}
     </v-card-title>

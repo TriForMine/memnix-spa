@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-card-title class="text-h5">
       {{ $t('delete_card_confirmation') }}
     </v-card-title>
