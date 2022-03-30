@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-card-title>
       <v-toolbar color="primarycontainer">
         <v-btn icon @click="closePracticeDialog">
@@ -142,7 +142,6 @@ export default Vue.extend({
 
     closePracticeDialog() {
       this.$emit('closePracticeDialog')
-      this.total = 0
       this.progressBuffer = 0
       this.progress = 0
       this.cardIndex = 0
