@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card  color="background">
     <v-toolbar color="primarycontainer">
       <v-btn icon @click="closeDialog">
         <v-icon>mdi-arrow-left</v-icon>

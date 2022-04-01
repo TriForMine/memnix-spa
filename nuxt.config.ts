@@ -147,64 +147,42 @@ export default {
       themes:
         {
           light: {
-            primary: '#00658e',
-            accent: '#9b432d',
-            primarycontainer: '#c4e7ff',
-            secondary: '#00668b',
-            info: '#c1e8ff',
-            warning: '#9b432d',
-            error: '#B3261E',
-            success: '#1eb325',
-            background: '#fbfdfd', // Not automatically applied
-            surface: '#fbfdfd',
-            surfacevariant: '#E7E0EC',
-            outline: '#79747E',
-            oncolor: '#ffffff',
-            onbackground: '#191c1d',
-            onsuccess: '#ffffff'
+            primary: '#88C0D0', // Nord 8
+            primarycontainer: '#81A1C1',
+            accent: '#8FBCBB', // Nord 7
+            secondary: '#81A1C1', // Nord 9
+            info: '#5E81AC', // Nord 10
+            warning: '#EBCB8B', // Nord 13
+            error: '#BF616A', // Nord 11
+            success: '#A3BE8C', // Nord 14
+            background: '#ECEFF4', // Nord 6
+            surface: '#E5E9F0', // Nord 5
+            surfacevariant: '#D8DEE9', // Nord 4
+            outline: '#5E81AC', // Nord 10
+            oncolor: '#4C566A',
+            onbackground: '#2E3440', // Nord 0
+            onsuccess: '#4C566A',
 
           },
           dark: {
-            primary: '#7fcfff',
-            primarycontainer: '#004c6c',
-            accent: '#ffb4a0',
-            secondary: '#75d1ff',
-            info: '#004c69',
-            warning: '#ffb4a0',
-            error: '#F2B8B5',
-            success: '#b5f2b8',
-            background: '#191c1d', // Not automatically applied
-            surface: '#191c1d',
-            surfacevariant: '#49454F',
-            outline: '#938F99',
-            oncolor: '#00344c',
-            onbackground: '#e0e3e3',
-            onsuccess: '#191c1d',
+            primary: '#88C0D0', // Nord 8
+            primarycontainer: '#81A1C1',
+            accent: '#8FBCBB', // Nord 7
+            secondary: '#81A1C1', // Nord 9
+            info: '#5E81AC', // Nord 10
+            warning: '#EBCB8B', // Nord 13
+            error: '#BF616A', // Nord 11
+            success: '#A3BE8C', // Nord 14
+            background: '#2E3440', // Nord0
+            surface: '#3B4252', // Nord 1
+            surfacevariant: '#434C5E', // Nord 2
+            outline: '#5E81AC', // Nord 10
+            oncolor: '#4C566A',
+            onbackground: '#ECEFF4', // Nord 6
+            onsuccess: '#4C566A',
 
           },
         },
-        /*
-        {
-          name: "default",
-        light: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        }, */
-
     },
   },
 

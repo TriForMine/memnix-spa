@@ -5,7 +5,7 @@
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer padless>
+    <v-footer padless color="background">
       <v-col class="text-center" cols="12">
         <v-card
           class="flex transparent"
@@ -27,7 +27,7 @@
             </v-btn>
           </v-card-text>
 
-          <v-card-text class="py-2 white--text text-center">
+          <v-card-text class="py-2 text-center">
             {{ new Date().getFullYear() }} — <strong>Memnix</strong>
           </v-card-text>
         </v-card>

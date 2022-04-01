@@ -34,15 +34,16 @@
             v-model="answer"
             required
             counter
+            shaped
+            outlined
             maxlength="100"
-            class="rounded-lg"
             :label="card.card_format"
+            color="secondary"
             placeholder="your answer"
             :append-outer-icon="answer ? 'mdi-send' : ''"
             clear-icon="mdi-close-circle"
             clearable
             name="answer"
-            filled
             @input="$v.answer.$touch()"
             @blur="$v.answer.$touch()"
             @click:append-outer="validateAnswer"
@@ -54,7 +55,7 @@
           <v-chip
             v-if="card.card_case"
             class="ma-2"
-            color="accent"
+            color="warning"
             text-color="onbackground"
             outlined
           >
@@ -82,7 +83,7 @@
     <v-container v-else>
       <v-row>
         <v-col v-for="(n, index) in items" :key="index" cols="12" sm="6">
-          <v-btn color="primarycontainer" x-large block @click="buttonAnswer(n)">{{
+          <v-btn color="secondary" x-large block @click="buttonAnswer(n)">{{
               n
             }}</v-btn>
         </v-col>

@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-dialog
       v-model="createCardDialog"
       max-width="600px"
@@ -100,7 +100,7 @@
       <v-toolbar-title>{{ getDeckName }}</v-toolbar-title>
     </v-toolbar>
     <v-card-title> </v-card-title>
-    <v-tabs :value="isCreateMode ? 0 : 1">
+    <v-tabs background-color="background" :value="isCreateMode ? 0 : 1">
       <v-tab>
         <v-icon left> mdi-cog </v-icon>
         {{ $t('deck') }}
@@ -114,7 +114,7 @@
         {{ $t('mcq') }}
       </v-tab>
 
-      <v-tab-item>
+      <v-tab-item transition="false">
         <DeckForm
           :is-edit="!isCreateMode"
           :selected-deck="selectedDeck"
@@ -123,10 +123,10 @@
         />
       </v-tab-item>
 
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <v-card>
+      <v-tab-item transition="false">
+        <v-card color="background">
+          <v-card-text >
+            <v-card color="background">
               <v-card-title>
                 <v-text-field
                   v-model="search"
@@ -146,7 +146,7 @@
                   {{ $t('create_card') }}
                 </v-btn>
               </v-card-title>
-              <v-data-table :headers="headers" :items="cards" :search="search">
+              <v-data-table class="background" :headers="headers" :items="cards" :search="search">
                 <template #[`item.card_case`]="{ item }">
                   <v-simple-checkbox
                     v-model="item.card_case"
@@ -180,10 +180,10 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
+      <v-tab-item transition="false">
+        <v-card color="background">
           <v-card-text>
-            <v-card>
+            <v-card color="background">
               <v-card-title>
                 <v-text-field
                   v-model="search"
@@ -203,7 +203,7 @@
                   {{ $t('create_mcq') }}
                 </v-btn>
               </v-card-title>
-              <v-data-table
+              <v-data-table class="background"
                 :headers="headersMCQ"
                 :items="mcqs"
                 :search="search"

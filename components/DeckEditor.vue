@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" flat max-width="500">
+  <v-card class="mx-auto" flat max-width="500" color="surface">
     <v-img :src="deckObject.deck_banner" lazy-src="moutmout.png" height="200px">
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">

@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card color="background">
     <v-dialog v-model="errorDialog">
       <v-card>
         <v-card-title class="text-h5 error">

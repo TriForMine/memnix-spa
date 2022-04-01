@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat color="background">
     <v-card-text>
       <v-form @submit.prevent="validateAnswer">
         <v-row>
