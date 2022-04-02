@@ -79,6 +79,7 @@
 
     <v-card-actions>
       <v-btn text color="primary" @click="editDeck"> {{ $t('edit') }} </v-btn>
+      <v-btn v-if="deckObject.deck_status === 1" text color="warning" @click="publishDeck"> {{ $t('Publish') }} </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -106,6 +107,10 @@ export default Vue.extend({
     editDeck() {
       this.$emit('editDeck')
     },
+
+    publishDeck() {
+      this.$emit('publishDeck')
+    }
   },
 })
 </script>

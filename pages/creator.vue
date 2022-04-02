@@ -19,6 +19,25 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog v-model="publishConfirmation">
+      <v-card color="background">
+        <v-card-title class="text-h5 mb-6 primary onsuccess--text" >
+          {{ $t('publish_deck_confirmation') }}
+        </v-card-title>
+        <v-card-text> <h2> {{ $t('publish_deck_warning') }}</h2></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="error" text @click="publishConfirmation=false">
+            {{ $t('no') }}
+          </v-btn>
+
+          <v-btn color="success" text @click="publishDeckQuery">
+            {{ $t('yes') }}</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog
       v-model="editor"
       fullscreen
@@ -52,6 +71,7 @@
           <DeckEditor
             :deck-object="n"
             @editDeck="editDeck(n)"
+            @publishDeck="publishDeck(n)"
           />
         </v-col>
       </v-row>
@@ -62,7 +82,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {DeckCreator} from "~/types/types";
-import {getEditorAPI} from "~/api/deck.api";
+import {getEditorAPI, publishDeckAPI} from "~/api/deck.api";
 
 export default Vue.extend({
   middleware: 'authentificated',
@@ -76,7 +96,8 @@ export default Vue.extend({
     snackbarText: string,
     loaderOverlay: boolean,
     timeout: number,
-    error: string
+    error: string,
+    publishConfirmation: boolean
   } {
     return {
       decks: [],
@@ -88,7 +109,8 @@ export default Vue.extend({
       snackbarText: "",
       loaderOverlay: false,
       timeout: 2000,
-      error: ''
+      error: '',
+      publishConfirmation: false,
     }
   },
 
@@ -103,6 +125,10 @@ export default Vue.extend({
 
       this.editor = true
     },
+    publishDeck(value: DeckCreator) {
+      this.selectedDeck = value
+      this.publishConfirmation = true
+    },
     async editDeck(value: DeckCreator) {
       this.selectedDeck = value
       this.createMode = false
@@ -115,8 +141,21 @@ export default Vue.extend({
       await this.$refs.deckEditorDialog.getCards(value.ID)
       // @ts-ignore
       await this.$refs.deckEditorDialog.getMCQS(value.ID)
-
     },
+
+    async publishDeckQuery() {
+      this.publishConfirmation = false
+      this.loaderOverlay = true
+      const [error] = await publishDeckAPI(this.selectedDeck.ID)
+      if (error) this.error = error.response.data.message
+      else {
+        this.snackbarText = this.$i18n.t("success_publish_deck")
+        this.snackbar = true
+        await this.getEditorsDeck()
+      }
+      this.loaderOverlay = false
+    },
+
     async closeEditDeck() {
       await this.getEditorsDeck()
       this.editor = false
