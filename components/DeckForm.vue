@@ -234,7 +234,7 @@ export default Vue.extend({
     },
     copyKey() {
       if (navigator.clipboard && window.isSecureContext) {
-        return navigator.clipboard.writeText(this.deckKey + '#' + this.deckCode)
+        navigator.clipboard.writeText(this.deckKey + '#' + this.deckCode)
       } else {
         const el = document.createElement('textArea') as HTMLInputElement
         el.value = this.deckKey + '#' + this.deckCode
