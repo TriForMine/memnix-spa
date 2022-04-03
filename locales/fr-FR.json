@@ -117,5 +117,8 @@
   "today": "Quotidien",
   "my_decks": "Mes decks",
   "public_decks": "Decks publics",
-  "deck_creator": "Créateur de deck"
+  "deck_creator": "Créateur de deck",
+  "publish_deck_confirmation": "Voulez-vous vraiment publier votre deck ?",
+  "publish_deck_warning": "Votre deck sera vérifié par notre équipe ! Vous serez averti par email une fois que nous l'aurons examiné.",
+  "success_publish_deck": "Votre demande a bien été envoyée à notre équipe. Vous serez bientôt averti par email !"
 }
