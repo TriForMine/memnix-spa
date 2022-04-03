@@ -106,11 +106,7 @@ export default Vue.extend({
       return this.mcqStandalone ?? true
     },
     confirmButtonText() {
-      if (this.mcq) {
-        return this.$i18n.t('edit')
-      } else {
-        return this.$i18n.t('create')
-      }
+      return this.mcq ? this.$i18n.t('edit') : this.$i18n.t('create');
     },
 
     nameErrors() {
