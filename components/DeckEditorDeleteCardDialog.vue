@@ -1,16 +1,16 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-card-title class="text-h5">
       {{ $t('delete_card_confirmation') }}
     </v-card-title>
     <v-card-actions>
       <v-spacer></v-spacer>
 
-      <v-btn color="red darken-1" text @click="closeDialogConfirmation">
+      <v-btn color="error" text @click="closeDialogConfirmation">
         {{ $t('no') }}
       </v-btn>
 
-      <v-btn color="green darken-1" text @click="deleteCard">
+      <v-btn color="success" text @click="deleteCard">
         {{ $t('yes') }}
       </v-btn>
     </v-card-actions>

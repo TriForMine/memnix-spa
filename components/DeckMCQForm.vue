@@ -52,8 +52,8 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeMCQDialog"> {{ $t('close') }} </v-btn>
-      <v-btn color="warning" text x-large @click="validateAnswer">
+      <v-btn color="onbackground" text @click="closeMCQDialog"> {{ $t('close') }} </v-btn>
+      <v-btn color="primary" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
     </v-card-actions>
@@ -106,11 +106,7 @@ export default Vue.extend({
       return this.mcqStandalone ?? true
     },
     confirmButtonText() {
-      if (this.mcq) {
-        return this.$i18n.t('edit')
-      } else {
-        return this.$i18n.t('create')
-      }
+      return this.mcq ? this.$i18n.t('edit') : this.$i18n.t('create');
     },
 
     nameErrors() {

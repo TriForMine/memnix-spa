@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat color="background">
     <v-card-text>
       <v-form @submit.prevent="validateAnswer">
         <v-row>
@@ -123,10 +123,10 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="info" text @click="closeCardDialog">
+      <v-btn color="onbackground" text @click="closeCardDialog">
         {{ $t('close') }}
       </v-btn>
-      <v-btn color="warning" text x-large @click="validateAnswer">
+      <v-btn color="primary" text x-large @click="validateAnswer">
         {{ confirmButtonText }}
       </v-btn>
     </v-card-actions>
@@ -204,16 +204,10 @@ export default Vue.extend({
   },
   computed: {
     answerFieldType() {
-      if (this.cardType === CardType.Int)
-        return this.$i18n.t('number').toString()
-      else return this.$i18n.t('string').toString()
+      return this.cardType === CardType.Int ? this.$i18n.t('number').toString() : this.$i18n.t('string').toString();
     },
     confirmButtonText() {
-      if (this.card) {
-        return this.$i18n.t('edit').toString()
-      } else {
-        return this.$i18n.t('create').toString()
-      }
+      return this.card ? this.$i18n.t('edit').toString() : this.$i18n.t('create').toString();
     },
     questionErrors() {
       const errors: string[] = []

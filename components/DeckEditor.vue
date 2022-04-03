@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" flat max-width="500">
+  <v-card class="mx-auto" flat max-width="500" color="surface">
     <v-img :src="deckObject.deck_banner" lazy-src="moutmout.png" height="200px">
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
@@ -38,8 +38,9 @@
     <v-chip
       v-if="deckObject.deck_status === 3"
       class="ma-2"
-      color="primary"
-      text-color="white"
+      color="outline"
+      outlined
+      text-color="onbackground"
     >
       <v-icon left> mdi-lock-open </v-icon>
       {{ $t('public') }}
@@ -47,8 +48,9 @@
     <v-chip
       v-if="deckObject.deck_status === 1"
       class="ma-2"
-      color="secondary"
-      text-color="white"
+      color="outline"
+      outlined
+      text-color="onbackground"
     >
       <v-icon left> mdi-lock </v-icon>
       {{ $t('private') }}
@@ -57,7 +59,8 @@
       v-if="deckObject.deck_status === 2"
       class="ma-2"
       color="error"
-      text-color="white"
+      outlined
+      text-color="onbackground"
     >
       <v-icon left> mdi-clock-alert </v-icon>
       {{ $t('waiting_approval') }}
@@ -66,7 +69,8 @@
       v-if="deckObject.ID === 13"
       class="ma-2"
       color="accent"
-      text-color="white"
+      outlined
+      text-color="onbackground"
     >
       <v-icon left> mdi-star </v-icon>
       {{ $t('sponsored') }}
@@ -74,7 +78,8 @@
     <v-divider></v-divider>
 
     <v-card-actions>
-      <v-btn text color="info" @click="editDeck"> {{ $t('edit') }} </v-btn>
+      <v-btn text color="primary" @click="editDeck"> {{ $t('edit') }} </v-btn>
+      <v-btn v-if="deckObject.deck_status === 1" text color="warning" @click="publishDeck"> {{ $t('Publish') }} </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -102,6 +107,10 @@ export default Vue.extend({
     editDeck() {
       this.$emit('editDeck')
     },
+
+    publishDeck() {
+      this.$emit('publishDeck')
+    }
   },
 })
 </script>

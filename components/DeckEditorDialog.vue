@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="background">
     <v-dialog
       v-model="createCardDialog"
       max-width="600px"
@@ -83,7 +83,7 @@
       shaped
       elevation="24"
       outlined
-      color="info"
+      color="primary"
     >
       {{ snackbarText }}
 
@@ -93,14 +93,14 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-toolbar color="primary" dark>
-      <v-btn dark icon @click="closeEditDeck">
+    <v-toolbar color="primarycontainer">
+      <v-btn icon @click="closeEditDeck">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       <v-toolbar-title>{{ getDeckName }}</v-toolbar-title>
     </v-toolbar>
     <v-card-title> </v-card-title>
-    <v-tabs :value="isCreateMode ? 0 : 1">
+    <v-tabs background-color="background" :value="isCreateMode ? 0 : 1">
       <v-tab>
         <v-icon left> mdi-cog </v-icon>
         {{ $t('deck') }}
@@ -114,7 +114,7 @@
         {{ $t('mcq') }}
       </v-tab>
 
-      <v-tab-item>
+      <v-tab-item transition="false">
         <DeckForm
           :is-edit="!isCreateMode"
           :selected-deck="selectedDeck"
@@ -123,10 +123,10 @@
         />
       </v-tab-item>
 
-      <v-tab-item>
-        <v-card flat>
+      <v-tab-item transition="false">
+        <v-card color="background">
           <v-card-text>
-            <v-card>
+            <v-card color="background">
               <v-card-title>
                 <v-text-field
                   v-model="search"
@@ -139,14 +139,19 @@
                 <v-btn
                   text
                   outlined
-                  color="warning"
+                  color="primary"
                   x-large
                   @click="openCardCreatorDialog"
                 >
                   {{ $t('create_card') }}
                 </v-btn>
               </v-card-title>
-              <v-data-table :headers="headers" :items="cards" :search="search">
+              <v-data-table
+                class="background"
+                :headers="headers"
+                :items="cards"
+                :search="search"
+              >
                 <template #[`item.card_case`]="{ item }">
                   <v-simple-checkbox
                     v-model="item.card_case"
@@ -180,10 +185,10 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
+      <v-tab-item transition="false">
+        <v-card color="background">
           <v-card-text>
-            <v-card>
+            <v-card color="background">
               <v-card-title>
                 <v-text-field
                   v-model="search"
@@ -196,7 +201,7 @@
                 <v-btn
                   text
                   outlined
-                  color="warning"
+                  color="primary"
                   x-large
                   @click="openMCQCreatorDialog"
                 >
@@ -204,6 +209,7 @@
                 </v-btn>
               </v-card-title>
               <v-data-table
+                class="background"
                 :headers="headersMCQ"
                 :items="mcqs"
                 :search="search"
@@ -359,11 +365,7 @@ export default Vue.extend({
     },
 
     getMcqType(type: McqType) {
-      if (type === McqType.Standalone) {
-        return this.$i18n.t('standalone').toString()
-      } else {
-        return this.$i18n.t('linked').toString()
-      }
+      return type === McqType.Standalone ? this.$i18n.t('standalone').toString() : this.$i18n.t('linked').toString();
     },
     getCardType(type: CardType) {
       if (type === CardType.String) {
@@ -446,6 +448,7 @@ export default Vue.extend({
       } else {
         this.snackbarText = this.$i18n.t('success_edit_deck').toString()
         this.snackbar = true
+        this.$emit('createDeckSave')
       }
     },
 

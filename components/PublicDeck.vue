@@ -1,5 +1,5 @@
 <template>
-  <v-card class="content-bg card mx-auto pa-1 " flat max-width="500">
+  <v-card class="mx-auto pa-1 " color="surface" flat max-width="500">
     <v-img :src="item.deck_banner" height="200px"> </v-img>
     <v-card-title
       class="font-weight-bold d-inline-block text-truncate"
@@ -29,7 +29,8 @@
       v-if="item.ID === 13"
       class="ma-2"
       color="accent"
-      text-color="white"
+      outlined
+      text-color="onbackground"
     >
       <v-icon left>
         mdi-star
@@ -47,7 +48,7 @@
         outlined
         rounded
         small
-        color="orange"
+        color="primary"
         @click="subToDeckConfirmation(item)"
       >
         {{ $t("subscribe_now") }}

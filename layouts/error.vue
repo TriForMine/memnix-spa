@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :style="{ background: $vuetify.theme.themes[theme].background }">
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
@@ -35,6 +35,11 @@ export default Vue.extend({
     return {
       title,
     }
+  },
+  computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    },
   },
 })
 </script>

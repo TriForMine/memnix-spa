@@ -1,11 +1,11 @@
 <template>
-  <v-app dark>
+  <v-app :style="{ background: $vuetify.theme.themes[theme].background }">
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-footer padless>
+    <v-footer padless color="background">
       <v-col class="text-center" cols="12">
         <v-card
           class="flex transparent"
@@ -27,7 +27,7 @@
             </v-btn>
           </v-card-text>
 
-          <v-card-text class="py-2 white--text text-center">
+          <v-card-text class="py-2 text-center">
             {{ new Date().getFullYear() }} — <strong>Memnix</strong>
           </v-card-text>
         </v-card>
@@ -40,6 +40,12 @@
 <script lang="ts">
 import Vue from "vue"
 export default Vue.extend({
-  name: "Landing"
-})
+  name: "Landing",
+  computed: {
+    theme() {
+      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+    },
+  }
+}
+)
 </script>

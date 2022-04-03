@@ -1,9 +1,8 @@
 <template>
-  <v-main>
     <v-container class="fill-height" fluid>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="8" md="4" log="4">
-          <v-card elevation="0">
+          <v-card color="surface">
             <v-card-title class="headline">
               {{ $t('register') }} !</v-card-title
             >
@@ -96,7 +95,6 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-main>
 </template>
 
 <script lang="ts">

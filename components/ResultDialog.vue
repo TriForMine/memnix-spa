@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="res.validate">
-    <v-card-title class="text-h5 green"> {{ $t('correct') }} ! </v-card-title>
+    <v-card-title class="text-h5 success onsuccess--text"> {{ $t('correct') }} ! </v-card-title>
     <v-card-text>
       <v-container>
         <v-row>
@@ -19,7 +19,7 @@
     </v-card-actions>
   </v-card>
   <v-card v-else>
-    <v-card-title class="text-h5 red"> {{ $t('incorrect') }} ! </v-card-title>
+    <v-card-title class="text-h5 error oncolor--text"> {{ $t('incorrect') }} ! </v-card-title>
     <v-card-text>
       <v-container>
         <v-row>
