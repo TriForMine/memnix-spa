@@ -1,5 +1,21 @@
 <template>
   <v-card color="background">
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      shaped
+      elevation="24"
+      outlined
+      color="warning"
+    >
+      {{ snackbarText }}
+
+      <template #action="{ attrs }">
+        <v-btn color="warning" icon v-bind="attrs" @click="snackbar = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-dialog v-model="errorDialog">
       <v-card>
         <v-card-title class="text-h5 error">
@@ -23,7 +39,7 @@
               v-model="deckName"
               name="deckName"
               :error-messages="nameErrors"
-              label="Name *"
+              :label="$t('name') + '*'"
               required
               outlined
               shaped
@@ -37,7 +53,7 @@
             <v-textarea
               v-model="deckDescription"
               :error-messages="descriptionErrors"
-              label="Description *"
+              :label="$t('description') + '*'"
               no-resize
               outlined
               rows="3"
@@ -53,10 +69,35 @@
           <v-col cols="12">
             <v-text-field
               v-model="deckImageUrl"
-              label="Image url"
+              :label="$t('image_url')"
               outlined
               shaped
               maxlength="120"
+              @input="$v.deckImageUrl.$touch()"
+              @blur="$v.deckImageUrl.$touch()"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-switch
+              v-model="deckShare"
+              class="ml-3"
+              :label="$t('allow_sharing_deck')"
+            ></v-switch>
+          </v-col>
+          <v-col v-if="deckShare" cols="12">
+            <v-text-field
+              v-model="deckKey"
+              :error-messages="keyErrors"
+              :label="$t('private_key')"
+              class="ml-3"
+              :suffix="deckCode ? '#' + deckCode : ''"
+              outlined
+              counter
+              shaped
+              maxlength="4"
+              :append-outer-icon="deckCode ? 'mdi-content-copy' : ''"
+              @click:append-outer="copyKey"
+              @keyup="uppercase"
               @input="$v.deckImageUrl.$touch()"
               @blur="$v.deckImageUrl.$touch()"
             ></v-text-field>
@@ -109,20 +150,33 @@ export default Vue.extend({
       minLength: minLength(5),
     },
     deckImageUrl: { maxLength: maxLength(200) },
+    deckKey: { required, minLength: minLength(4), maxLength: maxLength(4) },
   },
   data(): {
     deckName: Deck['deck_name']
     deckDescription: Deck['deck_description']
     deckImageUrl: Deck['deck_banner']
+    deckCode: Deck['deck_code']
+    deckKey: Deck['deck_key']
+    deckShare: Deck['deck_share']
     error: string
     errorDialog: boolean
+    snackbar: boolean
+    snackbarText: string
+    timeout: number
   } {
     return {
       deckName: this.selectedDeck?.deck_name ?? '',
       deckDescription: this.selectedDeck?.deck_description ?? '',
       deckImageUrl: this.selectedDeck?.deck_banner ?? '',
+      deckCode: this.selectedDeck?.deck_code ?? '',
+      deckKey: this.selectedDeck?.deck_key ?? '',
+      deckShare: this.selectedDeck?.deck_share ?? false,
       error: 'An error occurred !',
       errorDialog: false,
+      snackbar: false,
+      snackbarText: '',
+      timeout: 2000,
     }
   },
   computed: {
@@ -148,6 +202,18 @@ export default Vue.extend({
         errors.push(this.$i18n.t('deck_description_required'))
       return errors
     },
+    keyErrors() {
+      const errors: string[] = []
+      if (!this.$v.deckKey.$dirty) return errors
+      !this.$v.deckKey.maxLength &&
+        errors.push(this.$i18n.t('deck_key_min_len'))
+      !this.$v.deckKey.minLength &&
+        errors.push(this.$i18n.t('deck_key_min_len'))
+      !this.$v.deckKey.required &&
+        errors.push(this.$i18n.t('deck_key_required'))
+      return errors
+    },
+
     confirmButtonText() {
       if (this.isEdit) {
         return this.$i18n.t('edit')
@@ -161,14 +227,41 @@ export default Vue.extend({
       this.deckName = newVal?.deck_name ?? ''
       this.deckDescription = newVal?.deck_description ?? ''
       this.deckImageUrl = newVal?.deck_banner ?? ''
+      this.deckCode = newVal?.deck_code ?? ''
+      this.deckKey = newVal?.deck_key ?? ''
+      this.deckShare = newVal?.deck_share ?? false
     },
   },
   methods: {
+    uppercase() {
+      this.deckKey = this.deckKey.toUpperCase()
+    },
+    copyKey() {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(this.deckKey + '#' + this.deckCode)
+      } else {
+        const el = document.createElement('textArea') as HTMLInputElement
+        el.value = this.deckKey + '#' + this.deckCode
+        // make the textarea out of viewport
+        el.style.position = 'fixed'
+        el.style.left = '-999999px'
+        el.style.top = '-999999px'
+        document.body.appendChild(el)
+        el.focus()
+        el.select()
+        document.execCommand('copy')
+        el.remove()
+      }
+      this.snackbarText = this.$i18n.t('copied_content_to_clipboard')
+      this.snackbar = true
+    },
     async createDeck() {
       const data = {
         deck_name: this.deckName,
         deck_description: this.deckDescription,
         deck_banner: this.deckImageUrl,
+        deck_key: this.deckKey,
+        deck_share: this.deckShare,
       }
 
       if (this.isEdit) {
