@@ -365,11 +365,7 @@ export default Vue.extend({
     },
 
     getMcqType(type: McqType) {
-      if (type === McqType.Standalone) {
-        return this.$i18n.t('standalone').toString()
-      } else {
-        return this.$i18n.t('linked').toString()
-      }
+      return type === McqType.Standalone ? this.$i18n.t('standalone').toString() : this.$i18n.t('linked').toString();
     },
     getCardType(type: CardType) {
       if (type === CardType.String) {

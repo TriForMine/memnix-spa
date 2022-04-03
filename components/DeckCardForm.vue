@@ -204,16 +204,10 @@ export default Vue.extend({
   },
   computed: {
     answerFieldType() {
-      if (this.cardType === CardType.Int)
-        return this.$i18n.t('number').toString()
-      else return this.$i18n.t('string').toString()
+      return this.cardType === CardType.Int ? this.$i18n.t('number').toString() : this.$i18n.t('string').toString();
     },
     confirmButtonText() {
-      if (this.card) {
-        return this.$i18n.t('edit').toString()
-      } else {
-        return this.$i18n.t('create').toString()
-      }
+      return this.card ? this.$i18n.t('edit').toString() : this.$i18n.t('create').toString();
     },
     questionErrors() {
       const errors: string[] = []

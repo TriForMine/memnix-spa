@@ -215,11 +215,7 @@ export default Vue.extend({
     },
 
     confirmButtonText() {
-      if (this.isEdit) {
-        return this.$i18n.t('edit')
-      } else {
-        return this.$i18n.t('create')
-      }
+      return this.isEdit ? this.$i18n.t('edit') : this.$i18n.t('create');
     },
   },
   watch: {
