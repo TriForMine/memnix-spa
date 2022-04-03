@@ -125,7 +125,7 @@
 
       <v-tab-item transition="false">
         <v-card color="background">
-          <v-card-text >
+          <v-card-text>
             <v-card color="background">
               <v-card-title>
                 <v-text-field
@@ -146,7 +146,12 @@
                   {{ $t('create_card') }}
                 </v-btn>
               </v-card-title>
-              <v-data-table class="background" :headers="headers" :items="cards" :search="search">
+              <v-data-table
+                class="background"
+                :headers="headers"
+                :items="cards"
+                :search="search"
+              >
                 <template #[`item.card_case`]="{ item }">
                   <v-simple-checkbox
                     v-model="item.card_case"
@@ -203,7 +208,8 @@
                   {{ $t('create_mcq') }}
                 </v-btn>
               </v-card-title>
-              <v-data-table class="background"
+              <v-data-table
+                class="background"
                 :headers="headersMCQ"
                 :items="mcqs"
                 :search="search"
@@ -446,6 +452,7 @@ export default Vue.extend({
       } else {
         this.snackbarText = this.$i18n.t('success_edit_deck').toString()
         this.snackbar = true
+        this.$emit('createDeckSave')
       }
     },
 
