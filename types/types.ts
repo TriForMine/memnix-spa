@@ -33,6 +33,7 @@ export interface Deck {
   deck_status: DeckStatus
   deck_key: string
   deck_code: string
+  deck_share: boolean
 }
 
 export interface DeckWithOwner {
