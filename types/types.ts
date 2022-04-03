@@ -17,8 +17,8 @@ export interface User {
 }
 
 export enum DeckStatus {
-  Draft = 1,
-  Private,
+  Private = 1,
+  InReview,
   Published,
 }
 
@@ -31,6 +31,8 @@ export interface Deck {
   deck_description: string
   deck_banner: string
   deck_status: DeckStatus
+  deck_key: string
+  deck_code: string
 }
 
 export interface DeckWithOwner {
