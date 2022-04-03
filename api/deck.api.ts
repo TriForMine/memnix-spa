@@ -93,6 +93,24 @@ export async function publishDeckAPI(deckID: number) {
   }
 }
 
+export async function subscribePrivateDeckAPI(deckSecret: string) {
+  try {
+    const { data } = await axiosClient.post(
+      `v1/decks/private/${deckSecret}/subscribe`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      }
+    )
+    return [null, data]
+  } catch (e: any) {
+    return [e]
+  }
+}
+
 export async function unsubToDeckAPI(deckID: number) {
   try {
     const { data } = await axiosClient.post(
