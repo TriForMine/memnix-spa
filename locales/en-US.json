@@ -146,5 +146,15 @@
   "deck_creator": "Deck Creator",
   "publish_deck_confirmation": "Do you really want to publish your deck ?",
   "publish_deck_warning": "Your deck will be reviewed by our team ! You will be notified by email once we have reviewed it.",
-  "success_publish_deck": "Your request has been successfully sent to our team. You will be notified by email soon !"
+  "success_publish_deck": "Your request has been successfully sent to our team. You will be notified by email soon !",
+  "success_subscribe_deck": "Success subscribing to a new deck",
+  "copied_content_to_clipboard" : "Copied content to clipboard",
+  "allow_sharing_deck": "Allow sharing deck",
+  "private_key": "Private Key",
+  "image_url": "Image URL",
+  "description": "Description",
+  "secret_code": "Secret Code",
+  "not_valid_code": "This isn't a valid secret code !"
+
+
 }
