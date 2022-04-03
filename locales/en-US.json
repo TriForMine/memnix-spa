@@ -135,6 +135,8 @@
   "deck_description_max_len": "Deck description must be at most 120 characters long",
   "deck_description_min_len": "Deck description must be at least 5 characters long",
   "deck_description_required": "Deck description is required",
+  "deck_key_required": "A deck key is required",
+  "deck_key_min_len": "Deck key must be 4 characters long",
 
   "logged_in": "Logged In",
   "logout": "Logout",
