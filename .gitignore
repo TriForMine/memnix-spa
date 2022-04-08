@@ -88,3 +88,5 @@ sw.*
 
 # Vim swap files
 *.swp
+!/public/.well-known/
+!/public/.well-known/assetlinks.json

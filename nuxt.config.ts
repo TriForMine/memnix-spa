@@ -89,6 +89,9 @@ export default {
   sitemap: {
     hostname: 'https://memnix.app',
     gzip: true,
+    routes: [
+      '/.well-known/assetlinks.json'
+    ]
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
