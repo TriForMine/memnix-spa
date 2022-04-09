@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "app.memnix.twa",
+    "sha256_cert_fingerprints": [" CD:46:0F:1F:9F:31:81:A1:81:04:6B:F6:A0:31:FE:90:48:8C:FE:9E:13:30:2E:B4:B0:EE:2F:99:D6:A0:EC:9B"] }
+}]
