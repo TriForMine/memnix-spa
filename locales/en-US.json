@@ -154,7 +154,14 @@
   "image_url": "Image URL",
   "description": "Description",
   "secret_code": "Secret Code",
-  "not_valid_code": "This isn't a valid secret code !"
-
-
+  "not_valid_code": "This isn't a valid secret code !",
+  "join_our_discord": "Join our discord !",
+  "discord_meet_team": "Meet our team ",
+  "discord_contribution":  "Start contributing by joining our discord!",
+  "translate_memnix": "Translate Memnix",
+  "translate_content": "We need your help to make Memnix available in more languages.",
+  "meet_team_content": "You can meet our team and find out who is working on Memnix",
+  "write_code": "Write code",
+  "write_code_content": "Writing code is a good way to help us improving Memnix but it can also help us practicing your skills and getting involved in an open-source project",
+  "community_contrib": "Join our community"
 }

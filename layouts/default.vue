@@ -1,6 +1,12 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes[theme].background }">
-    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app color="surface">
+    <v-navigation-drawer
+      v-model="drawer"
+      :clipped="clipped"
+      fixed
+      app
+      color="surface"
+    >
       <template #prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -13,11 +19,8 @@
             }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('logged_in') }}</v-list-item-subtitle>
           </v-list-item-content>
-          <v-btn
-            small
-            icon
-            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-          ><v-icon>mdi-weather-night</v-icon>
+          <v-btn small icon @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+            ><v-icon>mdi-weather-night</v-icon>
           </v-btn>
         </v-list-item>
       </template>
@@ -82,6 +85,9 @@
             >
               <v-icon>mdi-youtube</v-icon>
             </v-btn>
+            <v-btn class="mx-2" small fab href="https://discord.gg/de4hY4VEkJ">
+              <v-icon>mdi-discord</v-icon>
+            </v-btn>
           </v-card-text>
 
           <v-card-text class="py-2 onbackground--text text-center">
@@ -142,7 +148,7 @@ export default Vue.extend({
   },
   computed: {
     theme() {
-      return (this.$vuetify.theme.dark) ? 'dark' : 'light'
+      return this.$vuetify.theme.dark ? 'dark' : 'light'
     },
     url() {
       return (

@@ -25,6 +25,9 @@
             <v-btn class="mx-2" small fab href="https://www.youtube.com/channel/UCCF8LVU77iNt-4Lq8QTw5wA">
               <v-icon>mdi-youtube</v-icon>
             </v-btn>
+            <v-btn class="mx-2" small fab href="https://discord.gg/de4hY4VEkJ">
+              <v-icon>mdi-discord</v-icon>
+            </v-btn>
           </v-card-text>
 
           <v-card-text class="py-2 text-center">
