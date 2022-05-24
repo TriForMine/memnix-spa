@@ -25,7 +25,7 @@
     "vue-snip": "^2.0.0",
     "vue-stack-grid": "^1.2.2",
     "vuelidate": "^0.7.7",
-    "vuetify": "^2.6.4"
+    "vuetify": "^2.6.5"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
